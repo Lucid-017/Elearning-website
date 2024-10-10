@@ -2,36 +2,24 @@ import "../Layout/css/Navbar.css";
 
 const Navbar = () => {
   return (
-    <nav className="navbar bg-slate-600 px-20 py-5 ">
-      <div className="flex">
-        {/* <div className=""> */}
-          {/* <FaGithub className="inline pr-2 text-5xl text-white"/>
-            <Link to="/" className="text-lg capitalize text-white font-bold align-middle">
-                {title}
-            </Link> */}
-          {/* <h1 className='inline pr-2 text-3xl'>WEBSITE NAME</h1> */}
-          <div className="px-5 ">
-            <p>Home</p>
-            <p>Courses</p>
-            <p>About Us</p>
-            <p>Pricing</p>
-            <p>Contact</p>
-          </div>
-        {/* </div> */}
-        <div className="flex flex-row-reverse">
-          <div className="">
-            {/* <Link to="/" className="btn btn-ghost btn-sm rounded-btn text-white">
-                Home
-            </Link>
-            <Link to="/about" className="btn btn-ghost btn-sm rounded-btn text-white">
-                About
-            </Link> */}
-            <p>Sign Up</p>
-            <button className="btn">Login</button>
-          </div>
+    <>
+        <nav class="navbar">
+        <div class="nav-left">
+        <h1 className='inline pr-10 text-3xl'>EBEDMAS</h1>
+        <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Courses</a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
         </div>
-      </div>
+        <div class="nav-right">
+            <button class="sign-up">Sign Up</button>
+        </div>
     </nav>
+    </>
+   
   );
 };
 

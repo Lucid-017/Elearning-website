@@ -3,16 +3,38 @@ import { useState } from "react";
 import "./css/Login.css";
 
 const Login = () => {
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
   const [countries, setCountries] = useState(["nigeria", "Japan", "Mexico"]);
   return (
-    <div className="py-20">
+    <div className="py-10">
       {/* if user already exist */}
       {login ? (
         <div>
           <div className="grid grid-cols-2">
-            <div className="div1">{/* display by the left */}div1</div>
-            <div className="div2 ">
+          <div className="div1 grid place-items-center h-full w-full px-20 ">
+            {/* display by the left */}
+            <div>
+            <h2 className="pb-2">Students Testimonials</h2>
+            <p>Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et. Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et.Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et.Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et.Ac cum eget habitasse in velit fringilla feugiat senectus in.</p>
+            
+            <div className="carosel pl-10 pt-20">
+            The web design course provided a solid foundation for me. The instructors were knowledgeable and supportive, and the interactive learning environment was engaging. I highly recommend it!
+            </div>
+            </div>
+        
+          </div>            <div className="div2 ">
               <div className="text-center mb-10">
                 <h1 className="mb-2">Login</h1>
                 <p>Welcome back! please log in to access your account</p>
@@ -65,9 +87,29 @@ const Login = () => {
         </div>
       ) : (
         <div className="grid md:grid-cols-2">
-          <div className="div1">
+          <div className="div1 grid place-items-center h-full w-full px-20 ">
             {/* display by the left */}
-            Jake
+            <div>
+            <h2 className="pb-2">Students Testimonials</h2>
+            <p>Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et. Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et.Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et.Lorem ipsum dolor sit amet consectetur. 
+              Tempus tincidunt etiam eget elit id 
+              imperdiet et. Cras eu sit dignissim 
+              lorem nibh et.Ac cum eget habitasse in velit fringilla feugiat senectus in.</p>
+            
+            <div className="carosel pl-10 pt-20">
+            The web design course provided a solid foundation for me. The instructors were knowledgeable and supportive, and the interactive learning environment was engaging. I highly recommend it!
+            </div>
+            </div>
+        
           </div>
           <div className="div2">
             <div className="text-center mb-10">
