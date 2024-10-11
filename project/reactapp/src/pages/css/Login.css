@@ -1,0 +1,19 @@
+.check{
+    width: 20px !important;
+    height: 20px !important;
+}
+.div2 input{
+    display: block;
+    border-radius: 10px;
+    padding: 5px 10px;
+    width: 550px;
+    background-color: #F7F7F8;
+    height: 62px;
+    margin: 10px 0 15px 0;
+}
+
+.div2 label{
+    font-weight: 600;
+    text-transform: capitalize;
+}
+/* className="block border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" */
