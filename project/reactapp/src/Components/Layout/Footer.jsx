@@ -2,35 +2,55 @@ import '../Layout/css/Footer.css'
 
 const Footer = () => {
   return (
-    <footer className="w-full p-20">
-      <div className="grid grid-cols-5">
-        <div className="logo col-span-2">
-          <h2><span className="text-[#FF9500]">E</span>BEDMAS</h2>
-        </div>
-        <div className="home">
-          <p>Home</p>
-          <ul>
-            <li>Courses</li>
-            <li>Benefits</li>
-            <li>FAQ</li>
-          </ul>
-        </div>
-        <div className="about-us">
-          <p>About Us</p>
-          <ul>
-            <li>Our Goals</li>
-            <li>Achievements</li>
-          </ul>
-        </div>
-        <div className="socials">
-          <p>Social profiles</p>
-          <div className="flex"></div>
-        </div>
+    <>
+    <footer className="w-full p-10 tablet:p-20 bg-gray-800 text-white">
+  <div className="grid grid-cols-1 phone:grid-cols-4 tablet:grid-cols-5 gap-10 ">
+    {/* Logo */}
+    <div className="logo col-span-1 phone:col-span-2">
+      <h2 className="text-3xl font-bold">
+        <span className="text-[#FF9500]">E</span>BEDMAS
+      </h2>
+      <div className='pt-5'>
+        <p>@email.Confirm</p>
+        <p>090 000 000 00</p>
+        <p>somewhere in lagos</p>
       </div>
-      <div className="text-center mt-10">
-        <p>&copyright; 2024 Ebedmas. All rights reserved</p>
+    </div>
+
+    {/* Home Section */}
+    <div className="home">
+      <p className="font-semibold">Home</p>
+      <ul className="space-y-2">
+        <li>Courses</li>
+        <li>Benefits</li>
+        <li>FAQ</li>
+      </ul>
+    </div>
+
+    {/* About Us Section */}
+    <div className="about-us">
+      <p className="font-semibold">About Us</p>
+      <ul className="space-y-2">
+        <li>Our Goals</li>
+        <li>Achievements</li>
+      </ul>
+    </div>
+
+    {/* Socials Section */}
+    <div className="socials">
+      <p className="font-semibold">Social profiles</p>
+      <div className="flex space-x-4">
+        {/* Icons would go here */}
       </div>
-    </footer>
+    </div>
+  </div>
+
+  {/* Footer Bottom Text */}
+  <div className="text-center mt-10 text-gray-400">
+    <p>&copy; 2024 Ebedmas. All rights reserved.</p>
+  </div>
+</footer>
+</>
   );
 };
 

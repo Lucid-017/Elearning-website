@@ -5,12 +5,17 @@
 .div2 input{
     display: block;
     border-radius: 10px;
-    padding: 5px 10px;
-    width: 550px;
+    padding: 17px 10px;
+    width: 100%;
     background-color: #F7F7F8;
-    height: 62px;
+    /* height: 62px; */
     margin: 10px 0 15px 0;
 }
+/* @media screen and (min-width: 481px) { 
+    .div2 input{
+        width: 400px;
+    }
+ } */
 
 .div2 label{
     font-weight: 600;
