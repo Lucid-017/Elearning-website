@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../Layout/css/Navbar.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,8 +15,9 @@ const Navbar = () => {
         
   <div className="w-full flex justify-between">
    {/* Logo */}
-   <h1 className="font-bold overflow-hidden">EBEDMAS</h1>
-
+   <Link to='/'>
+    <h1 className="font-bold overflow-hidden">EBEDMAS</h1>
+   </Link>
     {/* Hamburger Icon (Visible on phone screens) */}
     <div className="phone:block tablet:hidden">
       <button onClick={toggleMenu} className="focus:outline-none">
@@ -27,17 +29,31 @@ const Navbar = () => {
 
     {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
     <div className="hidden tablet:flex space-x-6">
-      <a href="#" className="hover:text-gray-400">Home</a>
+      <Link to={'/'}>
+        <a href="#" className="hover:text-gray-400">Home</a>
+      </Link>
+      <Link to={'/courses'}>
       <a href="#" className="hover:text-gray-400">Courses</a>
+      </Link>
+      <Link to={'/pricing'}>
       <a href="#" className="hover:text-gray-400">Pricing</a>
+      </Link>
+      <Link to={'/about'}>
       <a href="#" className="hover:text-gray-400">About us</a>
+      </Link>
+      <Link to={'/contact'}>
       <a href="#" className="hover:text-gray-400">Contact</a>
+      </Link>
     </div>
 
     {/* Sign Up Button (Visible on laptop screens and above) */}
     <div className="hidden laptop:fpl-40 laptop:block">
-      <button className="px-4 py-2 rounded-md hover:bg-yellow-600">Login</button>
-      <button className="bg-[#ff9900] text-white px-4 py-2 rounded-md hover:bg-yellow-600">Sign Up</button>
+    <Link to={'/login'}>
+    <button className="px-4 py-2 rounded-md hover:bg-yellow-600">Login</button>
+    </Link>
+    <Link to={'/register'}>
+    <button className="bg-[#ff9900] text-white px-4 py-2 rounded-md hover:bg-yellow-600">Sign Up</button>
+    </Link>
     </div>
   </div>
 
