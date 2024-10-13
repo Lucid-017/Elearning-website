@@ -4,5 +4,5 @@ venv/
 .venv/
 env/
 ENV/
-
+.DS_Store
 node_modules/
