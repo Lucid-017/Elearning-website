@@ -6,6 +6,9 @@ import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import Navbar from './Components/Layout/Navbar';
 import Footer from './Components/Layout/Footer';
+import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
       <Route path='/' element={<Home/>}/>
       <Route path='/about' element={<About/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/register' element={<Signup/>}/>
+      <Route path='/forgotpassword' element={<ForgotPassword/>}/>
+      <Route path='/contact' element={<Contact/>}/>
       <Route path='/*' element={<NotFound/>}/>
     </Routes>
       </div>
