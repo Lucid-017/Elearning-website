@@ -11,7 +11,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <nav className="py-10 px-20">
+      <nav className="py-10 px-5 phone:px-10 tablet:px-20 mb-5 tablet:mb-20">
         
   <div className="w-full flex justify-between">
    {/* Logo */}
@@ -59,14 +59,29 @@ const Navbar = () => {
 
   {/* Dropdown Menu (Visible on phone screens when hamburger is clicked) */}
   {isOpen && (
-    <div className="phone:flex tablet:hidden flex flex-col space-y-2 mt-4">
-      <a href="#" className=" hover:bg-gray-700 px-4 py-2 rounded-md">Home</a>
-      <a href="#" className=" hover:bg-gray-700 px-4 py-2 rounded-md">Courses</a>
-      <a href="#" className=" hover:bg-gray-700 px-4 py-2 rounded-md">Pricing</a>
-      <a href="#" className=" hover:bg-gray-700 px-4 py-2 rounded-md">About us</a>
-      <a href="#" className=" hover:bg-gray-700 px-4 py-2 rounded-md">Contact</a>
+    <div className="ham phone:flex tablet:hidden flex flex-col space-y-2 mt-4">
+      <Link to={'/'}>
+      <a className=" hover:bg-gray-300 px-4 py-2 rounded-md">Home</a>
+      </Link>
+      <Link to={'/'}>
+      <a className=" hover:bg-gray-300 px-4 py-2 rounded-md">Courses</a>
+      </Link>
+      <Link to={'/'}>
+      <a className=" hover:bg-gray-300 px-4 py-2 rounded-md">Pricing</a>
+      </Link>
+      <Link to={'/about'}>
+      <a className=" hover:bg-gray-300 px-4 py-2 rounded-md">About</a>
+      </Link>
+      <Link to={'/contact'}>
+      <a href="#" className=" hover:bg-gray-300 px-4 py-2 rounded-md">Contact</a>
+      </Link>
+      <Link to={'/login'}>
       <button className="bg-[#F7F7F8]  px-4 py-2 rounded-md hover:bg-yellow-600">Login</button>
+      </Link>
+      <Link to={'/register'}>
       <button className="bg-[#ff9900]  px-4 py-2 rounded-md hover:bg-yellow-600">Sign Up</button>
+      </Link>
+
     </div>
   )}
 </nav>

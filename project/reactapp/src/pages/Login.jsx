@@ -7,7 +7,7 @@ const Login = () => {
   const [countries, setCountries] = useState(["nigeria", "Japan", "Mexico"]);
   return (
     <>
-      <div className="p-10 phone:py-10 tablet:py-15 laptop:py-10">
+      <div className="px-5 phone:px-10">
         {/* if user already exist */}
 
           <div>
@@ -37,9 +37,9 @@ const Login = () => {
                   </div>
                 </div>
               </div>
-              <div className="div2 ">
+              <div className="div2">
                 <div className="text-center mb-10">
-                  <h1 className="mb-2 overflow-hidden">Login</h1>
+                  <h1 className="pb-5">Login</h1>
                   <p>Welcome back! please log in to access your account</p>
                 </div>
                 <div className="">

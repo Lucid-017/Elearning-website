@@ -24,4 +24,9 @@ h1 {
   }
   *{
     overflow-x: hidden;
+    font-family: 'Be Vietnam Pro', 'raleway','poppins','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body{
+    background-color: #F7F7F8;
   }

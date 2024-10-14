@@ -3,11 +3,11 @@ import '../Layout/css/Footer.css'
 const Footer = () => {
   return (
     <>
-    <footer className="w-full p-10 tablet:p-20 bg-gray-800 text-white">
+    <footer className="w-full p-10 mt-20 tablet:p-20 bg-white text-black">
   <div className="grid grid-cols-1 phone:grid-cols-4 tablet:grid-cols-5 gap-10 ">
     {/* Logo */}
     <div className="logo col-span-1 phone:col-span-2">
-      <h2 className="text-3xl font-bold">
+      <h2 className="text-3xl font-bold overflow-hidden">
         <span className="text-[#FF9500]">E</span>BEDMAS
       </h2>
       <div className='pt-5'>

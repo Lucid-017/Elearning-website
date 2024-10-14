@@ -2,6 +2,10 @@
     width: 20px !important;
     height: 20px !important;
 }
+.div2{
+    background-color: white !important;
+    padding: 10px;
+}
 .div2 input{
     display: block;
     border-radius: 10px;
@@ -11,11 +15,11 @@
     /* height: 62px; */
     margin: 10px 0 15px 0;
 }
-/* @media screen and (min-width: 481px) { 
-    .div2 input{
-        width: 400px;
+@media screen and (min-width: 481px) { 
+    .div2{
+        padding: 30px;
     }
- } */
+ }
 
 .div2 label{
     font-weight: 600;

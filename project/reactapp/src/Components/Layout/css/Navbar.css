@@ -1,4 +1,9 @@
-div a{
+div a{    text-decoration: none;
+    font-weight: 600;
+    color: black;
+}
+.ham a{    
+    display: block;
     text-decoration: none;
     font-weight: 600;
     color: black;

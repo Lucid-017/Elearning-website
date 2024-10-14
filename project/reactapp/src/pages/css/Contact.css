@@ -1,0 +1,31 @@
+.contact-card div{
+    margin-bottom: 20px;
+    background-color: #F7F7F8;
+    /* border: 1px solid black; */
+    text-align: center;
+    padding: 40px 0;
+    max-width: 200px;
+    /* height: 143px; */
+    width: 290px;
+    border-radius: 6px;
+}
+
+input{
+    background-color: #F7F7F8;
+    outline: none;
+}
+/* block w-full border border-gray-200 rounded-md px-4 py-2 */
+.contact input{
+    display: block;
+    width: 100%;
+    border: 1px solid rgba(128, 128, 128, 0.200);
+    padding: 15px 0px 15px 10px;
+}
+.contact label{
+    font-weight: 500;
+    margin-bottom:10px;
+}
+.contact{
+    background-color: white;
+    border-radius: 10px;
+}

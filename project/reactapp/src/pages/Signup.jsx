@@ -7,7 +7,7 @@ const Signup = () => {
     const [countries, setCountries] = useState(["nigeria", "Japan", "Mexico"]);
 
   return (
-    <div className='p-5 phone:p-10 phone:py-10 tablet:py-15 laptop:py-10' >
+    <div className='px-5 phone:px-10' >
           <div className="grid tablet:grid-cols-2">
             <div className="div1 mb-40 tablet:mb-0 grid phone:place-items-center h-full w-full phone:px-10 ">
               {/* display by the left */}
@@ -37,7 +37,7 @@ const Signup = () => {
             {/* RIGHT */}
             <div className="div2">
               <div className="text-center mb-10">
-                <h1 className="mb-2 overflow-hidden">Sign Up</h1>
+                <h1 className="pb-5 overflow-hidden">Sign Up</h1>
                 <p>Create an account to unlock executive features</p>
               </div>
               <div className=" ">
