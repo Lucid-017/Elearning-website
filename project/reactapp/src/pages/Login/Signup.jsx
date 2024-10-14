@@ -1,11 +1,36 @@
-import './css/Login.css'
-import React, { useState } from 'react'
+import '../css/Login.css'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
 const Signup = () => {
+  const topCountries = [
+    'United States',
+    'China',
+    'India',
+    'Japan',
+    'Germany',
+    'United Kingdom',
+    'France',
+    'Brazil',
+    'Canada',
+    'Russia',
+    'Australia',
+    'Italy',
+    'Nigeria',
+    'South Korea',
+    'Mexico',
+    'Indonesia',
+    'Saudi Arabia',
+    'Turkey',
+    'Netherlands',
+    'Switzerland',
+    'Spain'
+  ];
 
-    const [countries, setCountries] = useState(["nigeria", "Japan", "Mexico"]);
-
+    // const [countries, setCountries] = useState(["nigeria", "Japan", "Mexico"]);
+    // useEffect(()=>{
+    //   console.log(countries)
+    // },[])
   return (
     <div className='px-5 phone:px-10' >
           <div className="grid tablet:grid-cols-2">
@@ -45,21 +70,51 @@ const Signup = () => {
                   <div>
                     <label htmlFor="email">Email</label>
                     <input
-                      className="block border border-gray-200 rounded-md px-4 focus:ring-blue-500"
-                      type="text"
+                      className="block border border-gray-200 rounded-md px-4 "
+                      type="email"
                       name="email"
                       required
-                      placeholder="Enter your name"
+                      placeholder="Enter your Email"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="fName">First Name</label>
                     <input
-                      className="block border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter your email"
+                      className="block border border-gray-200 rounded-md px-4 py-2"
+                      placeholder="Enter First Name"
                       type="text"
-                      name="email"
+                      name="fName"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="lName">Last Name</label>
+                    <input
+                      className="block border border-gray-200 rounded-md px-4 py-2"
+                      placeholder="Enter Last Name"
+                      type="text"
+                      name="lName"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="dob">Date of birth</label>
+                    <input
+                      className="block border border-gray-200 rounded-md px-4 py-2"
+                      placeholder="Enter your email"
+                      type="date"
+                      name="dob"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="address">Address</label>
+                    <input
+                      className="block border border-gray-200 rounded-md px-4 py-2"
+                      placeholder="Enter Address"
+                      type="text"
+                      name="address"
                       required
                     />
                   </div>
@@ -67,36 +122,34 @@ const Signup = () => {
                   <div>
                     <label htmlFor="mobile">Phone number</label>
                     <input
-                      className="block border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="block border border-gray-200 rounded-md px-4 py-2"
                       type="number"
                       name="mobile"
                       required
-                      placeholder="Enter your mobile number"
+                      placeholder="Enter Mobile Number"
                     />
                   </div>
 
                   <div>
                     <label htmlFor="country">Country</label>
-                    <input
-                      className="block border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Enter your country"
-                      list="countries"
-                      name="country"
-                    />
-                    <datalist id="countries">
+                    <select  
+                      className="block w-full border border-gray-200 rounded-md px-4 py-2"
+                      name='country'>
                       {/* loop through sample countries */}
-                      {countries.map((country, index) => {
-                        <option key={index} value={country}></option>;
-                      })}
-                    </datalist>
+                      <option value="">-- Select a country --</option>
+                      {topCountries.map((country, index) => (
+                        <option key={index} value={country}>{country}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div>
                     <label htmlFor="password1">Password</label>
                     <input
-                      className="block border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="block border border-gray-200 rounded-md px-4 py-2"
                       type="password"
                       name="password1"
+                      placeholder='Enter your password'
                       required
                     />
                   </div>
@@ -104,9 +157,10 @@ const Signup = () => {
                   <div>
                     <label htmlFor="password2">Confirm Password</label>
                     <input
-                      className="block border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="block border border-gray-200 rounded-md px-4 py-2"
                       type="text"
                       name="password2"
+                      placeholder='Re-type your password'
                       required
                     />
                   </div>
@@ -123,7 +177,7 @@ const Signup = () => {
                       Sign up with Google
                     </button>
                     <p className="text-center pt-5">
-                      Already have an account? <Link to={'/login'}><a>Login</a></Link>
+                      Already have an account? <Link to={'/login'} className='link'>Login</Link>
                     </p>
                   </div>
                 </form>
