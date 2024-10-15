@@ -16,13 +16,37 @@ const Login = () => {
   // handle form submit
   const handleSubmit= async (e)=>{
     e.preventDefault();
+
+    const data = {
+      username: username,
+      password: password,
+    };
+
     try{
       // input backend API endpoint
-      const response = await axios.post('http://127.0.0.1:8000/api/sign-in/',{
-        username,
-        password      })
+      const response = await axios.post('/api/sign-in/',data, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
       console.log('login successful',response.data)
-      // handle successful login, navigate to page
+
+      console.log(response)
+      // handle successful login: saving the access and refresh token to localstorage and then navigate to dashboard
+      
+      // Extracting the tokens and username from the response
+      const { access_token, refresh_token, username } = response.data;
+
+      // Creating an object with username as the key and the tokens as the valuea
+      const tokens = {
+        access_token: access_token,
+        refresh_token: refresh_token,
+      };
+
+      // Saving the userTokens object to localStorage as a string
+      localStorage.setItem(username, JSON.stringify(tokens));
+
+      console.log('Sign-in successful, tokens saved:', username);
       Navigate('/dashboard')
 
       // remember me,store email in local storage
