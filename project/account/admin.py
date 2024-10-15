@@ -4,7 +4,7 @@ from .models import User
 
 class UserAdmin(UserAdmin):
     # Fields to be used in displaying the User model
-    list_display = ('username', 'email', 'phone_number', 'country', 'is_staff', 'is_active')
+    list_display = ('username', 'email', 'phone_number', 'country', 'account_type', 'is_staff',)
     
     # Fields to filter the User model in the admin interface
     list_filter = ('is_staff', 'is_active', 'country')
@@ -12,7 +12,7 @@ class UserAdmin(UserAdmin):
     # Fieldsets define the layout for the admin interface when adding or editing a user
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'phone_number', 'country', 'address', 'date_of_birth')}),
+        ('Personal info', {'fields': ('account_type', 'first_name', 'last_name', 'phone_number', 'country', 'address', 'date_of_birth')}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
@@ -21,7 +21,7 @@ class UserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'first_name', 'last_name', 'email', 'phone_number', 'country', 'password1', 'password2', 'is_active', 'is_staff'),
+            'fields': ('account_type', 'username', 'first_name', 'last_name', 'email', 'phone_number', 'country', 'password1', 'password2', 'is_active', 'is_staff'),
         }),
     )
 

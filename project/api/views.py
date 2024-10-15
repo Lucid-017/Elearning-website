@@ -59,8 +59,8 @@ def login_user(request):
         refresh = RefreshToken.for_user(user)
         
         return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            'refresh_token': str(refresh),
+            'access_token': str(refresh.access_token),
             'username': user.username
         }, status=status.HTTP_200_OK)
     else:
