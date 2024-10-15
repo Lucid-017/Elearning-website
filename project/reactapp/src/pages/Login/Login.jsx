@@ -1,14 +1,15 @@
 // import css
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/Login.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   // set states for input field
-  const [email,setEmail]=useState('')
+  const [username,setUsername]=useState('')
   const [password,setPassword]=useState('')
+  const [rememberMe,setRememberMe] = useState(false)
   // error
   const [error,setError]=useState(null)
 
@@ -17,13 +18,20 @@ const Login = () => {
     e.preventDefault();
     try{
       // input backend API endpoint
-      const response = await axios.post('bacendurl',{
-        email,
-        password
-      })
+      const response = await axios.post('http://127.0.0.1:8000/api/sign-in/',{
+        username,
+        password      })
       console.log('login successful',response.data)
       // handle successful login, navigate to page
-      useNavigate('/dashboard')
+      Navigate('/dashboard')
+
+      // remember me,store email in local storage
+      if(rememberMe){
+        localStorage.setItem('username',username)
+      }else{
+        // remove email if not remembering
+        localStorage.removeItem('username')
+      }
     }catch(error){
       setError(error.response?.data?.message|| 'login failed!')
       console.log('error',error)
@@ -39,13 +47,22 @@ const Login = () => {
       })
       console.log('google login success', res.data)
       // 
-      useNavigate('/dashboard')
+      // useNavigate('/dashboard')
     }catch(error){
       setError(error.response?.data?.message || 'Google Login failed')
       console.log("Error:", error)
     }
   }
 
+  // Check local storage for remembered email on load up
+  useEffect(()=>{
+    const rememberedEmail = localStorage.getItem('email')
+      if(rememberedEmail){
+          // if remembered email exist
+          setUsername(rememberedEmail);
+          setRememberMe(true) //thiss also checks the remember me box
+      }
+  },[])
 
   return (
     <>
@@ -90,8 +107,8 @@ const Login = () => {
                     <input
                       type="text"
                       name="username"
-                      value={email}
-                      onChange={e=>setEmail(e.target.value)}
+                      value={username}
+                      onChange={e=>setUsername(e.target.value)}
                       placeholder="Enter your username/email"
                       required
                     />
@@ -110,10 +127,12 @@ const Login = () => {
                     </Link>
 
                     <div className="btns text-center">
-                      <div class="flex items-center mb-4">
+                      <div className="flex items-center mb-4">
                         <input
                           type="checkbox"
                           id="remember"
+                          checked={rememberMe}
+                          onChange={e=>setRememberMe(e.target.checked)}
                           class=" check form-checkbox text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <label className="ml-2 text-gray-700" htmlFor="remember">

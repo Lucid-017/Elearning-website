@@ -1,36 +1,49 @@
 import '../css/Login.css'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import countries from './countries';
 
 const Signup = () => {
-  const topCountries = [
-    'United States',
-    'China',
-    'India',
-    'Japan',
-    'Germany',
-    'United Kingdom',
-    'France',
-    'Brazil',
-    'Canada',
-    'Russia',
-    'Australia',
-    'Italy',
-    'Nigeria',
-    'South Korea',
-    'Mexico',
-    'Indonesia',
-    'Saudi Arabia',
-    'Turkey',
-    'Netherlands',
-    'Switzerland',
-    'Spain'
-  ];
 
-    // const [countries, setCountries] = useState(["nigeria", "Japan", "Mexico"]);
-    // useEffect(()=>{
-    //   console.log(countries)
-    // },[])
+  //  set states for input s
+  const [email,setEmail]= useState('')
+  const [fName,setFName]= useState('')
+  const [lNmae,setLName]= useState('')
+  const [dob,setDob]= useState('')
+  const [address,setAddress]= useState('')
+  const [mobile,setMobile]= useState('')
+  const [country,setCountry]= useState('')
+  const [password,setPassword]= useState('')
+  const [password2,setPassword2]= useState('')
+  const [error,setError] = useState(null)
+
+  // handle asynchronous submit 
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
+    try{
+      // post request
+      const response = await axios.post('backendurl',{
+        email,
+        fName,
+        lNmae,
+        dob,
+        address,
+        mobile,
+        country,
+        password,
+        password2
+      })
+      // handle login after signup
+    }catch(error){
+      setError(error.response?.data?.message || 'Sign up failed')
+      console.log('Error: ',error)
+    }
+    
+    // handle google login
+
+  }
+
   return (
     <div className='px-5 phone:px-10' >
           <div className="grid tablet:grid-cols-2">
@@ -66,13 +79,15 @@ const Signup = () => {
                 <p>Create an account to unlock executive features</p>
               </div>
               <div className=" ">
-                <form method="post">
+                <form onSubmit={handleSubmit}>
                   <div>
                     <label htmlFor="email">Email</label>
-                    <input
+                    <input  
                       className="block border border-gray-200 rounded-md px-4 "
                       type="email"
                       name="email"
+                      value={email}
+                      onChange={e=>setEmail(e.target.value)}
                       required
                       placeholder="Enter your Email"
                     />
@@ -80,9 +95,11 @@ const Signup = () => {
 
                   <div>
                     <label htmlFor="fName">First Name</label>
-                    <input
+                    <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       placeholder="Enter First Name"
+                      value={fName}
+                      onChange={e=>setFName(e.target.value)}
                       type="text"
                       name="fName"
                       required
@@ -90,9 +107,11 @@ const Signup = () => {
                   </div>
                   <div>
                     <label htmlFor="lName">Last Name</label>
-                    <input
+                    <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       placeholder="Enter Last Name"
+                      value={lNmae}
+                      onChange={e=>setLName(e.target.value)}
                       type="text"
                       name="lName"
                       required
@@ -100,9 +119,11 @@ const Signup = () => {
                   </div>
                   <div>
                     <label htmlFor="dob">Date of birth</label>
-                    <input
+                    <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       placeholder="Enter your email"
+                      value={dob}
+                      onChange={e=>setDob(e.target.value)}
                       type="date"
                       name="dob"
                       required
@@ -110,9 +131,11 @@ const Signup = () => {
                   </div>
                   <div>
                     <label htmlFor="address">Address</label>
-                    <input
+                    <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       placeholder="Enter Address"
+                      value={address}
+                      onChange={e=>setAddress(e.target.value)}
                       type="text"
                       name="address"
                       required
@@ -121,9 +144,11 @@ const Signup = () => {
 
                   <div>
                     <label htmlFor="mobile">Phone number</label>
-                    <input
+                    <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       type="number"
+                      value={mobile}
+                      onChange={e=>setMobile(e.target.value)}
                       name="mobile"
                       required
                       placeholder="Enter Mobile Number"
@@ -134,20 +159,25 @@ const Signup = () => {
                     <label htmlFor="country">Country</label>
                     <select  
                       className="block w-full border border-gray-200 rounded-md px-4 py-2"
-                      name='country'>
+                      name='country'
+                      required
+                      value={country}
+                      onChange={e=>setCountry(e.target.value)}>
                       {/* loop through sample countries */}
                       <option value="">-- Select a country --</option>
-                      {topCountries.map((country, index) => (
-                        <option key={index} value={country}>{country}</option>
+                      {countries.map((country) => (
+                        <option key={country.value} value={country.value}>{country.label}</option>
                       ))}
                     </select>
                   </div>
 
                   <div>
                     <label htmlFor="password1">Password</label>
-                    <input
+                    <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       type="password"
+                      value={password}
+                      onChange={e=>setPassword(e.target.value)}
                       name="password1"
                       placeholder='Enter your password'
                       required
@@ -156,9 +186,11 @@ const Signup = () => {
 
                   <div>
                     <label htmlFor="password2">Confirm Password</label>
-                    <input
+                    <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       type="text"
+                      value={password2}
+                      onChange={e=>setPassword2(e.target.value)}
                       name="password2"
                       placeholder='Re-type your password'
                       required
@@ -170,7 +202,9 @@ const Signup = () => {
                     <a href="#"> Privacy Policy</a>
                   </p>
                   <div className="btns">
-                    <button className="btn w-full py-5 bg-[#FF9500] rounded-lg text-white font-bold">
+                    <button 
+                    type='submit'
+                    className="btn w-full py-5 bg-[#FF9500] rounded-lg text-white font-bold">
                       Sign Up
                     </button>                    <p className="my-2 text-center">OR</p>
                     <button className="btn w-full py-5 bg-[#F7F7F8] rounded-lg">
