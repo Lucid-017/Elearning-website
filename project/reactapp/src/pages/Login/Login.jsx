@@ -1,10 +1,69 @@
 // import css
-import { useState } from "react";
-import "./css/Login.css";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import "../css/Login.css";
+import { Link, Navigate } from "react-router-dom";
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [countries, setCountries] = useState(["nigeria", "Japan", "Mexico"]);
+  // set states for input field
+  const [username,setUsername]=useState('')
+  const [password,setPassword]=useState('')
+  const [rememberMe,setRememberMe] = useState(false)
+  // error
+  const [error,setError]=useState(null)
+
+  // handle form submit
+  const handleSubmit= async (e)=>{
+    e.preventDefault();
+    try{
+      // input backend API endpoint
+      const response = await axios.post('http://127.0.0.1:8000/api/sign-in/',{
+        username,
+        password      })
+      console.log('login successful',response.data)
+      // handle successful login, navigate to page
+      Navigate('/dashboard')
+
+      // remember me,store email in local storage
+      if(rememberMe){
+        localStorage.setItem('username',username)
+      }else{
+        // remove email if not remembering
+        localStorage.removeItem('username')
+      }
+    }catch(error){
+      setError(error.response?.data?.message|| 'login failed!')
+      console.log('error',error)
+    }
+  }
+
+  // handle login with google
+  const handleGoogleLogin = async (response)=>{
+    const {credentials} = response //gets the id token from the response
+    try{
+      const res = await axios.post('backendgooglelogin',{
+        idToken: credentials,
+      })
+      console.log('google login success', res.data)
+      // 
+      // useNavigate('/dashboard')
+    }catch(error){
+      setError(error.response?.data?.message || 'Google Login failed')
+      console.log("Error:", error)
+    }
+  }
+
+  // Check local storage for remembered email on load up
+  useEffect(()=>{
+    const rememberedEmail = localStorage.getItem('email')
+      if(rememberedEmail){
+          // if remembered email exist
+          setUsername(rememberedEmail);
+          setRememberMe(true) //thiss also checks the remember me box
+      }
+  },[])
+
   return (
     <>
       <div className="px-5 phone:px-10">
@@ -43,11 +102,13 @@ const Login = () => {
                   <p>Welcome back! please log in to access your account</p>
                 </div>
                 <div className="">
-                  <form method="post">
+                  <form onSubmit={handleSubmit}>
                     <label htmlFor="username">Username</label>
                     <input
                       type="text"
                       name="username"
+                      value={username}
+                      onChange={e=>setUsername(e.target.value)}
                       placeholder="Enter your username/email"
                       required
                     />
@@ -56,37 +117,45 @@ const Login = () => {
                     <input
                       type="text"
                       name="password"
+                      value={password}
+                      onChange={e=>setPassword(e.target.value)}
                       placeholder="Enter your password"
                       required
                     />
-                    <Link to={'/forgotpassword'}>
+                    <Link to={'/forgotpassword'} className="link">
                       <small>Forgot password?</small>
                     </Link>
 
                     <div className="btns text-center">
-                      <div class="flex items-center mb-4">
+                      <div className="flex items-center mb-4">
                         <input
                           type="checkbox"
                           id="remember"
+                          checked={rememberMe}
+                          onChange={e=>setRememberMe(e.target.checked)}
                           class=" check form-checkbox text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <label class="ml-2 text-gray-700" for="remember">
+                        <label className="ml-2 text-gray-700" htmlFor="remember">
                           Remember Me
                         </label>
                       </div>
-                      <button className="btn w-full mb-5 py-5 bg-[#FF9500] rounded-lg text-white font-bold">
+                      <button type="submit" className="btn w-full mb-5 py-5 bg-[#FF9500] rounded-lg text-white font-bold">
                         Login
                       </button>
-                      {/* SIGN UP */}
-                      <button className="btn w-full py-5 bg-[#F7F7F8] rounded-lg font-[600]">
+                      <button 
+                      data-client_id='id.apps.googleusercontent.com'
+                      data-login-uri = 'backend google url'
+                      data-callback={handleGoogleLogin}
+                      onClick={()=>window.google?.accounts.id.prompt()}
+                      type="submit"
+                       className="btn w-full mb-2 py-5 bg-[#F7F7F8] rounded-lg font-[600]">
                         Login with Google
                       </button>
-                      {/* <button>Login with Google</button> */}
-                      <Link to={'/register'}>
-                      <small>
-                        Don't have an account? <a>Sign Up</a>
-                      </small>
+                      <p>
+                      Don't have an account?                       <Link to={'/register'} className="pl-1 link">
+                       Sign Up
                       </Link>
+                      </p>
                     </div>
 
                     {/* <label htmlFor="username">Country</label>
