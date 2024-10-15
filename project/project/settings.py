@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'rest_framework_simplejwt',
+    "corsheaders",
     'social_django',
     'phonenumber_field',
     'django_countries', 
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -152,6 +154,13 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'reactapp/build/static')]
 
 # for testing
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:3000",
+]
 
 # for production
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
