@@ -19,9 +19,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'phone_number',
+            'date_of_birth',
             'country',
             'address',
-            'date_of_birth',
             'password',
             'password2'
         ]
