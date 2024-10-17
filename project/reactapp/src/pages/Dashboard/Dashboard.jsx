@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect} from 'react'
+
 
 const Dashboard = () => {
+  const [user,setUser] = useState('')
+
+  useEffect(()=>{
+    const username = localStorage.getItem('username')
+    setUser(username)
+  },[])
+  
   return (
-    <div>Dashboard</div>
+    <div>Hello {user}</div>
   )
 }
 
