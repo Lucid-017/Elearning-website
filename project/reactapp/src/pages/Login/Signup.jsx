@@ -9,11 +9,12 @@ const Signup = () => {
 
   //  set states for input s
   const [email,setEmail]= useState('')
-  const [fName,setFName]= useState('')
-  const [lNmae,setLName]= useState('')
-  const [dob,setDob]= useState('')
+  const [first_name,setFName]= useState('')
+  const [username,setUsername]= useState('')
+  const [last_name,setLName]= useState('')
+  const [date_of_birth,setDob]= useState('')
   const [address,setAddress]= useState('')
-  const [mobile,setMobile]= useState('')
+  const [phone_number,setMobile]= useState('')
   const [country,setCountry]= useState('')
   const [password,setPassword]= useState('')
   const [password2,setPassword2]= useState('')
@@ -23,19 +24,26 @@ const Signup = () => {
   // handle asynchronous submit 
   const handleSubmit = async(e)=>{
     e.preventDefault();
+    const data = {
+      email,
+      first_name,
+      last_name,
+      username,
+      date_of_birth,
+      phone_number,
+      address,
+      country,
+      password,
+      password2
+    }
     try{
       // post request
-      const response = await axios.post('backendurl',{
-        email,
-        fName,
-        lNmae,
-        dob,
-        address,
-        mobile,
-        country,
-        password,
-        password2
+      const response = await axios.post('/api/register/',data,{
+        headers:{
+          'Content-Type':'application/json'
+        }
       })
+      console.log('signup was successful', response.data)
       // handle login after signup
       navigate('/dashboard')
     }catch(error){
@@ -50,7 +58,7 @@ const Signup = () => {
   return (
     <div className='px-5 phone:px-10' >
           <div className="grid tablet:grid-cols-2">
-            <div className="div1 mb-40 hidden phone:block tablet:mb-0 grid phone:place-items-center h-full w-full phone:px-10 ">
+            <div className="div1 mb-40 grid phone:place-items-center hidden phone:block tablet:mb-0  h-full w-full phone:px-10 ">
               {/* display by the left */}
               <div>
                 <h2 className="pb-2">Students Testimonials</h2>
@@ -83,6 +91,42 @@ const Signup = () => {
               </div>
               <div className=" ">
                 <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="fName">First Name</label>
+                    <input 
+                      className="block border border-gray-200 rounded-md px-4 py-2"
+                      placeholder="Enter First Name"
+                      value={first_name}
+                      onChange={e=>setFName(e.target.value)}
+                      type="text"
+                      name="fName"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="lName">Last Name</label>
+                    <input 
+                      className="block border border-gray-200 rounded-md px-4 py-2"
+                      placeholder="Enter Last Name"
+                      value={last_name}
+                      onChange={e=>setLName(e.target.value)}
+                      type="text"
+                      name="lName"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="username">Username</label>
+                    <input 
+                      className="block border border-gray-200 rounded-md px-4 py-2"
+                      placeholder="Enter Last Name"
+                      value={username}
+                      onChange={e=>setUsername(e.target.value)}
+                      type="text"
+                      name="username"
+                      required
+                    />
+                  </div>
                   <div>
                     <label htmlFor="email">Email</label>
                     <input  
@@ -97,27 +141,15 @@ const Signup = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="fName">First Name</label>
+                    <label htmlFor="mobile">Phone number</label>
                     <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
-                      placeholder="Enter First Name"
-                      value={fName}
-                      onChange={e=>setFName(e.target.value)}
                       type="text"
-                      name="fName"
+                      value={phone_number}
+                      onChange={e=>setMobile(e.target.value)}
+                      name="mobile"
                       required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="lName">Last Name</label>
-                    <input 
-                      className="block border border-gray-200 rounded-md px-4 py-2"
-                      placeholder="Enter Last Name"
-                      value={lNmae}
-                      onChange={e=>setLName(e.target.value)}
-                      type="text"
-                      name="lName"
-                      required
+                      placeholder="Enter Mobile Number"
                     />
                   </div>
                   <div>
@@ -125,7 +157,7 @@ const Signup = () => {
                     <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
                       placeholder="Enter your email"
-                      value={dob}
+                      value={date_of_birth}
                       onChange={e=>setDob(e.target.value)}
                       type="date"
                       name="dob"
@@ -144,24 +176,10 @@ const Signup = () => {
                       required
                     />
                   </div>
-
-                  <div>
-                    <label htmlFor="mobile">Phone number</label>
-                    <input 
-                      className="block border border-gray-200 rounded-md px-4 py-2"
-                      type="number"
-                      value={mobile}
-                      onChange={e=>setMobile(e.target.value)}
-                      name="mobile"
-                      required
-                      placeholder="Enter Mobile Number"
-                    />
-                  </div>
-
                   <div>
                     <label htmlFor="country">Country</label>
                     <select  
-                      className="block w-full border border-gray-200 rounded-md px-4 py-2"
+                      className="select block w-full border border-gray-200 rounded-md px-4 py-2"
                       name='country'
                       required
                       value={country}
@@ -191,7 +209,7 @@ const Signup = () => {
                     <label htmlFor="password2">Confirm Password</label>
                     <input 
                       className="block border border-gray-200 rounded-md px-4 py-2"
-                      type="text"
+                      type="password"
                       value={password2}
                       onChange={e=>setPassword2(e.target.value)}
                       name="password2"
