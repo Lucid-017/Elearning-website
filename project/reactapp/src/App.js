@@ -10,6 +10,7 @@ import Signup from './pages/Login/Signup';
 import ForgotPassword from './pages/Login/ForgotPassword';
 import Contact from './pages/Contact';
 import ResetPassword from './pages/Login/Reset password';
+import Dashboard from '../src/pages/Dashboard/Dashboard'
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
       <Route path='/' exact element={<Home/>}/>
       <Route path='/about' element={<About/>}/>
       <Route path='/login' element={<Login/>}/>
-      <Route path='/dashboard' element={<Login/>}/>
+      <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/register' element={<Signup/>}/>
       <Route path='/forgotpassword' element={<ForgotPassword/>}/>
       <Route path='/confirmpassword' element={<ResetPassword/>}/>

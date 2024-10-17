@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import countries from './countries';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
 
@@ -17,6 +18,7 @@ const Signup = () => {
   const [password,setPassword]= useState('')
   const [password2,setPassword2]= useState('')
   const [error,setError] = useState(null)
+  const navigate = useNavigate()
 
   // handle asynchronous submit 
   const handleSubmit = async(e)=>{
@@ -35,6 +37,7 @@ const Signup = () => {
         password2
       })
       // handle login after signup
+      navigate('/dashboard')
     }catch(error){
       setError(error.response?.data?.message || 'Sign up failed')
       console.log('Error: ',error)
@@ -47,7 +50,7 @@ const Signup = () => {
   return (
     <div className='px-5 phone:px-10' >
           <div className="grid tablet:grid-cols-2">
-            <div className="div1 mb-40 tablet:mb-0 grid phone:place-items-center h-full w-full phone:px-10 ">
+            <div className="div1 mb-40 hidden phone:block tablet:mb-0 grid phone:place-items-center h-full w-full phone:px-10 ">
               {/* display by the left */}
               <div>
                 <h2 className="pb-2">Students Testimonials</h2>

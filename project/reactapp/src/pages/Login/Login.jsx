@@ -1,7 +1,7 @@
 // import css
 import { useEffect, useState } from "react";
 import "../css/Login.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,7 @@ const Login = () => {
   const [rememberMe,setRememberMe] = useState(false)
   // error
   const [error,setError]=useState(null)
+  const navigate = useNavigate()
 
   // handle form submit
   const handleSubmit= async (e)=>{
@@ -47,7 +48,8 @@ const Login = () => {
       localStorage.setItem(username, JSON.stringify(tokens));
 
       console.log('Sign-in successful, tokens saved:', username);
-      Navigate('/dashboard')
+      // navigate to dahboard on successful login
+      navigate('/dashboard')
 
       // remember me,store email in local storage
       if(rememberMe){
@@ -71,7 +73,9 @@ const Login = () => {
       })
       console.log('google login success', res.data)
       // 
-      // useNavigate('/dashboard')
+      if(res.ok){
+        navigate('/dashboard')
+      }
     }catch(error){
       setError(error.response?.data?.message || 'Google Login failed')
       console.log("Error:", error)
@@ -95,7 +99,7 @@ const Login = () => {
 
           <div>
             <div className="grid tablet:grid-cols-2">
-              <div className="div1 mb-40 tablet:mb-0 grid phone:place-items-center h-full w-full px-10 ">
+              <div className="div1 mb-40 hidden phone:block tablet:mb-0 grid phone:place-items-center h-full w-full px-10 ">
                 {/* display by the left */}
                 <div>
                   <h2 className="pb-2">Students Testimonials</h2>
@@ -139,7 +143,7 @@ const Login = () => {
 
                     <label htmlFor="password">Password</label>
                     <input
-                      type="text"
+                      type="password"
                       name="password"
                       value={password}
                       onChange={e=>setPassword(e.target.value)}
