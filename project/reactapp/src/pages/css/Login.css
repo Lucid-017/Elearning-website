@@ -6,7 +6,7 @@
     background-color: white !important;
     padding: 10px;
 }
-.div2 input{
+.div2 input,.select{
     display: block;
     border-radius: 10px;
     padding: 17px 10px;

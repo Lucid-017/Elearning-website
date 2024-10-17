@@ -59,8 +59,8 @@ const Login = () => {
         localStorage.removeItem('username')
       }
     }catch(error){
-      setError(error.response?.data?.message|| 'login failed!')
-      console.log('error',error)
+      setError(error.response?.data?.error|| 'login failed!')
+      console.log('error',error.response.data)
     }
   }
 
@@ -78,7 +78,7 @@ const Login = () => {
       }
     }catch(error){
       setError(error.response?.data?.message || 'Google Login failed')
-      console.log("Error:", error)
+      console.log("Error: ---", error.response)
     }
   }
 
@@ -95,8 +95,10 @@ const Login = () => {
   return (
     <>
       <div className="px-5 phone:px-10">
+        {error ? (
+          <div>{error}</div>
+        ):<div> login successful !</div>}
         {/* if user already exist */}
-
           <div>
             <div className="grid tablet:grid-cols-2">
               <div className="div1 mb-40 hidden phone:block tablet:mb-0 grid phone:place-items-center h-full w-full px-10 ">
