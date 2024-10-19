@@ -19,6 +19,11 @@ const Signup = () => {
   const [password,setPassword]= useState('')
   const [password2,setPassword2]= useState('')
   const [error,setError] = useState(null)
+  const [clIcked,setClicked] = useState(false)
+  const [loading, setLoading] =useState(false)
+
+  // error
+  const [successmsg,setSuccessMsg]=useState('')
   const navigate = useNavigate()
 
   // handle asynchronous submit 
@@ -239,7 +244,14 @@ const Signup = () => {
               </div>
             </div>
           </div>
+          {clIcked && errormsg && (
+       <ErrorHandling message={errormsg} show={!!errormsg} onClose={clearError}/>
+      )}
+      {clIcked && !errormsg && (
+       <SuccessHandling message={'successmsg'} show={!!errormsg} onClose={clearError}/>
+     )}
     </div>
+    
   )
 }
 
