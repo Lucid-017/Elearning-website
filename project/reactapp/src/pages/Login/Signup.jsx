@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import countries from './countries';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from "./context/ToastContext";
+import ErrorHandling from "../../Components/Errors/ErrorHandling";
+
 
 const Signup = () => {
-
+  const {showToast} = useToast();
   //  set states for input s
   const [email,setEmail]= useState('')
   const [first_name,setFName]= useState('')
@@ -19,11 +22,17 @@ const Signup = () => {
   const [password,setPassword]= useState('')
   const [password2,setPassword2]= useState('')
   const [error,setError] = useState(null)
+  const [clIcked,setClicked] = useState(false)
+  const [loading, setLoading] =useState(false)
+  const [toastMessage,setToastMessage]=useState('')
+  const [toastType,setToastType]=useState('')
+  // 
   const navigate = useNavigate()
 
   // handle asynchronous submit 
   const handleSubmit = async(e)=>{
     e.preventDefault();
+    setClicked(true)
     const data = {
       email,
       first_name,
@@ -37,6 +46,7 @@ const Signup = () => {
       password2
     }
     try{
+      setLoading(true)
       // post request
       const response = await axios.post('/api/register/',data,{
         headers:{
@@ -45,14 +55,38 @@ const Signup = () => {
       })
       console.log('signup was successful', response.data)
       // handle login after signup
+      setLoading(false)
+      // if(response?.status === 200){
+        showToast('User registered successfully', 'success')  //global popup for success
+      // }
       navigate('/dashboard')
+
+
     }catch(error){
-      setError(error.response?.data?.message || 'Sign up failed')
       console.log('Error: ',error)
+      const errData = error.response?.data
+      // loop through error array
+      let combinederr = ''
+      for(let field in errData){
+        if(Array.isArray(errData[field])){
+ 
+           combinederr = Object.keys(errData).map((field)=>`${field} : ${errData[field].join('')}\n`)
+            showToast(combinederr , 'error' ) //show individual errors
+
+        }
+      }
+      // showToast(error.response?.data || 'Sign up failed','error')
+      setLoading(false)
     }
     
     // handle google login
+  }
 
+  const clearError= ()=>{
+    setError(null)
+    setToastMessage('')
+    setToastType('')
+    setClicked(false)
   }
 
   return (
@@ -239,7 +273,16 @@ const Signup = () => {
               </div>
             </div>
           </div>
+        
+          {clIcked && toastMessage && toastType && (
+       <ErrorHandling  message={toastMessage} show={toastMessage !==null} type={toastType} onClose={clearError}/>
+      )}
+      {/* {toastMessage ==='error' && toastMessage.map((err,index)=>{
+        return <ErrorHandling key={index} message={err} show={toastMessage !==null} type={'error'} onClose={clearError}/>
+
+      })} */}
     </div>
+    
   )
 }
 

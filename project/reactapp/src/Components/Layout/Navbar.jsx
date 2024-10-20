@@ -9,6 +9,8 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  //NOTE check if refresh token exist, if it does then use info to render log out for signed in users
   return (
     <>
       <nav className="py-10 px-5 phone:px-10 tablet:px-20 mb-5 tablet:mb-20">

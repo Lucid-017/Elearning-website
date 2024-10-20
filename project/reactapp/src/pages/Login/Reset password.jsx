@@ -1,6 +1,35 @@
+import axios from 'axios'
 import '../css/resetPassword.css'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 const ResetPassword = () => {
+  const [new_password,setPassword] =useState('')
+  const [confirm_password,setConfirmPassword] =useState('')
+  const [error,setError] =useState(null)
+
+  // let uidb64 = match.params.uid
+  // let token = match.params.token 
+  let {uidb64,token} =useParams()
+
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+    try {
+      const data ={
+        new_password,
+        confirm_password
+      }
+      const res = await axios.post(`/api/password-reset-confirm/${uidb64}/${token}/`,data,{
+        headers:{
+          'Content-Type':'application/json'
+        }
+      })
+      console.log('password reset complete')
+    } catch (error) {
+      setError(error)
+      console.log(error)
+    }
+  }
   return (
     <>
     <div className="flex justify-center items-center min-h-full bg-gray-50">
@@ -12,7 +41,7 @@ const ResetPassword = () => {
           Enter a new password below to reset your account.
         </p>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="newPassword" className="block text-lg tablet:text-xl font-semibold mb-2">
               New Password
@@ -20,6 +49,8 @@ const ResetPassword = () => {
             <input
               id="newPassword"
               type="password"
+              value={new_password}
+              onChange={e=>setPassword(e.target.value)}
               placeholder="Enter new password"
               className="input-field"
               required
@@ -33,6 +64,8 @@ const ResetPassword = () => {
             <input
               id="confirmPassword"
               type="password"
+              value={confirm_password}
+              onChange={e=>setConfirmPassword(e.target.value)}
               placeholder="Confirm new password"
               className="input-field"
               required

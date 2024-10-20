@@ -11,9 +11,11 @@ import ForgotPassword from './pages/Login/ForgotPassword';
 import Contact from './pages/Contact';
 import ResetPassword from './pages/Login/Reset password';
 import Dashboard from '../src/pages/Dashboard/Dashboard'
+import { ToastProvider } from './pages/Login/context/ToastContext';
 
 function App() {
   return (
+    <ToastProvider>
     <div>
     {/* ROUTER */}
     
@@ -29,7 +31,7 @@ function App() {
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/register' element={<Signup/>}/>
       <Route path='/forgotpassword' element={<ForgotPassword/>}/>
-      <Route path='/confirmpassword' element={<ResetPassword/>}/>
+      <Route path='/confirm-password-reset/:uidb64/:token' element={<ResetPassword/>}/>
       <Route path='/contact' element={<Contact/>}/>
       <Route path='/*' element={<NotFound/>}/>
     </Routes>
@@ -41,6 +43,7 @@ function App() {
     {/* FOOTER */}
     <Footer/>
     </div>
+    </ToastProvider>
   );
 }
 
