@@ -4,9 +4,12 @@ import "../css/Login.css";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import { useToast } from "./context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
 
 const Login = () => {
+  // 
+  const {showToast} = useToast();
   // set states for input field
   const [username,setUsername]=useState('')
   const [password,setPassword]=useState('')
@@ -59,13 +62,10 @@ const Login = () => {
       // navigate to dahboard on successful login
       setLoading(false)
       if(response?.status === 200){
-        const successmsg = 'Login Successful';
-        setToastType('success');
-        setToastMessage(successmsg);
-        console.log('toast messg:',toastMessage, 'Type',toastType);
+        showToast('Login Successful', 'success')  //global popup for success
         setTimeout(() => {
           navigate('/dashboard')
-        }, 1000);
+        }, 500);
       }
 
 
@@ -78,10 +78,9 @@ const Login = () => {
       }
     }catch(err){
       const errmesg = err.response?.data ||  {error:'login failed!'};
-      setError(errmesg.error);
-      setToastType('error');
-      setToastMessage(errmesg.error || 'Something went wrong');
+      showToast(errmesg.error || 'Something went wrong', 'error') //global popup for error
       setLoading(false);
+      console.log('error ',err)
 
     }
   }

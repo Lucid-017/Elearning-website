@@ -7,7 +7,7 @@ export const useToast = ()=>{
     return useContext(ToastContext)
 }
 
-export const ToastProvider = ({Children})=>{
+export const ToastProvider = ({children})=>{
     const [toastMessage,setToastMessage]=useState(null)
     const [toastType,setToastType]=useState('')
 
@@ -22,7 +22,7 @@ export const ToastProvider = ({Children})=>{
     return(
         <ToastContext.Provider
         value={{showToast,clearToast}}>
-            {Children}
+            {children}
             {toastMessage &&(
                 <ErrorHandling message={toastMessage}
                 show={!!toastMessage}

@@ -32,7 +32,7 @@ const ErrorHandling = ({message,type,show,onClose}) => {
   return (
     <div className={`fixed top-32 right-5  max-w-xs w-full p-4 rounded-md shadow-md transition-transform transform ease-in-out duration-300 ${notifyStyle}`}>
       <div className="flex justify-between items-center">
-        <span className='text-white z-10'>{message}</span>
+        <span className='text-white'>{message}</span>
         <button
           onClick={() => {
             setVisible(false);
