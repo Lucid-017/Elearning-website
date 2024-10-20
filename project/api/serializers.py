@@ -20,8 +20,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             'email',
             'phone_number',
             'date_of_birth',
-            'country',
+            'gender',
             'address',
+            'country',
             'password',
             'password2'
         ]
@@ -46,6 +47,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             country = validated_data['country'],
             address = validated_data['address'],
             date_of_birth = validated_data['date_of_birth'],
+            gender = validated_data['gender'],
         )
 
         user.set_password(validated_data['password']) # saving/hashing the password to the user
