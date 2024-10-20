@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import "../css/Login.css";
 import { Link } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./context/ToastContext";
@@ -102,6 +103,49 @@ const Login = () => {
   //     console.log("Error: ---", error.response)
   //   }
   // }
+
+  const handleLoginSuccess = async (response) => {
+    const { credential } = response; // This contains the Google ID token
+    try {
+      const res = await axios.post('/api/google-login/', { token: credential }, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const { access_token, refresh_token, username } = res.data;
+
+      // if thus user has already registered
+      if (res.data.user_exists) {
+        // Store tokens in localStorage
+        localStorage.setItem(username, JSON.stringify({
+          access_token: access_token,
+          refresh_token: refresh_token,
+        }));
+  
+        // Navigate to the dashboard
+        showToast('Login Successful', 'success');
+        navigate('/dashboard');
+
+      } 
+      // if the user does not exists,redirect the user to the complete google registeration page
+      else {
+        // Passing along the prefilled Google info (email, first_name, last_name)in url to be navigated to
+        navigate(`/register/complete-google-registration?email=${res.data.email}&first_name=${res.data.first_name}&last_name=${res.data.last_name}`)
+      }
+
+    } catch (error) {
+      showToast('Google Login Failed', 'error');
+      console.error("Google login error: ", error);
+    }
+  };
+
+    // handle Google login error
+    const handleLoginError = () => {
+      console.log('Google Login Failed', 'error');
+    };
+  
+
 
   const clearError= ()=>{
     setError(null)
@@ -204,15 +248,12 @@ const Login = () => {
                       <button disabled={loading} type="submit" className="btn w-full mb-5 py-5 bg-[#FF9500] rounded-lg text-white font-bold">
                         Login {loading ? '...':null}
                       </button>
-                      <button 
-                      // data-client_id='id.apps.googleusercontent.com'
-                      // data-login-uri = 'backend google url'
-                      // data-callback={handleGoogleLogin}
-                      // onClick={()=>window.google?.accounts.id.prompt()}
-                      type="submit"
-                       className="btn w-full mb-2 py-5 bg-[#F7F7F8] rounded-lg font-[600]">
-                        Login with Google
-                      </button>
+                      <GoogleOAuthProvider clientId="285601537552-ibees7qsgb5hjkr2a1r9qb3jjk14gvu2.apps.googleusercontent.com">
+                      <GoogleLogin
+                            onSuccess={handleLoginSuccess}
+                            onError={handleLoginError}
+                        />
+                      </GoogleOAuthProvider>
                       <p>
                       Don't have an account?                       <Link to={'/register'} className="pl-1 link">
                        Sign Up

@@ -11,6 +11,7 @@ import ForgotPassword from './pages/Login/ForgotPassword';
 import Contact from './pages/Contact';
 import ResetPassword from './pages/Login/Reset password';
 import Dashboard from '../src/pages/Dashboard/Dashboard'
+import CompleteGoogleRegistration from './pages/Login/complete-google-registeration';
 import { ToastProvider } from './pages/Login/context/ToastContext';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
       <Route path='/login' element={<Login/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/register' element={<Signup/>}/>
+      <Route path="/register/complete-google-registration" element={<CompleteGoogleRegistration/>}/>
       <Route path='/forgotpassword' element={<ForgotPassword/>}/>
       <Route path='/confirm-password-reset/:uidb64/:token' element={<ResetPassword/>}/>
       <Route path='/contact' element={<Contact/>}/>
