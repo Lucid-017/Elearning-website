@@ -1,0 +1,10 @@
+.welcome{
+    position: relative;
+}
+.welcome::before{
+    content: '';
+    position: absolute;
+    width: 20px;
+    background-color: #FF9500;
+    height: 100%;
+}

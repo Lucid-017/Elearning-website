@@ -18,6 +18,7 @@ const Signup = () => {
   const [last_name,setLName]= useState('')
   const [date_of_birth,setDob]= useState('')
   const [address,setAddress]= useState('')
+  const [gender,setGender]= useState('')
   const [phone_number,setMobile]= useState('')
   const [country,setCountry]= useState('')
   const [password,setPassword]= useState('')
@@ -40,6 +41,7 @@ const Signup = () => {
       last_name,
       username,
       date_of_birth,
+      gender,
       phone_number,
       address,
       country,
@@ -59,10 +61,11 @@ const Signup = () => {
       // storing refresh and access token
       const { access_token, refresh_token, username } = response.data;
         
-      localStorage.setItem(username, JSON.stringify({
-          access_token: access_token,
-          refresh_token: refresh_token,
-      }));
+      localStorage.setItem("user_info", JSON.stringify({
+        access_token: access_token,
+        refresh_token: refresh_token,
+        username: username
+        }));
 
       // handle login after signup
       setLoading(false)
@@ -103,7 +106,7 @@ const Signup = () => {
 
       const { access_token, refresh_token, username } = res.data;
 
-      // if thus user has already registered
+      // if this user has already registered
       if (res.data.user_exists) {
         // Store tokens in localStorage
         localStorage.setItem(username, JSON.stringify({
@@ -248,6 +251,18 @@ const Signup = () => {
                       name="dob"
                       required
                     />
+                  </div>
+                  <div>
+                    <label htmlFor="gender">Gender</label>
+                    <select 
+                      className="select block w-full border border-gray-200 rounded-md px-4 py-2"
+                      onChange={e=>setGender(e.target.value)}
+                    name="gender"
+                    value={gender}>
+                        <option value="">--Select Gender--</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>
                   </div>
                   <div>
                     <label htmlFor="address">Address</label>
