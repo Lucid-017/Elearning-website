@@ -1,19 +1,40 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../Layout/css/Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user,setUser] = useState('')
+  const [isloggedin, setIsLoggedIn] = useState(true)
+  const navigate = useNavigate()
 
   // Toggle the mobile menu
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleLogout =()=>{
+    setIsLoggedIn(false)
+    localStorage.removeItem('user_info')
+    console.log('user info removed')
+    setUser('')
+    navigate('/login')
+  }
+
   //NOTE check if refresh token exist, if it does then use info to render log out for signed in users
+  useEffect(() => {
+    const userInfoString = localStorage.getItem('user_info');
+    const userInfo = JSON.parse(userInfoString);
+    // Now userInfo will be an object with access_token, refresh_token, and username
+    setUser(userInfo);  
+    if(user!==''){
+      setIsLoggedIn(true)
+    }  
+  }, []);
+
   return (
     <>
-      <nav className="py-10 px-5 phone:px-10 tablet:px-20 mb-5 tablet:mb-20">
+      <nav className="py-10 px-5 phone:px-10 tablet:px-20 mb-5 tablet:mb-10">
         
   <div className="w-full flex justify-between">
    {/* Logo */}
@@ -30,7 +51,26 @@ const Navbar = () => {
     </div>
 
     {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
-    <div className="hidden tablet:flex space-x-6">
+    {user !=='' ? (
+      <>
+        <div className="hidden tablet:flex space-x-6">
+      <Link to={'/dashboard'} className="link">
+        My Dashboard
+      </Link>
+      <Link to={'/courses'} className="link">
+      Learning
+      </Link>
+      <Link to={'/pricing'} className="link">
+      Subscription
+      </Link>
+      <Link to={'/about'} className="link">
+        Settings
+      </Link>
+    </div>
+      </>
+    ):(
+      <>
+          <div className="hidden tablet:flex space-x-6">
       <Link to={'/'} className="link">
         Home
       </Link>
@@ -47,9 +87,25 @@ const Navbar = () => {
       Contact
       </Link>
     </div>
+      </>
+    )}
+
 
     {/* Sign Up Button (Visible on laptop screens and above) */}
-    <div className="hidden laptop:fpl-40 laptop:block">
+    {user !=='' ? (
+      <>
+      <div className="hidden laptop:fpl-40 laptop:block">
+      <Link to={'/logout'} className="link mr-2">
+        <button className="px-4 py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200">Settings</button>
+       </Link>
+     
+        <button onClick={handleLogout} className="px-4 py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200">Log out</button>
+      
+      </div>
+      </>
+    ):(
+      <>
+       <div className="hidden laptop:fpl-40 laptop:block">
     <Link to={'/login'} className="link mr-2">
     <button className="px-4 py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200">Login</button>
     </Link>
@@ -57,6 +113,9 @@ const Navbar = () => {
     <button className="bg-[#ff9900] text-white px-4 py-2 rounded-md">Sign Up</button>
     </Link>
     </div>
+      </>
+    )}
+   
   </div>
 
   {/* Dropdown Menu (Visible on phone screens when hamburger is clicked) */}
@@ -77,12 +136,24 @@ const Navbar = () => {
       <Link to={'/contact'} className="link hover:bg-gray-300 px-4 py-2 rounded-md">
       Contact
       </Link>
-      <Link to={'/login'} >
-      <button className="bg-[#F7F7F8] w-full text-black px-4 py-2 rounded-md hover:bg-slate-200 transition-colors duration-200">Login</button>
-      </Link>
-      <Link to={'/register'}>
-      <button className="bg-[#ff9900] w-full text-white  px-4 py-2 rounded-md hover:font-[600] transition duration-200">Sign Up</button>
-      </Link>
+      {/* if user is logged in  */}
+      {user!=='' ? (
+        <>
+        
+            <button onClick={handleLogout} className="bg-[#F7F7F8] w-full text-black px-4 py-2 rounded-md hover:bg-slate-200 transition-colors duration-200">Log out</button>
+          
+        </>
+      ):(
+        <>
+          <Link to={'/login'} >
+            <button className="bg-[#F7F7F8] w-full text-black px-4 py-2 rounded-md hover:bg-slate-200 transition-colors duration-200">Login</button>
+          </Link>
+          <Link to={'/register'}>
+           <button className="bg-[#ff9900] w-full text-white  px-4 py-2 rounded-md hover:font-[600] transition duration-200">Sign Up</button>
+          </Link>
+        </>
+      )}
+
 
     </div>
   )}

@@ -21,6 +21,7 @@ const CompleteGoogleRegistration = () => {
     const [date_of_birth,setDob]= useState('')
     const [address,setAddress]= useState('')
     const [phone_number,setMobile]= useState('')
+    const [gender,setGender]= useState('')
     const [country,setCountry]= useState('')
     const [error,setError] = useState(null)
     const [clIcked,setClicked] = useState(false)
@@ -40,6 +41,7 @@ const CompleteGoogleRegistration = () => {
         last_name,
         username,
         date_of_birth,
+        gender,
         phone_number,
         address,
         country,
@@ -53,13 +55,13 @@ const CompleteGoogleRegistration = () => {
           }
         })
         console.log('signup was successful', response.data)
-
+        // store and track login token and info
         const { access_token, refresh_token, username } = response.data;
-        
-        localStorage.setItem(username, JSON.stringify({
-            access_token: access_token,
-            refresh_token: refresh_token,
-        }));
+        localStorage.setItem("user_info", JSON.stringify({
+          access_token: access_token,
+          refresh_token: refresh_token,
+          username: username
+          }));
 
         // handle login after signup
         setLoading(false)
@@ -205,6 +207,18 @@ const CompleteGoogleRegistration = () => {
                         required
                       />
                     </div>
+                    <div>
+                    <label htmlFor="gender">Gender</label>
+                    <select 
+                      className="select block w-full border border-gray-200 rounded-md px-4 py-2"
+                      onChange={e=>setGender(e.target.value)}
+                    name="gender"
+                    value={gender}>
+                        <option value="">--Select Gender--</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>
+                  </div>
                     <div>
                       <label htmlFor="address">Address</label>
                       <input 
