@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useToast } from "./context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
+import { useAuth } from '../../Components/Context/AuthContext';
 
 const CompleteGoogleRegistration = () => {
     const location = useLocation();
@@ -28,6 +29,8 @@ const CompleteGoogleRegistration = () => {
     const [loading, setLoading] =useState(false)
     const [toastMessage,setToastMessage]=useState('')
     const [toastType,setToastType]=useState('')
+    const {authlogin}=useAuth()
+
     // 
     const navigate = useNavigate()
   
@@ -57,12 +60,13 @@ const CompleteGoogleRegistration = () => {
         console.log('signup was successful', response.data)
         // store and track login token and info
         const { access_token, refresh_token, username } = response.data;
-        localStorage.setItem("user_info", JSON.stringify({
+        const userInfo =localStorage.setItem("user_info", JSON.stringify({
           access_token: access_token,
           refresh_token: refresh_token,
           username: username
           }));
-
+          // store global variable
+          authlogin(userInfo)
         // handle login after signup
         setLoading(false)
         // if(response?.status === 200){

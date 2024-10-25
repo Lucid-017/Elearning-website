@@ -1,11 +1,17 @@
 import { useState,useEffect } from "react";
 import "../Layout/css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
 
+/* NOTE 
+update state across app 
+Handle the global state change on login and logout
+*/
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user,setUser] = useState('')
-  const [isloggedin, setIsLoggedIn] = useState(true)
+  // const [user,setUser] = useState(null)
+  // const [isloggedin, setIsLoggedIn] = useState(false)
+  const {user,logout,isloggedin} = useAuth()
   const navigate = useNavigate()
 
   // Toggle the mobile menu
@@ -14,23 +20,28 @@ const Navbar = () => {
   };
 
   const handleLogout =()=>{
-    setIsLoggedIn(false)
-    localStorage.removeItem('user_info')
-    console.log('user info removed')
-    setUser('')
+    logout()
     navigate('/login')
   }
 
   //NOTE check if refresh token exist, if it does then use info to render log out for signed in users
-  useEffect(() => {
-    const userInfoString = localStorage.getItem('user_info');
-    const userInfo = JSON.parse(userInfoString);
-    // Now userInfo will be an object with access_token, refresh_token, and username
-    setUser(userInfo);  
-    if(user!==''){
-      setIsLoggedIn(true)
-    }  
-  }, []);
+  // useEffect(() => {
+  //   // const userInfoString = localStorage.getItem('user_info');
+  //   // const userInfo = JSON.parse(userInfoString);
+  //   // // Now userInfo will be an object with access_token, refresh_token, and username
+  //   // if(userInfo){
+  //   //   setUser(userInfo)
+  //   //   console.log('user is logged in')
+  //   //   setIsLoggedIn(true)
+  //   // } else{
+  //   //   setUser(null)
+  //   //   setIsLoggedIn(false)
+  //   // }
+  //   const userinfostring = localStorage.getItem('user_info')
+  //   const userInfo = userinfostring ? JSON.parse(userinfostring):null;
+  //   setUser(userInfo)
+  //   setIsLoggedIn(!!userInfo) 
+  // }, [user]);
 
   return (
     <>
@@ -51,7 +62,7 @@ const Navbar = () => {
     </div>
 
     {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
-    {user !=='' ? (
+    {user ? (
       <>
         <div className="hidden tablet:flex space-x-6">
       <Link to={'/dashboard'} className="link">
@@ -92,7 +103,7 @@ const Navbar = () => {
 
 
     {/* Sign Up Button (Visible on laptop screens and above) */}
-    {user !=='' ? (
+    {user ? (
       <>
       <div className="hidden laptop:fpl-40 laptop:block">
       <Link to={'/logout'} className="link mr-2">
@@ -137,7 +148,7 @@ const Navbar = () => {
       Contact
       </Link>
       {/* if user is logged in  */}
-      {user!=='' ? (
+      {user ? (
         <>
         
             <button onClick={handleLogout} className="bg-[#F7F7F8] w-full text-black px-4 py-2 rounded-md hover:bg-slate-200 transition-colors duration-200">Log out</button>
