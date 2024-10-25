@@ -7,6 +7,7 @@ import countries from './countries';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "./context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
+import { useAuth } from '../../Components/Context/AuthContext';
 
 
 const Signup = () => {
@@ -28,6 +29,8 @@ const Signup = () => {
   const [loading, setLoading] =useState(false)
   const [toastMessage,setToastMessage]=useState('')
   const [toastType,setToastType]=useState('')
+  const {authlogin}=useAuth()
+
   // 
   const navigate = useNavigate()
 
@@ -61,7 +64,7 @@ const Signup = () => {
       // storing refresh and access token
       const { access_token, refresh_token, username } = response.data;
         
-      localStorage.setItem("user_info", JSON.stringify({
+      const userInfo = localStorage.setItem("user_info", JSON.stringify({
         access_token: access_token,
         refresh_token: refresh_token,
         username: username
@@ -69,6 +72,7 @@ const Signup = () => {
 
       // handle login after signup
       setLoading(false)
+      authlogin(userInfo)
       // if(response?.status === 200){
         showToast('User registered successfully', 'success')  //global popup for success
       // }
@@ -260,8 +264,8 @@ const Signup = () => {
                     name="gender"
                     value={gender}>
                         <option value="">--Select Gender--</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
                   </div>
                   <div>

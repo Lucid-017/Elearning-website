@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "./context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
 import {GoogleOAuthProvider,GoogleLogin,googleLogout} from "@react-oauth/google";
-
+import { useAuth } from "../../Components/Context/AuthContext";
 const Login = () => {
   //
   const { showToast } = useToast();
@@ -21,6 +21,7 @@ const Login = () => {
   const [errormsg, setError] = useState(null);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("");
+  const {authlogin}=useAuth()
   const navigate = useNavigate();
 
   // handle form submit
@@ -47,16 +48,9 @@ const Login = () => {
       // handle successful login: saving the access and refresh token to localstorage and then navigate to dashboard
       // Extracting the tokens and username from the response
       const { access_token, refresh_token } = response.data;
-
-      // Creating an object with username as the key and the tokens as the valuea
-      // const tokens = {
-      //   access_token: access_token,
-      //   refresh_token: refresh_token,
-      // };
-
+      
       // Saving the userTokens object to localStorage as a string
-      // localStorage.setItem(username, JSON.stringify(tokens));
-      localStorage.setItem("user_info", JSON.stringify({
+      const userInfo = localStorage.setItem("user_info", JSON.stringify({
         access_token: access_token,
         refresh_token: refresh_token,
         username: username
@@ -66,6 +60,9 @@ const Login = () => {
       // navigate to dahboard on successful login
       setLoading(false);
       if (response?.status === 200) {
+        // store user info as global variable
+        authlogin(userInfo)
+        // notification on success
         showToast("Login Successful", "success"); //global popup for success
         setTimeout(() => {
           navigate("/dashboard");
@@ -81,29 +78,12 @@ const Login = () => {
       }
     } catch (err) {
       const errmesg = err.response?.data || { error: "login failed!" };
+        // notification on error
       showToast(errmesg.error || "Something went wrong", "error"); //global popup for error
       setLoading(false);
       console.log("error ", err);
     }
   };
-
-  // handle login with google
-  // const handleGoogleLogin = async (response)=>{
-  //   const {credentials} = response //gets the id token from the response
-  //   try{
-  //     const res = await axios.post('backendgooglelogin',{
-  //       idToken: credentials,
-  //     })
-  //     console.log('google login success', res.data)
-  //     //
-  //     if(res.ok){
-  //       navigate('/dashboard')
-  //     }
-  //   }catch(error){
-  //     setError(error.response?.data?.message || 'Google Login failed')
-  //     console.log("Error: ---", error.response)
-  //   }
-  // }
 
   const handleLoginSuccess = async (response) => {
     const { credential } = response; // This contains the Google ID token
@@ -123,14 +103,14 @@ const Login = () => {
       // if thus user has already registered
       if (res.data.user_exists) {
         // Store tokens in localStorage
-        localStorage.setItem(
-          username,
-          JSON.stringify({
-            access_token: access_token,
-            refresh_token: refresh_token,
-          })
-        );
-
+              // Saving the userTokens object to localStorage as a string
+      const userInfo = localStorage.setItem("user_info", JSON.stringify({
+        access_token: access_token,
+        refresh_token: refresh_token,
+        username: username
+        }));
+          // store global variable
+          authlogin(userInfo)
         // Navigate to the dashboard
         showToast("Login Successful", "success");
         navigate("/dashboard");
@@ -172,11 +152,6 @@ const Login = () => {
     }
   }, []);
 
-  // useEffect(()=>{
-  //   if(toastMessage && toastType)
-  //  console.log('updated toast message', toastMessage)
-  //  console.log('updated toast type', toastType)
-  // },[toastMessage,toastType])
   return (
     <>
       <div className="px-5 phone:px-10">

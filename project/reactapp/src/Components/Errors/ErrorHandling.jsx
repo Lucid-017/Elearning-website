@@ -26,13 +26,13 @@ const ErrorHandling = ({message,type,show,onClose}) => {
       notifyStyle = 'bg-red-500 text-white'
     }
     else if (type === 'info'){
-      notifyStyle = 'bg-slate-200 text-white'
+      notifyStyle = 'bg-slate-200 text-black'
     }
 
   return (
     <div className={`fixed top-32 right-5  max-w-xs w-full p-4 rounded-md shadow-md transition-transform transform ease-in-out duration-300 ${notifyStyle}`}>
       <div className="flex justify-between items-center">
-        <span className='text-white'>{message}</span>
+        <span>{message}</span>
         <button
           onClick={() => {
             setVisible(false);
