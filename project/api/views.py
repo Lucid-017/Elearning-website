@@ -1,54 +1,83 @@
 import requests
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from social_django.models import UserSocialAuth
-
-from .serializers import RegisterSerializer, PasswordResetSerializer
+from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer
 from account.models import User
+from learning.models import Quiz, Question, Answer, StudentQuizAttempt, Course, YearLevel, Subject
 
 # Create your views here.
 
+# auth views
+
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_routes(request):
     routes = [
         {
             'Endpoint': '/api/sign-in/',
             'method': 'POST',
-            'body': {'body': ""},
             'description': 'Authenticates and logs in a user'
         },
         {
             'Endpoint': '/api/register/',
             'method': 'POST',
-            'body': {'body': ""},
             'description': 'Registers a new user to the database'
         },
         {
             'Endpoint': '/api/password-reset/',
             'method': 'POST',
-            'body': {'body': ""},
             'description': 'Starts the password reset process and sends a reset password link'
         },
         {
             'Endpoint': 'api/password-reset-confirm/uidb64/token/',
             'method': 'POST',
-            'body': {'body': ""},
             'description': 'Saves the new password'
         },
+        {
+            'Endpoint': 'api/year-levels/<str:slug>/',
+            'method': 'GET',
+            'description': 'Lists all the year level and skills for a particular subject'
+        },
+        {
+            'Endpoint': 'api/quizzes/',
+            'method': 'GET',
+            'description': 'Lists al quizzes'
+        },
+        {
+            'Endpoint': 'api/quizzes/<int:pk>/',
+            'method': 'GET',
+            'description': 'Gets all the questions and anser of a particular quiz via primary key'
+        },
+        {
+            'Endpoint': 'api/quizzes/<int:pk>/submit-question/',
+            'method': 'POST',
+            'description': 'Submits a questions in a quiz'
+        },
+        {
+            'Endpoint': 'api/quizzes/<int:pk>/submit/',
+            'method': 'POST',
+            'description': 'Submits an entire quiz'
+        },
+
     ]
 
     return Response(routes)
  
 
+#  Authentication views
+
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def login_user(request):
     username = request.data.get('username')
     password = request.data.get('password')
@@ -69,6 +98,7 @@ def login_user(request):
         return Response({'error': 'Invalid username or password'}, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register_user(request):
     if request.method == "POST":
         serializer = RegisterSerializer(data=request.data)
@@ -89,6 +119,7 @@ def register_user(request):
 
 
 class GoogleLogin(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         token = request.data.get('token')
         try:
@@ -155,6 +186,7 @@ class GoogleLogin(APIView):
         
 
 class CompleteGoogleRegistration(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         # Get the data from the request
         first_name = request.data.get('first_name')
@@ -208,6 +240,7 @@ class CompleteGoogleRegistration(APIView):
 
     
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def password_reset_request(request):
     serializer = PasswordResetSerializer(data=request.data)
     if serializer.is_valid():
@@ -215,7 +248,9 @@ def password_reset_request(request):
         return Response({'message': 'Password reset email has been sent.'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def password_reset_confirm(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -238,3 +273,94 @@ def password_reset_confirm(request, uidb64, token):
         return Response({"message": "Password has been reset successfully"}, status=status.HTTP_200_OK)
     else:
         return Response({"error": "Invalid token or user"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+# Learning views
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def year_levels(request, slug):
+    try:
+        subject = Subject.objects.get(slug=slug)
+    except Subject.DoesNotExist:
+        return Response({'error': 'Subject not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    year_levels = YearLevel.objects.all()
+    serializer = YearLevelSerializer(year_levels, many=True, context={'slug': slug})
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def quiz_list(request):
+    quizzes = Quiz.objects.all()
+    serializer = QuizSerializer(quizzes, many=True)
+    print(serializer.data)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def quiz_detail(request, pk):
+    try:
+        quiz = Quiz.objects.get(pk=pk)
+        serializer = QuizSerializer(quiz)
+        print(serializer.data)
+        return Response(serializer.data)
+    except Quiz.DoesNotExist:
+        return Response({'error': 'Quiz not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def submit_question(request, pk):
+    question_id = request.data.get('question_id')
+    answer_id = request.data.get('answer')
+    print('Question:', question_id, "   ", 'Answer:', answer_id)
+
+    try:
+        question = Question.objects.get(id=question_id)
+        selected_answer = Answer.objects.get(id=answer_id, question=question)
+
+        is_correct = selected_answer.is_correct
+
+        return Response({
+            'is_correct': is_correct
+        })
+
+    except Question.DoesNotExist:
+        return Response({'error': 'Question not found'}, status=404)
+
+    except Answer.DoesNotExist:
+        return Response({'error': 'Answer not found'}, status=404)
+
+    
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def submit_quiz(request, pk):
+    try:
+        quiz = Quiz.objects.get(pk=pk)
+        user = request.user
+
+        submitted_answers = request.data.get('answers', {})
+
+        correct_count = 0
+        questions_answered = 0
+        total_questions = quiz.questions.count()
+
+        for question in quiz.questions.all():
+            submitted_answer_id = submitted_answers.get(str(question.id))
+            if submitted_answer_id:
+                selected_answer = Answer.objects.get(id=submitted_answer_id)
+                questions_answered += 1
+                if selected_answer.is_correct:
+                    correct_count += 1
+
+        score = (correct_count / total_questions) * 100
+        StudentQuizAttempt.objects.create(user=user, quiz=quiz, questions_answered=questions_answered, score=score)
+        return Response({'score': score}, status=status.HTTP_200_OK)
+
+    except Quiz.DoesNotExist:
+        return Response({'error': 'Quiz not found'}, status=status.HTTP_404_NOT_FOUND)
