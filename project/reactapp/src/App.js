@@ -12,6 +12,9 @@ import Contact from './pages/Contact';
 import ResetPassword from './pages/Login/Reset password';
 import Dashboard from '../src/pages/Dashboard/Dashboard'
 import CompleteGoogleRegistration from './pages/Login/complete-google-registeration';
+import YearLevels from './pages/YearLevels';
+import QuizList from './pages/QuizList';
+import QuizDetail from './pages/QuizDetail';
 import { ToastProvider } from './pages/Login/context/ToastContext';
 
 function App() {
@@ -35,6 +38,9 @@ function App() {
       <Route path='/forgotpassword' element={<ForgotPassword/>}/>
       <Route path='/confirm-password-reset/:uidb64/:token' element={<ResetPassword/>}/>
       <Route path='/contact' element={<Contact/>}/>
+      <Route path="/learning/:subject/" element={<YearLevels/>}/>
+      <Route path='/maths' element={<QuizList/>}/>
+      <Route path='/maths/quiz/:quizId' element={<QuizDetail/>}/>
       <Route path='/*' element={<NotFound/>}/>
     </Routes>
       </div>

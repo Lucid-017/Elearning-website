@@ -44,14 +44,15 @@ INSTALLED_APPS = [
     # my apps
     'account',
     'api',
+    'learning',
 
     # Third-party apps
+    "corsheaders",
+    'django_countries', 
+    'phonenumber_field',
     'rest_framework',
     'rest_framework_simplejwt',
-    "corsheaders",
     'social_django',
-    'phonenumber_field',
-    'django_countries', 
 ]
 
 MIDDLEWARE = [
@@ -128,7 +129,10 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 AUTH_USER_MODEL = 'account.User'
