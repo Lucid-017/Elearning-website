@@ -21,7 +21,7 @@ export const ToastProvider = ({children})=>{
     }
     return(
         <ToastContext.Provider
-        value={{showToast,clearToast}}>
+        value={{showToast,clearToast, setToastMessage,setToastType, toastMessage,toastType}}>
             {children}
             {toastMessage &&(
                 <ErrorHandling message={toastMessage}

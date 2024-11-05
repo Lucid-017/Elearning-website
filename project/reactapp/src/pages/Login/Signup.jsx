@@ -331,8 +331,8 @@ const Signup = () => {
                     type='submit'
                     className="btn w-full py-5 bg-[#FF9500] rounded-lg text-white font-bold">
                       Sign Up
-                    </button>                    <p className="my-2 text-center">OR</p>
-                    
+                    </button>                    
+                    <p className="my-2 text-center">OR</p>
                     <GoogleOAuthProvider clientId="285601537552-ibees7qsgb5hjkr2a1r9qb3jjk14gvu2.apps.googleusercontent.com">
                       <GoogleLogin
                             onSuccess={handleLoginSuccess}

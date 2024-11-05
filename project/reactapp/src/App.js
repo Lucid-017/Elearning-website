@@ -17,6 +17,7 @@ import QuizList from './pages/QuizList';
 import QuizDetail from './pages/QuizDetail';
 import { ToastProvider } from './pages/Login/context/ToastContext';
 import { AuthProvider } from "./Components/Context/AuthContext";
+import Learning from './pages/Courses/Learning';
 
 function App() {
   return (
@@ -35,14 +36,18 @@ function App() {
         <Route path='/about' element={<About/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/learning/:subject' element={<Learning/>} 
+        children={
+          <Route path=":subject" element={<YearLevels/>}/>
+        }/>
+        {/* children */}
         <Route path='/register' element={<Signup/>}/>
         <Route path="/register/complete-google-registration" element={<CompleteGoogleRegistration/>}/>
         <Route path='/forgotpassword' element={<ForgotPassword/>}/>
         <Route path='/confirm-password-reset/:uidb64/:token' element={<ResetPassword/>}/>
         <Route path='/contact' element={<Contact/>}/>
-        <Route path="/learning/:subject/" element={<YearLevels/>}/>
-        <Route path='/maths' element={<QuizList/>}/>
-        <Route path='/maths/quiz/:quizId' element={<QuizDetail/>}/>
+        {/* <Route path='/maths' element={<QuizList/>}/> */}
+        {/* <Route path='/maths/quiz/:quizId' element={<QuizDetail/>}/> */}
         <Route path='/*' element={<NotFound/>}/>
       </Routes>
         </div>

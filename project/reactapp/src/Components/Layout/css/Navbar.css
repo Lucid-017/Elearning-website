@@ -11,12 +11,20 @@ div .link:hover{
     color: #ff9900;
 
 }
+.middle .link{
+    margin-right: 20px;
+
+}
 .ham .link{    
     display: block;
     text-decoration: none;
     font-weight: 600;
-    color: black;
 }
 .ham .link:hover{    
     color: inherit;
+}
+/* learning nav */
+.learning .link{
+    color: white;
+    padding: 0 20px;
 }

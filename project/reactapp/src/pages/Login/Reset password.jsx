@@ -1,12 +1,15 @@
 import axios from 'axios'
 import '../css/resetPassword.css'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useToast } from './context/ToastContext'
 
 const ResetPassword = () => {
+  const {showToast} = useToast()
   const [new_password,setPassword] =useState('')
   const [confirm_password,setConfirmPassword] =useState('')
   const [error,setError] =useState(null)
+  const navigate = useNavigate()
 
   // let uidb64 = match.params.uid
   // let token = match.params.token 
@@ -24,10 +27,16 @@ const ResetPassword = () => {
           'Content-Type':'application/json'
         }
       })
-      console.log('password reset complete')
+      if(res.status===200){
+        console.log('password reset complete')
+        showToast('password reset complete','success')
+        navigate('/login')
+      }
     } catch (error) {
-      setError(error)
-      console.log(error)
+      const errmesg = error.response?.data?.error || 'Invalid request'
+      setError(errmesg)
+      showToast(errmesg,'error')
+      console.log(errmesg)
     }
   }
   return (

@@ -2,37 +2,60 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "./context/ToastContext";
+import ErrorHandling from "../../Components/Errors/ErrorHandling";
 
 const ForgotPassword = () => {
   // 
-  const {showToast} =useToast();
+  const {showToast,toastMessage,toastType,setToastMessage,setToastType} =useToast();
   // 
   const [email,setEmail] = useState('')
-  const [error,setError] =useState(null)
+  const [loading, setLoading] = useState(false);
+  const [error,setError] =useState('')
+  // const [clicked,setClicked] =useState(false)
   const navigate = useNavigate()
   // 
   const handlesubmit = async (e)=>{
       e.preventDefault();
+    //  setClicked(true)
       try {
+        setLoading(true)
+        // clear error state when mounted
+        setError('')
         const response = await axios.post('/api/password-reset/',{
           email
         },{headers:{
             'Content-Type': 'application/json',
           }})
           // if response is ok
-          // authlogin(userInfo)
-        // notification on success
-        showToast("Details on password has been sent to your email", "success"); 
-          // navigate('/confirmpassword')
-          console.log(response)
+          if(response.status ===200){
+          // notification on success
+          setLoading(false)
+          // if(clicked){
+            showToast('Details on password has been sent to your email', "success"); 
+            // navigate('/confirmpassword')
+            console.log(response)
+          }
 
       } catch (err) {
-        setError(err.email|| 'Request failed!')
-        console.log('error',error)
-        showToast(error, "error"); 
-
+        setLoading(false)
+        // On first click, error is empty, soluttion:use error directly in showtoast
+        // setError(err.response.data?.email|| 'Request failed!')
+        // showToast(error || 'Something went wrong try again', "error"); 
+        // console.log('error',error)
+        const errmesg = err.response?.data?.email || 'Request failed'
+        setError(errmesg)
+        showToast(errmesg,"error")
+        console.log(errmesg)
       }
   }
+
+  // const clearError = () => {
+  //   setError(null);
+  //   setToastMessage("");
+  //   setToastType("");
+  //   setClicked(false);
+  // };
+
   return (
     <>
 <div className="flex justify-center items-center min-h-full bg-gray-50">
@@ -61,10 +84,11 @@ const ForgotPassword = () => {
           </div>
 
           <button
+            disabled= {loading}
             type="submit"
             className="w-full py-3 tablet:py-4 bg-[#FF9500] text-white text-lg tablet:text-xl font-bold rounded-lg hover:bg-[#e08700] transition duration-300"
           >
-             Send Reset Link            
+             Send Reset Link   {loading ? "..." : null}
           </button>
         </form>
         <div className="text-center mt-4">
@@ -77,6 +101,14 @@ const ForgotPassword = () => {
           </div>
       </div>
     </div>
+    {/* {clicked && toastMessage && toastType && (
+        <ErrorHandling
+          message={toastMessage}
+          show={toastMessage !== null}
+          type={toastType}
+          onClose={clearError}
+        />
+      )} */}
     </>
   );
 };
