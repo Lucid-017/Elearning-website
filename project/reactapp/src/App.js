@@ -1,4 +1,5 @@
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -12,17 +13,45 @@ import Contact from './pages/Contact';
 import ResetPassword from './pages/Login/Reset password';
 import Dashboard from '../src/pages/Dashboard/Dashboard'
 import CompleteGoogleRegistration from './pages/Login/complete-google-registeration';
-import YearLevels from './pages/YearLevels';
-import QuizList from './pages/QuizList';
-import QuizDetail from './pages/QuizDetail';
+import YearLevels from './pages/Courses/YearLevels';
+// import QuizList from './pages/QuizList';
+// import QuizDetail from './pages/QuizDetail';
 import { ToastProvider } from './pages/Login/context/ToastContext';
-import { AuthProvider } from "./Components/Context/AuthContext";
+import { AuthProvider, useAuth } from "./Components/Context/AuthContext";
 import Learning from './pages/Courses/Learning';
+import { useEffect, useState } from 'react';
+import ProtectedRoute from './Route';
+
+// const ProtectedRoute = ({children})=>{
+//   const isAuthenticated =localStorage.getItem('user_info')
+//   return isAuthenticated ? children : <Navigate to={'/login'}/>
+// }
 
 function App() {
+  // confirm if user is logged in
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token,setToken] =useState(null)
+  // runs when application loads
+  useEffect(() => {
+    const userInfoString = localStorage.getItem('user_info');
+    if (userInfoString) {
+      const userInfo = JSON.parse(userInfoString);
+      setToken(userInfo);
+      setIsLoggedIn(true);
+            console.log('user is logged in')
+    }else{
+      console.log('user is not logged in')
+            // setUser(null)
+      setIsLoggedIn(false)
+      setToken(null);
+    }
+ 
+  }, [token]); //anytime user logs out and logs in
+
   return (
+    <AuthProvider>
+
     <ToastProvider>
-      <AuthProvider>
       <div>
       {/* ROUTER */}
       
@@ -32,15 +61,19 @@ function App() {
     <Navbar/>
       {/* NAVBAR END */}
       <Routes>
-        <Route path='/' exact element={<Home/>}/>
+        {/* redirect '/' to dashboard if logged in */}
+        <Route path='/' element={isLoggedIn ? <Navigate to='/dashboard'/>:<Home/>}/>  
         <Route path='/about' element={<About/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/learning/:subject' element={<Learning/>} 
+        {/* Routes that require Auth */}
+        <Route path='/dashboard' element={<ProtectedRoute><Dashboard/></ProtectedRoute>}/>
+        <Route path='/learning/' element={<ProtectedRoute><Learning/></ProtectedRoute>} 
         children={
-          <Route path=":subject" element={<YearLevels/>}/>
+          <Route path=":subject" element={<ProtectedRoute><YearLevels/></ProtectedRoute>}/>
         }/>
-        {/* children */}
+        {/* Routes that require Auth */}
+
+
         <Route path='/register' element={<Signup/>}/>
         <Route path="/register/complete-google-registration" element={<CompleteGoogleRegistration/>}/>
         <Route path='/forgotpassword' element={<ForgotPassword/>}/>
@@ -58,8 +91,9 @@ function App() {
       {/* FOOTER */}
       <Footer/>
       </div>
-      </AuthProvider>
     </ToastProvider>
+    </AuthProvider>
+
   );
 }
 
