@@ -2,22 +2,17 @@
     text-decoration: none;
     color: black ;
     transition: all .2s ease-in;
-}
-div .link{    text-decoration: none;
     font-weight: 600;
-    color: black;
+    /* padding-right: 10px; */
 }
+
 div .link:hover{    
     color: #ff9900;
 
 }
-.middle .link{
-    margin-right: 20px;
-
-}
+/* hamburger links */
 .ham .link{    
     display: block;
-    text-decoration: none;
     font-weight: 600;
 }
 .ham .link:hover{    

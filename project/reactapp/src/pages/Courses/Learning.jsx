@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import YearLevels from '../YearLevels'
+import YearLevels from '../Courses/YearLevels'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useToast } from '../Login/context/ToastContext'
 
@@ -17,14 +17,20 @@ const Learning = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { subject } = useParams(); // Extract the 'subject' slug from the URL
-    const {showToast} = useToast;
+    const {showToast} = useToast();
 
     useEffect(() => {
+       // Reset states when the subject changes
+       setYearLevels([]);
+       setError(null);
+
         const fetchYearLevels = async () => {
           try {
             setLoading(true);
-            const response = await axios.get(`/api/year-levels/${subject}/`);
+            // gets the subject from the url
+            const response = await axios.get(`/api/year-levels/${subject || 'maths'}/`);//default redirect on initial render
             setYearLevels(response.data);
+            // showToast('Year levels loaded successfully', 'success');
             console.log(response.data)
             console.log(subject, 'subject from url')
             // showToast(response.data,'success')
@@ -35,13 +41,23 @@ const Learning = () => {
           } finally {
             setLoading(false);
           }
-          // store last visted website
+          //TODO store last visted website, Implement efficiently
           // localStorage.setItem('lastVisitedSubject',`learning/${subject}`)
           // console.log(subject)
         };
     
         fetchYearLevels();
       }, [subject]);
+
+      // redirect to a subject on component render (if you route to learning/ without a subject)
+  useEffect(() => {
+    navigate('maths')
+    console.log(subject)
+
+    return () => {
+      return null;
+    };
+  }, [navigate,subject]);
 
     // useEffect(()=>{
     //     const lastVisitedSubject = localStorage.getItem('lastVistedSubject')
@@ -78,13 +94,13 @@ const Learning = () => {
           <div className="w-full ">
             {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
             <div className="learning grid grid-cols-1 phone:grid-cols-3 ">
-              <Link to={'/maths'} className="link">
+              <Link to={'maths'} className="link">
                 Maths
               </Link>
-              <Link to={'learning/english'} className="link">
+              <Link to={'english'} className="link">
                 English
               </Link>
-              <Link to={"/recommendations"} className="link">
+              <Link to={"recommendations"} className="link">
                 Recommendations
               </Link>
             </div>
@@ -92,7 +108,13 @@ const Learning = () => {
         </nav>
       {/* )} */}
         <div>
-            <YearLevels subject={subject} loading={loading} error={error} yearLevels={yearLevels}/>
+          
+          {!loading &&!error && yearLevels.length >0 ? (
+               <YearLevels subject={subject} loading={loading} error={error} yearLevels={yearLevels}/>
+
+        ):(
+        <div>No year levels found for this topic</div>
+        )}
         </div>
     </div>
   )

@@ -12,8 +12,10 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   // const [isLearning, setIsLearning] = useState(false);
   const { user, logout, isloggedin } = useAuth();
-  // const location = useLocation(); // Extract the 'subject' slug from the URL
+  const location = useLocation(); // Extract the 'subject' slug from the URL
   const navigate = useNavigate();
+  const isLaptop = useMediaQuery("(min-width: 1024px)");
+  const isTablet = useMediaQuery("(max-width: 1023px)");
 
   // Toggle the mobile menu
   const toggleMenu = () => {
@@ -26,25 +28,35 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  // useEffect(() => {
-  //   console.log(location);
-  //   if (location.pathname.includes("/learning")) {
-  //     setIsLearning(true);
-  //     console.log("in learning page");
-  //   } else {
-  //     setIsLearning(false);
-  //     console.log("not in learning page");
-  //   }
+  function useMediaQuery(query) {
+    const [matches, setMatches] = useState(false);
 
-  //   return () => {
-  //     return null;
-  //   };
-  // }, [location]);
+    useEffect(() => {
+      const mediaQueryList = window.matchMedia(query);
+
+      const handleMediaChange = (event) => {
+        setMatches(event.matches);
+      };
+
+      // Check initial match
+      setMatches(mediaQueryList.matches);
+
+      // Add listener to handle changes
+      mediaQueryList.addEventListener("change", handleMediaChange);
+
+      // Cleanup on component unmount
+      return () => {
+        mediaQueryList.removeEventListener("change", handleMediaChange);
+      };
+    }, [query]);
+
+    return matches;
+  }
 
   return (
     <>
-      <nav className=" px-5 phone:px-10 tablet:px-20 tablet:mb-10">
-        <div className="w-full flex justify-between items-center justify-center">
+      <nav className="mt-5 px-5 phone:px-10 tablet:px-20 tablet:mb-10">
+        <div className="w-full flex justify-around items-center justify-center">
           {/* Logo */}
           <Link to="/" className="text-black no-underline ">
             <h1 className="font-bold overflow-hidden">EBEDMAS</h1>
@@ -70,7 +82,7 @@ const Navbar = () => {
           </div>
 
           {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
-          <div className="hidden middle tablet:flex space-x-6">
+          <div className="hidden middle tablet:flex">
             {user ? (
               <div>
                 <Link to={"/dashboard"} className="link">
@@ -79,9 +91,26 @@ const Navbar = () => {
                 <Link to={"/learning/maths"} className="link">
                   Learning
                 </Link>
-                <Link to={"/pricing"} className="link">
-                  Subscription
-                </Link>
+                {/* navbar on tablet screen should include logout button */}
+                {isTablet && (
+                  <>
+                    {/* <Link className="link"> */}
+                      <button
+                        onClick={handleLogout}
+                        className=" py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200"
+                      >
+                        Log out
+                      </button>
+                    {/* </Link> */}
+                  </>
+                )}
+                {isLaptop && (
+                  <>
+                    <Link to={"/pricing"} className="link">
+                      Subscription
+                    </Link>
+                  </>
+                )}
               </div>
             ) : (
               <div>
@@ -102,25 +131,25 @@ const Navbar = () => {
           </div>
 
           {/* Sign Up Button (Visible on laptop screens and above) */}
-          <div className="hidden laptop:pl-40 laptop:block">
+          <div className="hidden laptop:pl-40 laptop:flex ">
             {user ? (
-              <div>
-                <Link to={"/logout"} className="link mr-2">
+              <>
+                <Link to={"/logout"} className="link">
                   <button className="px-4 py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200">
                     Settings
                   </button>
                 </Link>
 
-                <button
+                <Link
                   onClick={handleLogout}
-                  className="px-4 py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200"
+                  className=" link px-4 py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200"
                 >
                   Log out
-                </button>
-              </div>
+                </Link>
+              </>
             ) : (
-              <div>
-                <Link to={"/login"} className="link mr-2">
+              <>
+                <Link to={"/login"} className="link">
                   <button className="px-4 py-2 rounded-md hover:bg-[#ff9900] hover:text-white transition-colors duration-200">
                     Login
                   </button>
@@ -130,7 +159,7 @@ const Navbar = () => {
                     Sign Up
                   </button>
                 </Link>
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -140,19 +169,22 @@ const Navbar = () => {
           {/* if user is logged in then check if hamburger has been clicked */}
           {user && isOpen ? (
             <div>
-              <Link to={"/learning/maths"} 
+              <Link
+                to={"maths"}
                 className="link hover:bg-gray-300 px-4 py-2 rounded-md"
-                >
+              >
                 Maths
               </Link>
-              <Link to={"/learning/english"} 
+              <Link
+                to={"english"}
                 className="link hover:bg-gray-300 px-4 py-2 rounded-md"
-                >
+              >
                 English
               </Link>
-              <Link to={"/recommendations"} 
+              <Link
+                to={"recommendations"}
                 className="link hover:bg-gray-300 px-4 py-2 rounded-md"
-                >
+              >
                 Recommendations
               </Link>
               <Link
@@ -224,7 +256,6 @@ const Navbar = () => {
           )}
         </div>
       </nav>
-    
     </>
   );
 };
