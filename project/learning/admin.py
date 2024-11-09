@@ -22,7 +22,7 @@ class SkillInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SkillInline]
     search_fields = ['subject__name', 'name', 'topic__name']
-    list_display = ['name', 'subject',  'topic', 'grade_level', 'total_students_enrolled']
+    list_display = ['name', 'subject', 'grade_level', 'total_students_enrolled']
     list_filter = ['subject', 'grade_level', 'date_created']
 
 class SkillAdmin(admin.ModelAdmin):

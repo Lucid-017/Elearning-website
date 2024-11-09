@@ -12,8 +12,10 @@ urlpatterns = [
     path('api/password-reset/', views.password_reset_request, name="password_reset"),
     path('api/password-reset-confirm/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
     path('api/year-levels/<str:slug>/', views.year_levels, name='year-level'),
+    path('api/topics/<str:slug>/', views.topic, name='topics'),
     path('api/quizzes/', views.quiz_list, name='quiz-list'),
     path('api/quizzes/<int:pk>/', views.quiz_detail, name='quiz-detail'),
     path('api/quizzes/<int:pk>/submit-question/', views.submit_question, name="submit-question"),
     path('api/quizzes/<int:pk>/submit/', views.submit_quiz, name='quiz-submit'),
+    path('api/create-quiz/', views.create_quiz_with_questions, name='create_quiz')
 ]

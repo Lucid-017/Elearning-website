@@ -1,3 +1,6 @@
+import json
+import re
+from django.http import JsonResponse
 import requests
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
@@ -10,9 +13,9 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from social_django.models import UserSocialAuth
-from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer
+from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer, TopicSerializer
 from account.models import User
-from learning.models import Quiz, Question, Answer, StudentQuizAttempt, Course, YearLevel, Subject
+from learning.models import Quiz, Question, Answer, StudentQuizAttempt, Course, YearLevel, Subject, Topic, Skill
 
 # Create your views here.
 
@@ -289,6 +292,18 @@ def year_levels(request, slug):
     serializer = YearLevelSerializer(year_levels, many=True, context={'slug': slug})
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def topic(request, slug):
+    try:
+        subject = Subject.objects.get(slug=slug)
+    except Subject.DoesNotExist:
+        return Response({'error': 'Subject not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    topics = Topic.objects.all()
+    serializer = TopicSerializer(topics, many=True, context={'slug': slug})
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -364,3 +379,117 @@ def submit_quiz(request, pk):
 
     except Quiz.DoesNotExist:
         return Response({'error': 'Quiz not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def create_quiz_with_questions(request):
+    skill = Skill.objects.get(name="Mental Addition")
+
+#     quiz_data = {
+#     'skill_id': skill.id,  # Replace with the actual skill ID for "Counting to 100"
+#     "questions": [
+#         {
+#             "question": "What is 5 + 3?",
+#             "answers": [{"answer": "8", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "Calculate 7 + 2.",
+#             "answers": [{"answer": "9", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "What is the sum of 4 + 6?",
+#             "answers": [{"answer": "10", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "What is 9 + 5?",
+#             "answers": [{"answer": "14", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "Add 8 + 7.",
+#             "answers": [{"answer": "15", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "What is 3 + 4?",
+#             "answers": [{"answer": "7", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "Find the sum of 6 + 9.",
+#             "answers": [{"answer": "15", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "What is the result of 2 + 8?",
+#             "answers": [{"answer": "10", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "Calculate 5 + 9.",
+#             "answers": [{"answer": "14", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "Add 12 + 7.",
+#             "answers": [{"answer": "19", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "What is 15 + 3?",
+#             "answers": [{"answer": "18", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "Find the sum of 8 + 10.",
+#             "answers": [{"answer": "18", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "What is 11 + 9?",
+#             "answers": [{"answer": "20", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "Add 4 + 5 + 6.",
+#             "answers": [{"answer": "15", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         },
+#         {
+#             "question": "What is the sum of 7 + 8 + 5?",
+#             "answers": [{"answer": "20", "is_correct": True}],
+#             "question_type": "Fill in the Blank"
+#         }
+#     ]
+# }
+
+
+
+#     quiz = Quiz.objects.create(
+#         skill_id=quiz_data['skill_id'],
+#         created_by= User.objects.get(username='Quest')
+#     )
+    
+#     for question_data in quiz_data['questions']:
+#         question = Question.objects.create(
+#             quiz=quiz,
+#             question=question_data['question'],
+#             question_type=question_data['question_type']
+#         )
+        
+#         for answer_data in question_data['answers']:
+#             is_correct = answer_data.get('is_correct', False)
+#             if question_data['question_type'] == 'Fill in the Blank':
+#                 is_correct = True
+            
+#             Answer.objects.create(
+#                 question=question,
+#                 answer=answer_data['answer'],
+#                 is_correct=is_correct
+#             )
+            
+    return Response({"message": "Quiz created successfully"}, status=201)
