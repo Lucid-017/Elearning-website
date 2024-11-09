@@ -52,7 +52,7 @@ function App() {
     <AuthProvider>
 
     <ToastProvider>
-      <div>
+    <div>
       {/* ROUTER */}
       
       <Router>
