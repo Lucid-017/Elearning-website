@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import PasswordResetForm
 from account.models import User
-from learning.models import Quiz, Question, Answer, StudentQuizAttempt, YearLevel, Course, Skill
+from learning.models import Quiz, Question, Answer, StudentQuizAttempt, YearLevel, Course, Skill, Topic
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -140,4 +140,29 @@ class YearLevelSerializer(serializers.ModelSerializer):
     def get_total_skills(self, obj):
         slug = self.context.get('slug')
         courses = obj.year_level_courses.filter(subject__slug=slug)
-        return len(CourseSerializer(courses, many=True).data)
+        skills = Skill.objects.filter(course__in=courses).distinct()
+        return len(SkillSerializer(skills, many=True).data)
+        # return len(CourseSerializer(courses, many=True).data)
+
+class TopicSerializer(serializers.ModelSerializer):
+    skills = serializers.SerializerMethodField()
+    total_skills = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Topic
+        fields = ['id', 'name', 'total_skills', 'skills']
+
+    def get_skills(self, obj):
+        slug = self.context.get('slug')
+        id = self.fields.get('id')
+        print(obj)
+        courses = obj.topics.filter(subject__slug=slug)
+        skills = Skill.objects.filter(course__in=courses).distinct()
+        return SkillSerializer(skills, many=True).data[:6]
+    
+    def get_total_skills(self, obj):
+        slug = self.context.get('slug')
+        id = self.fields.get('id')
+        courses = obj.topics.filter(subject__slug=slug)
+        skills = Skill.objects.filter(course__in=courses).distinct()
+        return len(SkillSerializer(skills, many=True).data)
+        # return len(CourseSerializer(courses, many=True).data)
