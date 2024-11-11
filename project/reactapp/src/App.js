@@ -46,7 +46,7 @@ function App() {
       setToken(null);
     }
  
-  }, [token]); //anytime user logs out and logs in
+  }, []); //anytime user logs out and logs in
 
   return (
     <AuthProvider>
