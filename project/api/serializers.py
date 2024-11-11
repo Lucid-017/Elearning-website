@@ -134,7 +134,7 @@ class YearLevelSerializer(serializers.ModelSerializer):
     def get_skills(self, obj):
         slug = self.context.get('slug')
         courses = obj.year_level_courses.filter(subject__slug=slug)
-        skills = Skill.objects.filter(course__in=courses).distinct()
+        skills = Skill.objects.filter(course__in=courses).distinct().order_by('?')
         return SkillSerializer(skills, many=True).data[:6]
     
     def get_total_skills(self, obj):
@@ -149,20 +149,13 @@ class TopicSerializer(serializers.ModelSerializer):
     total_skills = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Topic
-        fields = ['id', 'name', 'total_skills', 'skills']
+        fields = ['id', 'name', 'slug', 'total_skills', 'skills']
 
     def get_skills(self, obj):
-        slug = self.context.get('slug')
-        id = self.fields.get('id')
-        print(obj)
-        courses = obj.topics.filter(subject__slug=slug)
-        skills = Skill.objects.filter(course__in=courses).distinct()
+        skills = Skill.objects.filter(related_topics__id=obj.id).distinct().order_by('?')
         return SkillSerializer(skills, many=True).data[:6]
     
     def get_total_skills(self, obj):
-        slug = self.context.get('slug')
-        id = self.fields.get('id')
-        courses = obj.topics.filter(subject__slug=slug)
-        skills = Skill.objects.filter(course__in=courses).distinct()
+        skills = Skill.objects.filter(related_topics__id=obj.id).distinct()
         return len(SkillSerializer(skills, many=True).data)
         # return len(CourseSerializer(courses, many=True).data)

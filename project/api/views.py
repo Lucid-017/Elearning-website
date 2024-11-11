@@ -53,6 +53,11 @@ def get_routes(request):
             'description': 'Lists all the year level and skills for a particular subject'
         },
         {
+            'Endpoint': 'api/topics/<str:slug>/',
+            'method': 'GET',
+            'description': 'Lists all the topics and skills for a particular subject'
+        },
+        {
             'Endpoint': 'api/quizzes/',
             'method': 'GET',
             'description': 'Lists al quizzes'
@@ -302,7 +307,7 @@ def topic(request, slug):
     except Subject.DoesNotExist:
         return Response({'error': 'Subject not found'}, status=status.HTTP_404_NOT_FOUND)
     
-    topics = Topic.objects.all()
+    topics = Topic.objects.filter(subject=subject)
     serializer = TopicSerializer(topics, many=True, context={'slug': slug})
     return Response(serializer.data)
 

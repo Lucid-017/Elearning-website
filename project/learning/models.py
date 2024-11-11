@@ -22,18 +22,26 @@ class Subject(models.Model):
     
 
 class Topic(models.Model):
-    name = models.CharField(max_length=100)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True, null=True)
 
     class Meta:
         ordering = ['name']
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if self.slug == "" or self.slug is None:
+            self.slug = slugify(self.name)
+
+        super(Topic, self).save(*args, **kwargs)
 
 
 class YearLevel(models.Model):
     level = models.CharField(max_length=10)
-    order_number = models.IntegerField(unique=True)
+    order_number = models.IntegerField(unique=True, null=True)
 
 
     class Meta:
@@ -45,7 +53,7 @@ class YearLevel(models.Model):
 
 class Course(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="courses")
-    topic = models.ManyToManyField(Topic, blank=True, related_name="topics")
+    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL,null=True, related_name="topics")
     name = models.CharField(max_length=100)
     grade_level = models.ForeignKey(YearLevel, on_delete=models.SET_NULL, null=True, related_name='year_level_courses')
     order_number = models.CharField(max_length=1, null=True)
@@ -53,7 +61,7 @@ class Course(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ['order_number']
+        ordering = ['grade_level', 'order_number']
 
     def __str__(self):
         return self.name
@@ -63,12 +71,16 @@ class Course(models.Model):
 
 class Skill(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='skills')
+    related_topics = models.ManyToManyField(Topic, blank=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     students_with_proficiency = models.ManyToManyField(User, blank=True)
-    order_number = models.IntegerField(default=0)
+    order_number = models.IntegerField(null=True)
     date_created = models.DateTimeField(default=timezone.now)
     slug = models.SlugField(null=True, blank=True, unique=True)
+
+    class Meta:
+        ordering = ['course', 'order_number']
 
     def __str__(self):
         return self.name
