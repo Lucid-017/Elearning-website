@@ -7,10 +7,12 @@ class SubjectAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ['name']}
 
 class YearLevelAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ['level']}
     list_display = ['level']
 
 
 class TopicAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ['name']}
     list_display = ['name']
 
 
