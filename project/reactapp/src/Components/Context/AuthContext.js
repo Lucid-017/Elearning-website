@@ -13,10 +13,10 @@ export const AuthProvider = ({ children }) => {
       const userInfo = JSON.parse(userInfoString);
       setUser(userInfo);
       setIsLoggedIn(true);
-            console.log('user is logged in')
+            // console.log('user is logged in')
 
     }else{
-      console.log('user is not logged in')
+      // console.log('user is not logged in')
             setUser(null)
       setIsLoggedIn(false)
 

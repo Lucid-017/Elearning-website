@@ -50,7 +50,7 @@ const YearLevels = ({ subject, loading, error, yearLevels }) => {
 
               <ul class="list-subject-links">
                 <li class="subject-link-item math">
-                  <div class="subject-skill-container">
+                  <div class="subject-skill-container flex justify-between">
                     <h3 class="subject-hdr">{subject}</h3>
                     <a
                       class="skill-lk"
@@ -59,15 +59,17 @@ const YearLevels = ({ subject, loading, error, yearLevels }) => {
                       data-ga-click-event-button="Grade level skills"
                       data-ga-click-event-text="Pre-K Math"
                     >
-                      <span class="lk-txt">{yearLevel.skills.length}</span>
+                      <span class="lk-txt">{yearLevel.total_skills}</span>
                     </a>
                   </div>
                 </li>
 
                 <li class="subject-link-item language-arts">
                   <div class="subject-skill-container">
-                  {yearLevel.skills.map((skill) => (
-                     <span key={skill.slug}> {skill.name},</span>
+                  {yearLevel.skills.map((skill,index) => (
+                     <span key={skill.slug}> {skill.name}
+                     {index < yearLevel.skills.length - 1 && ' | '}
+                     </span>
                   ))}
                   </div>
                 </li>

@@ -1,0 +1,10 @@
+.filter .link {
+    font-weight: 400;
+}
+.filter .link.active{
+    background-color: orange;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 50%;
+
+}
