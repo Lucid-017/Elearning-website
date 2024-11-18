@@ -42,12 +42,12 @@ class Topic(models.Model):
 
 class YearLevel(models.Model):
     level = models.CharField(max_length=10)
-    order_number = models.IntegerField(unique=True, null=True)
+    order_number = models.CharField(max_length=2, unique=True, null=True)
     slug = models.SlugField(unique=True, null=True)
 
 
     class Meta:
-        ordering = ['order_number']
+        ordering = ['id']
 
     def __str__(self):
         return self.level

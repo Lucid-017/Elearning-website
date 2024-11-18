@@ -15,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from social_django.models import UserSocialAuth
-from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer, TopicSerializer
+from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer, TopicSerializer, CourseSerializer
 from account.models import User
 from learning.models import Quiz, Question, Answer, StudentQuizAttempt, Course, YearLevel, Subject, Topic, Skill
 
@@ -53,9 +53,19 @@ def get_routes(request):
             'description': 'Lists all the year level and skills for a particular subject'
         },
         {
+            'Endpoint': 'api/year-levels/<str:subject_slug>/<str:grade_level_slug>/',
+            'method': 'GET',
+            'description': 'Lists all the courses and skills for a particular year level'
+        },
+        {
             'Endpoint': 'api/topics/<str:slug>/',
             'method': 'GET',
-            'description': 'Lists all the topics and skills for a particular subject'
+            'description': 'Lists all the courses and skills for a particular subject'
+        },
+        {
+            'Endpoint': 'api/topics/<str:subject_slug>/<str:topic_slug>/',
+            'method': 'GET',
+            'description': 'Lists all the courses and skills for a particular topic'
         },
         {
             'Endpoint': 'api/quizzes/',
@@ -308,8 +318,35 @@ def topic(request, slug):
         return Response({'error': 'Subject not found'}, status=status.HTTP_404_NOT_FOUND)
     
     topics = Topic.objects.filter(subject=subject)
-    serializer = TopicSerializer(topics, many=True, context={'slug': slug})
+    serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def year_level_courses(request, subject_slug, grade_level_slug):
+    try:
+        subject = Subject.objects.get(slug=subject_slug)
+        grade_level = YearLevel.objects.get(slug=grade_level_slug)
+    except (Subject.DoesNotExist, YearLevel.DoesNotExist):
+        return Response({'error': 'Subject or grade level not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    courses = Course.objects.filter(subject=subject, grade_level=grade_level)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def topic_courses(request, subject_slug, topic_slug):
+    try:
+        subject = Subject.objects.get(slug=subject_slug)
+        topic = Topic.objects.get(subject=subject, slug=topic_slug)
+    except (Subject.DoesNotExist, Topic.DoesNotExist):
+        return Response({'error': 'Subject or topic not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    courses = Course.objects.filter(subject=subject, topic=topic)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
 
 
 @api_view(['GET'])
