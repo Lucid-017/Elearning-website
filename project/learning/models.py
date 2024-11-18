@@ -24,6 +24,7 @@ class Subject(models.Model):
 class Topic(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, unique=True)
+    order_number = models.IntegerField(unique=True, null=True)
     slug = models.SlugField(unique=True, null=True)
 
     class Meta:
@@ -42,6 +43,7 @@ class Topic(models.Model):
 class YearLevel(models.Model):
     level = models.CharField(max_length=10)
     order_number = models.IntegerField(unique=True, null=True)
+    slug = models.SlugField(unique=True, null=True)
 
 
     class Meta:
