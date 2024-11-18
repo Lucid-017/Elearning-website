@@ -114,7 +114,7 @@ class StudentAttemptSerializer(serializers.ModelSerializer):
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
-        fields = ['name', 'order_number', 'slug']
+        fields = ['name', 'order_number', 'description', 'slug']
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -129,7 +129,7 @@ class YearLevelSerializer(serializers.ModelSerializer):
     total_skills = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = YearLevel
-        fields = ['id', 'level', 'total_skills', 'order_number', 'skills']
+        fields = ['id', 'level', 'total_skills', 'slug', 'order_number', 'skills']
 
     def get_skills(self, obj):
         slug = self.context.get('slug')
@@ -152,7 +152,6 @@ class TopicSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'slug', 'total_skills', 'order_number', 'skills']
 
     def get_skills(self, obj):
-        print(obj.pk)
         skills = Skill.objects.filter(related_topics__id=obj.id).distinct().order_by('?')
         return SkillSerializer(skills, many=True).data[:6]
     
