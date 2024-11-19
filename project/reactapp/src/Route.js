@@ -4,11 +4,11 @@ import { Navigate } from 'react-router-dom';
 const ProtectedRoute = ({children})=>{
       // confirm if user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const isAuthenticated =localStorage.getItem('user_info')
+  const isAuthenticated =sessionStorage.getItem('user_info')
 
   // runs when application loads
   useEffect(() => {
-    const userInfoString = localStorage.getItem('user_info');
+    const userInfoString = sessionStorage.getItem('user_info');
     if (userInfoString) {
       const userInfo = JSON.parse(userInfoString);
       // setUser(userInfo);

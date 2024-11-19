@@ -1,5 +1,5 @@
 .grade-box-tab {
-    background-color: grey;
+    background-color: #FF9500;
     border-radius: 0 19px 19px 0;
     color: #fff;
     display: inline-block;
@@ -15,7 +15,7 @@
 }
 .grade-module {
     background-color: #fff;
-    border: 1px solid grey;
+    border: 1px solid rgba(128, 128, 128, 0.363);
     border-radius: 5px;
     padding: 0;
     position: relative;
@@ -35,6 +35,7 @@
     position: relative;
     text-decoration: none;
 }
+
 
 @media screen and (min-width: 801px) {
     .grade-module {

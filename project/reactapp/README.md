@@ -5,12 +5,16 @@
 #FIXME - handle notifications for password reset ✅
 #FIXME - handle route guards ✅
 #FIXME - finish dashboard page, track recent courses taken ✅
-#FIXME - create math, english and recommendations tabs
+#FIXME - create math, english and recommendations tabs ✅
 list available courses 
 #FIXME - Navbar should show logout and setting on mid screen or stick to the hamburger ✅
-#FIXME - Remove local storage info on every session
-##TODO - preview skills when fetching year levels
+#FIXME - Remove local storage info on every session ✅
+##TODO - preview skills when fetching year levels ✅
 ##TODO - create a hero section for subject titles
+##TODO - everything icons
+##TODO - Clean up code before proceeding with
+<!-- ##TODO - everything icons -->
+
 
 #REVIEW - potential issues
 - the global error handling component is not working as expected, the click and monitoring shouldn't have to be in each component to work

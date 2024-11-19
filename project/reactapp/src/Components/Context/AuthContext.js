@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
   // runs when application loads
   useEffect(() => {
-    const userInfoString = localStorage.getItem('user_info');
+    const userInfoString = sessionStorage.getItem('user_info');
     if (userInfoString) {
       const userInfo = JSON.parse(userInfoString);
       setUser(userInfo);
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
-    localStorage.removeItem('user_info');
+    sessionStorage.removeItem('user_info');
   };
 
   return (

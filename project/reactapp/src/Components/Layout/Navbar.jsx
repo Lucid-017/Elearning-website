@@ -11,8 +11,8 @@ we will also create a second navigation if the user is on the Learning page
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   // const [isLearning, setIsLearning] = useState(false);
-  const { user, logout, isloggedin } = useAuth();
-  const location = useLocation(); // Extract the 'subject' slug from the URL
+  const { user, logout } = useAuth();
+  // const location = useLocation(); // Extract the 'subject' slug from the URL
   const navigate = useNavigate();
   const isLaptop = useMediaQuery("(min-width: 1024px)");
   const isTablet = useMediaQuery("(max-width: 1023px)");
@@ -55,7 +55,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="mt-5 px-5 phone:px-10 tablet:px-20 tablet:mb-10">
+      <nav className="mt-5 px-5 phone:px-10 tablet:px-20 tablet:mb-5">
         <div className="w-full flex justify-around items-center justify-center">
           {/* Logo */}
           <Link to="/" className="text-black no-underline ">
