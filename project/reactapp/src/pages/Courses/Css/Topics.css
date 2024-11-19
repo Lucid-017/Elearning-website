@@ -5,6 +5,7 @@ button{
 }
 .topic{
     position: relative;
+    border: 1px solid rgba(128, 128, 128, 0.363);
     padding: 20px 20px 20px 30px;
 }
 .topic button{

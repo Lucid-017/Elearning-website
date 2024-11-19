@@ -21,30 +21,28 @@ const Learning = () => {
   const [error, setError] = useState(null);
   const { subject } = useParams(); // Extract the 'subject' slug from the URL
   const { showToast } = useToast();
-  const [viewBy,setViewBy] = useState(['Years','Topics'])//static options array
-  const [selectedView,setSelectedView] = useState('Years')//Default years
+  const [viewBy, setViewBy] = useState(["Years", "Topics"]); //static options array
+  const [selectedView, setSelectedView] = useState("Years"); //Default years
 
   // handle which filter is being clicked
-  const handleFilterChange = (fil)=>{
+  const handleFilterChange = (fil) => {
     // setSelectedView('')
-    setSelectedView(fil)
-    console.log(fil, 'has been clicked')
+    setSelectedView(fil);
+    console.log(fil, "has been clicked");
     // if topic was selected then get topics
     // if(selectedView === 'Topics'){
     //   return fetchTopics()
     // }
-  }
+  };
 
-  const fetchTopics = async () =>{
+  const fetchTopics = async () => {
     try {
       setLoading(true);
       // gets the subject from the url
-      const response = await axios.get(
-        `/api/topics/${subject || "maths"}/`
-      ); //default redirect on initial render
+      const response = await axios.get(`/api/topics/${subject || "maths"}/`); //default redirect on initial render
       setTopics(response.data);
       // showToast('Year levels loaded successfully', 'success');
-      console.log(response.data, 'TOPIC DATA');
+      console.log(response.data, "TOPIC DATA");
       // console.log(subject, "subject from url");
       // showToast(response.data,'success')
     } catch (error) {
@@ -54,16 +52,14 @@ const Learning = () => {
     } finally {
       setLoading(false);
     }
-  }
-
+  };
 
   useEffect(() => {
     // Reset states when the subject changes
     setYearLevels([]);
-    setTopics([])
+    setTopics([]);
     setError(null);
     // console.log(filters)
-
 
     const fetchYearLevels = async () => {
       try {
@@ -97,10 +93,10 @@ const Learning = () => {
     <div>
       {/* links to the our topcs */}
       {/* if user is in learning page */}
-      <nav className="py-10 px-5 hidden phone:block phone:px-10 tablet:px-20 bg-slate-700 tablet:mb-10">
+      <nav className="py-5 px-5 hidden phone:block phone:px-10 tablet:px-20 bg-slate-700">
         <div className="w-full ">
           {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
-          <div className="learning grid grid-cols-1 phone:grid-cols-3 ">
+          <div className="learning flex flex-col justify-center justify-around  phone:flex-row ">
             <Link to={"maths"} className="link">
               Maths
             </Link>
@@ -114,40 +110,68 @@ const Learning = () => {
         </div>
       </nav>
       {/* filter */}
-      <div
-        class="filter flex"
-      >
+      <div class="filter flex px-20">
         <span class="text-slate-600">View by:</span>
-        {
-        viewBy.map((filter,index)=>(
+        {viewBy.map((filter, index) => (
           <button
-          key={index}
-          className="mr-5 bg-slate-500" onClick={()=>handleFilterChange(filter)}>
+            key={index}
+            className="mr-5"
+            onClick={() => handleFilterChange(filter)}
+          >
             {filter}
           </button>
         ))}
-
+      </div>
+      <div className="hero">
+        <div className="hcontent">
+          <h1 className="uppercase p-2">{subject}</h1>
+          <div className="details">
+            {subject === "maths" ? (
+              <p>
+                Gain fluency and confidence in maths! IXL helps students master
+                essential skills at their own pace through fun and interactive
+                questions, built in support and motivating awards.
+              </p>
+            ) : subject === "english" ? (
+              <p>
+                From phonics and reading comprehension to writing strategies and
+                more, IXL helps learners develop the communication skills needed
+                for success in school, university and career.
+              </p>
+            ) : (
+              <p>
+                IXL offers personalised skill recommendations based on what each
+                student has been practising, so they can grow from where they
+                are. If you have an IXL account, make sure to sign in to see
+                your recommendations! Not a member yet? Select your year level
+                to explore maths and English topics, and click on any skill
+                you'd like to try!
+              </p>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* )} */}
-      <div>
+      <div className="content">
         {!loading && !error && yearLevels.length > 0 ? (
           <div className="px-5 phone:px-10 tablet:px-20 tablet:mb-10">
             {/* dispaly levels on default and dsiplay topics on click */}
-            {selectedView === 'Years'? (
+            {selectedView === "Years" ? (
               <YearLevels
-              subject={subject}
-              loading={loading}
-              error={error}
-              yearLevels={yearLevels}
-            />
-            ):(
-             <Topics subject={subject || 'maths'} topics={topics}/> 
+                subject={subject}
+                loading={loading}
+                error={error}
+                yearLevels={yearLevels}
+              />
+            ) : (
+              <Topics subject={subject || "maths"} topics={topics} />
             )}
-            
           </div>
         ) : (
-          <div>No year levels found for this topic</div>
+          <div className="topic flex justify-between items-center bg-white text-black mb-10 p">
+            There seems to be an issue, please try again later
+          </div>
         )}
       </div>
     </div>

@@ -60,7 +60,7 @@ const CompleteGoogleRegistration = () => {
         console.log('signup was successful', response.data)
         // store and track login token and info
         const { access_token, refresh_token, username } = response.data;
-        const userInfo =localStorage.setItem("user_info", JSON.stringify({
+        const userInfo =sessionStorage.setItem("user_info", JSON.stringify({
           access_token: access_token,
           refresh_token: refresh_token,
           username: username

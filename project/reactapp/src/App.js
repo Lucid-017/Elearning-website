@@ -22,10 +22,6 @@ import Learning from './pages/Courses/Learning';
 import { useEffect, useState } from 'react';
 import ProtectedRoute from './Route';
 
-// const ProtectedRoute = ({children})=>{
-//   const isAuthenticated =localStorage.getItem('user_info')
-//   return isAuthenticated ? children : <Navigate to={'/login'}/>
-// }
 
 function App() {
   // confirm if user is logged in
@@ -33,7 +29,7 @@ function App() {
   const [token,setToken] =useState(null)
   // runs when application loads
   useEffect(() => {
-    const userInfoString = localStorage.getItem('user_info');
+    const userInfoString = sessionStorage.getItem('user_info');
     if (userInfoString) {
       const userInfo = JSON.parse(userInfoString);
       setToken(userInfo);
@@ -50,7 +46,6 @@ function App() {
 
   return (
     <AuthProvider>
-
     <ToastProvider>
     <div>
       {/* ROUTER */}

@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
 import "./Css/YearLevel.css";
 import { Link } from "react-router-dom";
 
-const YearLevels = ({ subject, loading, error, yearLevels }) => {
-  // const { subject } = useParams(); // Extract the 'subject' slug from the URL
-  // const [yearLevels, setYearLevels] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
-  // const {showToast} = useToast()
+const YearLevels = ({ loading, error, yearLevels }) => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
-      <div className="hero">
-        <h1>Year Levels for Subject: {subject}</h1>
-      </div>
+
     <div className="grid grid-cols-1 p-2 phone:grid-cols-2 laptop:grid-cols-3 gap-6">
       {yearLevels.map((yearLevel) => (
         <div key={yearLevel.id} >
@@ -28,12 +20,12 @@ const YearLevels = ({ subject, loading, error, yearLevels }) => {
               data-ga-click-event-module="Grade list"
               data-ga-click-event-button="Grade level header"
             >
-              <div class="grade-box-tab blue1-bg">{yearLevel.level.slice(0, 1)}</div>
+              <div class="grade-box-tab ">{yearLevel.level === 'Reception' ? 'R' :yearLevel.order_number}</div>
               <h2 class="grade-box-hdr blue1-text">
                 <span class="block phone:hidden grade-box-short-name grade-box-name">
-                {yearLevel.level.length-1}
+                {yearLevel.order_number}
                 </span>
-                <span class="hidden phone:block grade-box-long-name grade-box-name">
+                <span class="hidden phone:block grade-box-long-name grade-box-name text-black ">
                   {yearLevel.level}
                 </span>
               </h2>
@@ -41,9 +33,6 @@ const YearLevels = ({ subject, loading, error, yearLevels }) => {
             <div class="hidden tablet:block grade-body">
               <div class="grade-description" escapehtml="false">
                 {/* list 4 topics included in course and prefix for mroe */}
-                {/* {yearLevel.skills.slice(0,4).map((skill) => (
-                     <span key={skill.slug}> {skill.name},</span>
-                  ))}, and more... */}
                 Counting objects, inside and outside, longer and shorter, letter
                 names, rhyming words, and more.
               </div>
@@ -51,16 +40,16 @@ const YearLevels = ({ subject, loading, error, yearLevels }) => {
               <ul class="list-subject-links">
                 <li class="subject-link-item math">
                   <div class="subject-skill-container flex justify-between">
-                    <h3 class="subject-hdr">{subject}</h3>
-                    <a
+                    <small class="">Skills</small>
+                    <Link
                       class="skill-lk"
-                      href="/math/pre-k"
+                      to={"URL HERE"}
                       data-ga-click-event-module="Grade list"
                       data-ga-click-event-button="Grade level skills"
-                      data-ga-click-event-text="Pre-K Math"
+                      
                     >
                       <span class="lk-txt">{yearLevel.total_skills}</span>
-                    </a>
+                    </Link>
                   </div>
                 </li>
 

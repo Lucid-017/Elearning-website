@@ -12,7 +12,7 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
 
   // Find another way to access username, local storage is only dependent on if user uses the remember me option
   useEffect(() => {
-    const userInfoString = localStorage.getItem("user_info");
+    const userInfoString = sessionStorage.getItem("user_info");
     const userInfo = userInfoString ? JSON.parse(userInfoString) : {};
     // Now userInfo will be an object with access_token, refresh_token, and username
     setUser(userInfo.username || "guest");

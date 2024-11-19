@@ -64,7 +64,7 @@ const Signup = () => {
       // storing refresh and access token
       const { access_token, refresh_token, username } = response.data;
         
-      const userInfo = localStorage.setItem("user_info", JSON.stringify({
+      const userInfo = sessionStorage.setItem("user_info", JSON.stringify({
         access_token: access_token,
         refresh_token: refresh_token,
         username: username
@@ -112,8 +112,8 @@ const Signup = () => {
 
       // if this user has already registered
       if (res.data.user_exists) {
-        // Store tokens in localStorage
-        localStorage.setItem(username, JSON.stringify({
+        // Store tokens in sessionStorage
+        sessionStorage.setItem(username, JSON.stringify({
           access_token: access_token,
           refresh_token: refresh_token,
         }));

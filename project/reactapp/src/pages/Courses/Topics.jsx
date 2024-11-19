@@ -5,17 +5,9 @@ import './Css/Topics.css'
 const Topics = ({topics,subject}) => {
   return (
     <div>
-      <div className="hero my-10 text-center">
+      {/* <div className="my-10 text-center">
         <h1>{subject}</h1>
-        {subject === 'maths' ? (
- <p>Gain fluency and confidence in maths!
- IXL helps students master essential skills 
-at their own pace through fun and interactive questions, built in support and motivating awards.</p>
-
-        ):(
-          <p>From phonics and reading comprehension to writing strategies and more, IXL helps learners develop the communication skills needed for success in school, university and career.</p>
-        )}
-         </div>
+         </div> */}
     <div className="">
       {topics.map((topic,index)=>(
         <div className='topic flex justify-between items-center bg-white mb-10'>

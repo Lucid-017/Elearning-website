@@ -45,12 +45,12 @@ const Login = () => {
 
       console.log(response);
 
-      // handle successful login: saving the access and refresh token to localstorage and then navigate to dashboard
+      // handle successful login: saving the access and refresh token to sessionStorage  and then navigate to dashboard
       // Extracting the tokens and username from the response
       const { access_token, refresh_token } = response.data;
       
-      // Saving the userTokens object to localStorage as a string
-      const userInfo = localStorage.setItem("user_info", JSON.stringify({
+      // Saving the userTokens object to sessionStorage  as a string
+      const userInfo = sessionStorage .setItem("user_info", JSON.stringify({
         access_token: access_token,
         refresh_token: refresh_token,
         username: username
@@ -71,10 +71,10 @@ const Login = () => {
 
       // remember me,store email in local storage
       if (rememberMe) {
-        localStorage.setItem("username", username);
+        sessionStorage .setItem("username", username);
       } else {
         // remove email if not remembering
-        localStorage.removeItem("username");
+        sessionStorage .removeItem("username");
       }
     } catch (err) {
       const errmesg = err.response?.data || { error: "login failed!" };
@@ -102,9 +102,9 @@ const Login = () => {
 
       // if thus user has already registered
       if (res.data.user_exists) {
-        // Store tokens in localStorage
-              // Saving the userTokens object to localStorage as a string
-      const userInfo = localStorage.setItem("user_info", JSON.stringify({
+        // Store tokens in sessionStorage 
+              // Saving the userTokens object to sessionStorage  as a string
+      const userInfo = sessionStorage.setItem("user_info", JSON.stringify({
         access_token: access_token,
         refresh_token: refresh_token,
         username: username
@@ -144,7 +144,7 @@ const Login = () => {
 
   useEffect(() => {
     setError(null);
-    const rememberedEmail = localStorage.getItem("email");
+    const rememberedEmail = sessionStorage.getItem("email");
     if (rememberedEmail) {
       // if remembered email exist
       setUsername(rememberedEmail);
