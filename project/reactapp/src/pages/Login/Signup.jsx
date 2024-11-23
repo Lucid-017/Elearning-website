@@ -5,9 +5,9 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import countries from './countries';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from "./context/ToastContext";
+import { useToast } from "../../API and Contxt/Context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
-import { useAuth } from '../../Components/Context/AuthContext';
+import { useAuth } from '../../API and Contxt/Context/AuthContext';
 
 
 const Signup = () => {

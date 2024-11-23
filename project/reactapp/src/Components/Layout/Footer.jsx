@@ -1,4 +1,5 @@
 import '../Layout/css/Footer.css'
+import Logo from '../../assets/EBEDMAS Logo 0.1.png'
 
 const Footer = () => {
   return (
@@ -7,9 +8,10 @@ const Footer = () => {
   <div className="grid grid-cols-1 phone:grid-cols-4 tablet:grid-cols-5 gap-10 ">
     {/* Logo */}
     <div className="logo col-span-1 phone:col-span-2">
-      <h2 className="text-3xl font-bold overflow-hidden">
+      <img className='logo' src={Logo} alt="Ebedmas Logo"/>
+      {/* <h2 className="text-3xl font-bold overflow-hidden">
         <span className="text-[#FF9500]">E</span>BEDMAS
-      </h2>
+      </h2> */}
       <div className='pt-5'>
         <p>@email.Confirm</p>
         <p>090 000 000 00</p>

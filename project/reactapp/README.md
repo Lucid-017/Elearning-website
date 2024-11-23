@@ -12,7 +12,8 @@ list available courses
 ##TODO - preview skills when fetching year levels ✅
 ##TODO - create a hero section for subject titles
 ##TODO - everything icons
-##TODO - Clean up code before proceeding with
+##TODO - Clean up code with context
+##TODO - Utlize outlet, define routes properly
 <!-- ##TODO - everything icons -->
 
 

@@ -2,7 +2,7 @@ import axios from 'axios'
 import '../css/resetPassword.css'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useToast } from './context/ToastContext'
+import { useToast } from '../../API and Contxt/Context/ToastContext'
 
 const ResetPassword = () => {
   const {showToast} = useToast()

@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import YearLevels from "../Courses/YearLevels";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useToast } from "../Login/context/ToastContext";
+import { Link, Navigate, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useToast } from "../../API and Contxt/Context/ToastContext";
 import "./Css/Learning.css";
 import Topics from "./Topics";
+import { CoursesContext } from "../../API and Contxt/Context/Courses";
+// import Grade from "./Grade";
 
 /**We're going to get courses by year,
  * on default, when navigated to, the course component renders the last visted year
@@ -13,81 +15,59 @@ import Topics from "./Topics";
  */
 
 const Learning = () => {
-  // const navigate = useNavigate();
+   const navigate = useNavigate();
   // const location = useLocation();
-  const [yearLevels, setYearLevels] = useState([]);
-  const [topics, setTopics] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { subject } = useParams(); // Extract the 'subject' slug from the URL
-  const { showToast } = useToast();
-  const [viewBy, setViewBy] = useState(["Years", "Topics"]); //static options array
+  // const [yearLevels, setYearLevels] = useState([]);
+  // const [topics, setTopics] = useState([]);
+  const { subject = 'maths' } = useParams(); // Extract the 'subject' slug from the URL
+  // const { showToast } = useToast();
   const [selectedView, setSelectedView] = useState("Years"); //Default years
+  // const [selectedSubject, setSelectedSubject] = useState("maths"); //Default years
+  // const {getTopics,getYear,setLoading,setError,loading,error} =useContext(CoursesContext)
+  const [viewBy, setViewBy] = useState(["Years", "Topics"]); //static options array
 
-  // handle which filter is being clicked
-  const handleFilterChange = (fil) => {
-    // setSelectedView('')
-    setSelectedView(fil);
-    console.log(fil, "has been clicked");
-    // if topic was selected then get topics
-    // if(selectedView === 'Topics'){
-    //   return fetchTopics()
-    // }
-  };
+  // Redirect to default subject if none is provided
+  // useEffect(() => {
+  //   if (!subject) {
+  //     navigate("/learning/maths", { replace: true }); // Set default subject
+  //   }
+  // }, [subject]);
 
-  const fetchTopics = async () => {
-    try {
-      setLoading(true);
-      // gets the subject from the url
-      const response = await axios.get(`/api/topics/${subject || "maths"}/`); //default redirect on initial render
-      setTopics(response.data);
-      // showToast('Year levels loaded successfully', 'success');
-      console.log(response.data, "TOPIC DATA");
-      // console.log(subject, "subject from url");
-      // showToast(response.data,'success')
-    } catch (error) {
-      setError("Failed to load year levels");
-      console.error("Error fetching year levels:", error);
-      showToast(error.response?.data?.error, "error");
-    } finally {
-      setLoading(false);
+  // // handle which filter is being clicked
+  const handleFilterChange = (view) => {
+    setSelectedView(view);
+    if(view ==='Topics'){
+       navigate(`topic`)
+    }else if (view === 'Years'){
+      navigate('')
     }
+    console.log(view, "has been clicked");
   };
+  // // const handleSubjectChange = (subject) => {
+  // //   setSelectedSubject(subject);
+  // //   navigate(`/learning/${subject}`);
+  // // };
 
-  useEffect(() => {
-    // Reset states when the subject changes
-    setYearLevels([]);
-    setTopics([]);
-    setError(null);
-    // console.log(filters)
+  
+ 
 
-    const fetchYearLevels = async () => {
-      try {
-        setLoading(true);
-        // gets the subject from the url
-        const response = await axios.get(
-          `/api/year-levels/${subject || "maths"}/`
-        ); //default redirect on initial render
-        setYearLevels(response.data);
-        // showToast('Year levels loaded successfully', 'success');
-        console.log(response.data);
-        console.log(subject, "subject from url");
-        // showToast(response.data,'success')
-      } catch (error) {
-        setError("Failed to load year levels");
-        console.error("Error fetching year levels:", error);
-        showToast(error.response?.data?.error, "error");
-      } finally {
-        setLoading(false);
-      }
-      //TODO store last visted website, Implement efficiently
-      // localStorage.setItem('lastVisitedSubject',`learning/${subject}`)
-      // console.log(subject)
-    };
-
-    fetchYearLevels();
-    fetchTopics();
-  }, [subject]);
+  // useEffect(() => {
+  //   // Reset states when the subject changes
+  //   if(!subject) return;
+  //   setYearLevels([]);
+  //   setTopics([]);
+  //   setError(null);
+  //     //  Trigger fetch requests(streamlined to avoid unnecessary setState calls)
+  //   (async ()=>{
+  //     try{
+  //       await Promise.all([fetchTopics(),fetchYearLevels()])
+  //     }catch(err){
+  //       console.log(err)
+  //     }
+  //   })();
+  //   // fetchYearLevels();
+  //   // fetchTopics();
+  // }, [subject]);
 
   return (
     <div>
@@ -97,30 +77,35 @@ const Learning = () => {
         <div className="w-full ">
           {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
           <div className="learning flex flex-col justify-center justify-around  phone:flex-row ">
-            <Link to={"maths"} className="link">
-              Maths
-            </Link>
-            <Link to={"english"} className="link">
-              English
-            </Link>
-            <Link to={"recommendations"} className="link">
-              Recommendations
-            </Link>
+          {["maths", "english", "recommendations"].map((subj) => (
+            <div
+              key={subj}
+              className={`link ${
+                subject === subj ? "active" : ""
+              }`}
+              onClick={() => navigate(`/learning/${subj}`)}
+            >
+              {subj.charAt(0).toUpperCase() + subj.slice(1)}
+            </div>
+          ))}
           </div>
         </div>
       </nav>
       {/* filter */}
-      <div class="filter flex px-20">
+      <div class="filter text-center flex items-center flex-col px-20 phone:text-start phone:flex-row">
         <span class="text-slate-600">View by:</span>
-        {viewBy.map((filter, index) => (
+        {["Years", "Topics"].map((view) => (
           <button
-            key={index}
-            className="mr-5"
-            onClick={() => handleFilterChange(filter)}
+            key={view}
+            className={`px-4 py-2 rounded-md ${
+              selectedView === view ? "bg-[#ff9900] text-white" : ""
+            }`}
+            onClick={() =>handleFilterChange(view)}
           >
-            {filter}
+            {view}
           </button>
         ))}
+        
       </div>
       <div className="hero">
         <div className="hcontent">
@@ -154,25 +139,9 @@ const Learning = () => {
 
       {/* )} */}
       <div className="content">
-        {!loading && !error && yearLevels.length > 0 ? (
-          <div className="px-5 phone:px-10 tablet:px-20 tablet:mb-10">
-            {/* dispaly levels on default and dsiplay topics on click */}
-            {selectedView === "Years" ? (
-              <YearLevels
-                subject={subject}
-                loading={loading}
-                error={error}
-                yearLevels={yearLevels}
-              />
-            ) : (
-              <Topics subject={subject || "maths"} topics={topics} />
-            )}
-          </div>
-        ) : (
-          <div className="topic flex justify-between items-center bg-white text-black mb-10 p">
-            There seems to be an issue, please try again later
-          </div>
-        )}
+        <div className="px-5 phone:px-10 tablet:px-20 tablet:mb-10">
+          <Outlet/>
+        </div>
       </div>
     </div>
   );

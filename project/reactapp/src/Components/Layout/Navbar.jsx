@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "../Layout/css/Navbar.css";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../Context/AuthContext";
-
+import { Link, useNavigate, useParams, } from "react-router-dom";
+import { useAuth } from "../../API and Contxt/Context/AuthContext";
+import Logo from '../../assets/EBEDMAS Logo 0.1.png'
 /* NOTE 
 update state across app 
 Handle the global state change on login and logout
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   // const [isLearning, setIsLearning] = useState(false);
   const { user, logout } = useAuth();
+  const { subject } = useParams(); // Extract the 'subject' slug from the URL
   // const location = useLocation(); // Extract the 'subject' slug from the URL
   const navigate = useNavigate();
   const isLaptop = useMediaQuery("(min-width: 1024px)");
@@ -59,7 +60,9 @@ const Navbar = () => {
         <div className="w-full flex justify-around items-center justify-center">
           {/* Logo */}
           <Link to="/" className="text-black no-underline ">
-            <h1 className="font-bold overflow-hidden">EBEDMAS</h1>
+            {/* <h1 className="font-bold overflow-hidden">EBEDMAS</h1>
+             */}
+             <img className="logo" src={Logo} alt="Ebedmas logo" />
           </Link>
           {/* Hamburger Icon (Visible on phone screens) */}
           <div className="phone:block tablet:hidden">
@@ -88,7 +91,7 @@ const Navbar = () => {
                 <Link to={"/dashboard"} className="link">
                   My Dashboard
                 </Link>
-                <Link to={"/learning/maths"} className="link">
+                <Link to={`/learning/${subject || 'maths'}`} className="link">
                   Learning
                 </Link>
                 {/* navbar on tablet screen should include logout button */}
