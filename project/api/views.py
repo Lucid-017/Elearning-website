@@ -354,26 +354,25 @@ def topic_courses(request, subject_slug, topic_slug):
 def quiz_list(request):
     quizzes = Quiz.objects.all()
     serializer = QuizSerializer(quizzes, many=True)
-    print(serializer.data)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def quiz_detail(request, pk):
+def quiz_detail(request, slug):
     try:
-        quiz = Quiz.objects.get(pk=pk)
+        skill = Skill.objects.get(slug=slug)
+        quiz = skill.quiz
         serializer = QuizSerializer(quiz)
-        print(serializer.data)
         return Response(serializer.data)
-    except Quiz.DoesNotExist:
+    except (Skill.DoesNotExist, Quiz.DoesNotExist):
         return Response({'error': 'Quiz not found'}, status=status.HTTP_404_NOT_FOUND)
     
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def submit_question(request, pk):
+def submit_question(request, slug):
     question_id = request.data.get('question_id')
     answer_id = request.data.get('answer')
     print('Question:', question_id, "   ", 'Answer:', answer_id)
@@ -398,9 +397,10 @@ def submit_question(request, pk):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def submit_quiz(request, pk):
+def submit_quiz(request, slug):
     try:
-        quiz = Quiz.objects.get(pk=pk)
+        skill = Skill.objects.get(slug=slug)
+        quiz = skill.quiz
         user = request.user
 
         submitted_answers = request.data.get('answers', {})
