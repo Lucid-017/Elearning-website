@@ -1,0 +1,31 @@
+.container .herop img{
+    height: 198px;
+    width: 458px;
+}
+.herop{
+    padding: 10px 40px;
+    background-color: #f5f1eb;
+    border-radius: 20px;
+}
+.newsletter{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: #50c878;
+    color: white;
+    border-radius: 20px;
+    padding: 45px 0;
+
+}
+.newsletter .header{
+    text-transform: capitalize;
+}
+.newsletter input{
+    border-radius: 10px 0 0 10px;
+    padding: 5px 0;
+
+}
+.newsletter button{
+    background-color: #0A0A0A;
+    border-radius: 0 10px 10px 0;
+}

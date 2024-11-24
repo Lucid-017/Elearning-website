@@ -1,26 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { CoursesContext } from '../API and Contxt/Context/Courses';
 
-const Quiz = ({ token }) => {
+const QuizDetail = () => {
   const { quizId } = useParams(); // Get quizId from URL parameters
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [quiz,setQuiz] =useState(null)
   const [isCorrect, setIsCorrect] = useState(null); // null: not answered, true: correct, false: incorrect
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  const { getQuiz,error,setError,setLoading,loading } = useContext(CoursesContext);
+
 
   // New state variables for score and total answered
   const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
 
+  const fetchQuiz = async () => {
+    try {
+      setLoading(true);
+      const response = await getQuiz(quizId);
+      setQuiz(response);
+      console.log('Grade',response);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    console.log(quizId)
+    fetchQuiz()
     // Fetch the quiz questions when the component mounts
-    axios.get(`/api/quizzes/${quizId}/`)
-      .then(response => setQuestions(response.data.questions))
-      .catch(error => console.error('Error fetching quiz:', error));
-  }, [quizId, token]);
+
+  }, [quizId]);
 
   const handleSubmit = () => {
     if (selectedAnswer === null) return;
@@ -117,4 +134,4 @@ const Quiz = ({ token }) => {
   );
 };
 
-export default Quiz;
+export default QuizDetail;
