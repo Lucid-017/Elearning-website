@@ -16,8 +16,8 @@ urlpatterns = [
     path('api/topics/<str:slug>/', views.topic, name='topics'),
     path('api/topics/<str:subject_slug>/<str:topic_slug>/', views.topic_courses, name='topic_courses'),
     path('api/quizzes/', views.quiz_list, name='quiz-list'),
-    path('api/quizzes/<int:pk>/', views.quiz_detail, name='quiz-detail'),
-    path('api/quizzes/<int:pk>/submit-question/', views.submit_question, name="submit-question"),
-    path('api/quizzes/<int:pk>/submit/', views.submit_quiz, name='quiz-submit'),
+    path('api/quizzes/<str:slug>/', views.quiz_detail, name='quiz-detail'),
+    path('api/quizzes/<str:slug>/submit-question/', views.submit_question, name="submit-question"),
+    path('api/quizzes/<str:slug>/submit/', views.submit_quiz, name='quiz-submit'),
     path('api/create-quiz/', views.create_quiz_with_questions, name='create_quiz'),
 ]
