@@ -60,12 +60,8 @@ const YearLevels = () => {
 
 
   const handleGrade = async (grade) => {
-    // fet courses for the selected year
-    // navigate(`${subject}/${grade}`);
     setSelectedYear(grade)
-    // if(location.pathname.includes(`${subject}/`)){
       navigate(`${grade}`)
-    // }
   };
 
   if (loading) return <p>Loading...</p>;

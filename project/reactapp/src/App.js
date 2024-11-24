@@ -29,6 +29,8 @@ import ProtectedRoute from "./Route";
 import Grade from "./pages/Courses/Grade";
 import { CoursesProvider } from "./API and Contxt/Context/Courses";
 import Topics from "./pages/Courses/Topics";
+import Pricing from "./pages/Pricing";
+import QuizDetail from "./pages/QuizDetail";
 
 function App() {
   // confirm if user is logged in
@@ -95,13 +97,16 @@ function App() {
                   > 
                     {/* Nested routes inside Learning */}
                     <Route index element={<YearLevels />} />
-                    <Route path=":grade" element={<Grade />} />
+                    <Route path=":grade" element={<Grade />}> 
+                    <Route path=':quizId' element={<QuizDetail/>}/>
+                    </Route>
                     \ <Route path="topic" element={<Topics />} />
                   </Route>
                   {/* Routes that require Auth */}
                   {/* <Route path="learning/:subject/:grade" element={<ProtectedRoute><Grade/></ProtectedRoute>}/> */}
 
                   <Route path="/register" element={<Signup />} />
+                  <Route path="pricing" element={<Pricing />} />
                   <Route
                     path="/register/complete-google-registration"
                     element={<CompleteGoogleRegistration />}
@@ -113,7 +118,6 @@ function App() {
                   />
                   <Route path="/contact" element={<Contact />} />
                   {/* <Route path='/maths' element={<QuizList/>}/> */}
-                  {/* <Route path='/maths/quiz/:quizId' element={<QuizDetail/>}/> */}
                   <Route path="/*" element={<NotFound />} />
                 </Routes>
               </div>

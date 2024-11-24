@@ -28,9 +28,12 @@ export const CoursesProvider = ({children})=>{
         const url = `/api/year-levels/${subject}/${grade}`;
         return await apiCall(url)
     }
+    const getQuiz =async(quizId)=>{
+        const url = `/api/quizzes/${quizId}/`;
+        return await apiCall(url)
+    }
 
-
-    const value = useMemo(()=>( {getTopics,getYear,getGradeCourse,loading,setLoading,error,setError,gradeSelected,setGradeSelected}),[loading,error])
+    const value = useMemo(()=>( {getTopics,getYear,getGradeCourse,getQuiz,loading,setLoading,error,setError,gradeSelected,setGradeSelected}),[loading,error])
     return(
         <CoursesContext.Provider value={value}>
             {children}

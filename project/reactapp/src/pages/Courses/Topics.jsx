@@ -51,7 +51,7 @@ const Topics = () => {
           <p><small className='text-slate-600 pr-2'>Some Topics Includes:</small>{topic.skills.map(skill=> skill.name).join(' | ')}.</p>
           </div>
           <div>
-            <button>see all {topic.total_skills} topics</button>
+            <button>See all {topic.total_skills} skills</button>
           </div>
         </div>
       ))}
