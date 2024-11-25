@@ -63,6 +63,7 @@ const Navbar = () => {
             {/* <h1 className="font-bold overflow-hidden">EBEDMAS</h1>
              */}
              <img className="logo" src={Logo} alt="Ebedmas logo" />
+             {/* <img className="logo" src={Logo} alt="Ebedmas logo" /> */}
           </Link>
           {/* Hamburger Icon (Visible on phone screens) */}
           <div className="phone:block tablet:hidden">
