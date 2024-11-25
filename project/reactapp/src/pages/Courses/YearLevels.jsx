@@ -9,9 +9,7 @@ const YearLevels = () => {
   const [yearLevels, setYearLevels] = useState([]);
   const [selectedYear,setSelectedYear] =useState(null)
   const {getYear,setLoading,setError,error,loading} =useContext(CoursesContext)
-    // const location = useLocation();
-    const { subject } = useParams(); // Extract the 'subject' slug from the URL
-
+  const { subject } = useParams(); // Extract the 'subject' slug from the URL
   const navigate = useNavigate();
   const { showToast } = useToast();
 
@@ -46,15 +44,15 @@ const YearLevels = () => {
     if(!subject) return;
     setYearLevels([]);
     setError(null);
-      //  Trigger fetch requests(streamlined to avoid unnecessary setState calls)
-    (async ()=>{
-      try{
-        await Promise.all([fetchYearLevels()])
-      }catch(err){
-        console.log(err)
-      }
-    })();
-    // fetchYearLevels();
+    //   //  Trigger fetch requests(streamlined to avoid unnecessary setState calls)
+    // (async ()=>{
+    //   try{
+    //     await Promise.all([fetchYearLevels()])
+    //   }catch(err){
+    //     console.log(err)
+    //   }
+    // })();
+    fetchYearLevels();
     // fetchTopics();
   }, [subject]);
 

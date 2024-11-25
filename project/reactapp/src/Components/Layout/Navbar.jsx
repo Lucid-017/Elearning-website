@@ -3,6 +3,7 @@ import "../Layout/css/Navbar.css";
 import { Link, useNavigate, useParams, } from "react-router-dom";
 import { useAuth } from "../../API and Contxt/Context/AuthContext";
 import Logo from '../../assets/EBEDMAS Logo 0.1.png'
+import MobileLogo from '../../assets/Logo.png'
 /* NOTE 
 update state across app 
 Handle the global state change on login and logout
@@ -62,8 +63,8 @@ const Navbar = () => {
           <Link to="/" className="text-black no-underline ">
             {/* <h1 className="font-bold overflow-hidden">EBEDMAS</h1>
              */}
-             <img className="logo" src={Logo} alt="Ebedmas logo" />
-             {/* <img className="logo" src={Logo} alt="Ebedmas logo" /> */}
+             <img className="hidden logo phone:block" src={Logo} alt="Ebedmas logo" />
+             <img className="logo mobile phone:hidden" src={MobileLogo} alt="Ebedmas logo" />
           </Link>
           {/* Hamburger Icon (Visible on phone screens) */}
           <div className="phone:block tablet:hidden">

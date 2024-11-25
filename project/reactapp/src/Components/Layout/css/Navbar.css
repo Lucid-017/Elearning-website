@@ -1,6 +1,9 @@
 .logo{
     width: 150px;
 }
+.logo.mobile{
+    width: 3rem;
+}
 .link{
     text-decoration: none;
     color: black ;
