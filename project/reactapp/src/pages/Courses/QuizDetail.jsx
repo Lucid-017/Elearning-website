@@ -138,14 +138,17 @@ const QuizDetail = () => {
                   onChange={() => setSelectedAnswer(option.id)}
                 />
                 <label htmlFor={option.id}>{option.answer}</label>
+                Multiple
               </div>
             ) : (
               <div>
+                <p>not multiple</p>
                 <input
+                className="input"
                   type="text"
                   id={option.id}
                   name="answer"
-                  value={option.id}
+                  // value={}
                   checked={selectedAnswer === option.id}
                   onChange={() => setSelectedAnswer(option.id)}
                 />

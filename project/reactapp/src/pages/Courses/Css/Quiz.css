@@ -41,3 +41,7 @@
 .quiz-container .progress {
     background-color: rgba(128, 128, 128, 0.467); /* Background for unsupported cases */
   }
+
+  .input{
+    border: 1px solid black;
+  }
