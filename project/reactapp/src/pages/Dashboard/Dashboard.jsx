@@ -29,7 +29,7 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
           <p className="font-[500]">In this week({formattedDate} - today)</p>
           <small>See how you’ve performed this week</small>
         </div>
-        <div className="grid grid-cols-1 pb-10  text-center laptop:grid-cols-3  gap-10 ">
+        <div className="grid grid-cols-1 pb-10  text-center tablet:grid-cols-2 laptop:grid-cols-3  gap-10 ">
           <div className="questions">
             <div className="summary-stats">
               <div className="summary-stats-grid">

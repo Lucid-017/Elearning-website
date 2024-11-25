@@ -1,5 +1,6 @@
 import '../Layout/css/Footer.css'
 import Logo from '../../assets/EBEDMAS Logo 0.1.png'
+import MobileLogo from '../../assets/Logo.png'
 
 const Footer = () => {
   return (
@@ -8,7 +9,9 @@ const Footer = () => {
   <div className="grid grid-cols-1 phone:grid-cols-4 tablet:grid-cols-5 gap-10 ">
     {/* Logo */}
     <div className="logo col-span-1 phone:col-span-2">
-      <img className='logo' src={Logo} alt="Ebedmas Logo"/>
+    <img className="hidden logo phone:block" src={Logo} alt="Ebedmas logo" />
+    <img className="logo mobile phone:hidden" src={MobileLogo} alt="Ebedmas logo" />
+
       {/* <h2 className="text-3xl font-bold overflow-hidden">
         <span className="text-[#FF9500]">E</span>BEDMAS
       </h2> */}

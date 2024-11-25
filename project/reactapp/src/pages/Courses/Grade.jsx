@@ -40,7 +40,7 @@ const Grade = () => {
   return (
     <div>
       {!SelectedQuiz &&(
-      <ul className=" bg-white p-10 ">
+      <div className=" bg-white p-10 ">
       <div>
        <p className="capitalize text-[#FF9500] font-[600]">{grade} skills</p>
       </div>
@@ -52,7 +52,7 @@ const Grade = () => {
               {course.skills?.map(skill=>(
                 <>
                  <div onClick={()=>handleQuiz(skill.slug)}>
-                  <li>{skill.order_number}. {skill.name} - {skill.description}</li>
+                  <li className="cursor-pointer hover:text-[#ff9900]">{skill.order_number}. {skill.name} - {skill.description}</li>
                 </div>
                 </>
                  
@@ -64,7 +64,7 @@ const Grade = () => {
       ) : (
         <p>No courses found for this grade.</p>
       )}
-    </ul>
+    </div>
       )}
   <Outlet/>
     </div>

@@ -19,8 +19,6 @@ import ResetPassword from "./pages/Login/Reset password";
 import Dashboard from "../src/pages/Dashboard/Dashboard";
 import CompleteGoogleRegistration from "./pages/Login/complete-google-registeration";
 import YearLevels from "./pages/Courses/YearLevels";
-// import QuizList from './pages/QuizList';
-// import QuizDetail from './pages/QuizDetail';
 import { ToastProvider } from "./API and Contxt/Context/ToastContext";
 import { AuthProvider, useAuth } from "./API and Contxt/Context/AuthContext";
 import Learning from "./pages/Courses/Learning";
@@ -30,7 +28,7 @@ import Grade from "./pages/Courses/Grade";
 import { CoursesProvider } from "./API and Contxt/Context/Courses";
 import Topics from "./pages/Courses/Topics";
 import Pricing from "./pages/Pricing";
-import QuizDetail from "./pages/QuizDetail";
+import QuizDetail from "./pages/Courses/QuizDetail";
 
 function App() {
   // confirm if user is logged in
