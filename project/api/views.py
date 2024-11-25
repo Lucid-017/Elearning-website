@@ -379,19 +379,25 @@ def submit_question(request, slug):
 
     try:
         question = Question.objects.get(id=question_id)
-        selected_answer = Answer.objects.get(id=answer_id, question=question)
+        if question.question_type == 'Multiple Choice':
+            selected_answer = Answer.objects.get(id=answer_id, question=question)
 
-        is_correct = selected_answer.is_correct
+            is_correct = selected_answer.is_correct
+        else:
+            correct_answer = Answer.objects.filter(question=question, is_correct=True).first()
+            if correct_answer.answer == answer_id:
+                is_correct = True
+            else:
+                is_correct = False
 
         return Response({
             'is_correct': is_correct
         })
 
-    except Question.DoesNotExist:
-        return Response({'error': 'Question not found'}, status=404)
+    except (Question.DoesNotExist, Answer.DoesNotExist):
+        return Response({'error': 'Question or answers not found'}, status=404)
 
-    except Answer.DoesNotExist:
-        return Response({'error': 'Answer not found'}, status=404)
+
 
     
 
