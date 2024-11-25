@@ -4,28 +4,61 @@
 }
 .herop{
     padding: 10px 40px;
-    background-color: #f5f1eb;
+    background-color: #a8d29f5d;
     border-radius: 20px;
 }
 .newsletter{
     display: flex;
     justify-content: center;
+    align-items: center;
     text-align: center;
     background-color: #50c878;
     color: white;
     border-radius: 20px;
-    padding: 45px 0;
+    width: 100%;
+    height: 400px;
 
 }
 .newsletter .header{
     text-transform: capitalize;
 }
+.newsletter .header h2{
+    /* line-height: 55px; */
+}
 .newsletter input{
     border-radius: 10px 0 0 10px;
     padding: 5px 0;
-
+    /* width: 509px; */
+    height:60px;
 }
+.newsletter input::placeholder{
+    padding: 5px;
+    font-size: 12px;
+}
+
 .newsletter button{
     background-color: #0A0A0A;
     border-radius: 0 10px 10px 0;
+    height: 60px;
+}
+/* pricing */
+.pricing .header{
+    border-bottom: 1px solid #0a0a0a2c;
+}
+.pricing .header img{
+    display: inlines;
+    width: 30px;
+    height: 30px;
+}
+.pricing .pricing-card{
+    border: 1px solid rgba(0, 0, 0, 0.225);
+    padding: 40px;
+}
+.pricing .pricing-card .price{
+    padding-top: 1.25em;
+}
+.pricing button{
+    background-color: #0A0A0A;
+    color: white;
+    width: 100%;
 }
