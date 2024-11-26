@@ -35,6 +35,8 @@ const QuizDetail = () => {
 
   useEffect(() => {
     console.log(quizId);
+    // console.log('current option. answers',currentOptions);
+
     fetchQuiz();
     // Fetch the quiz questions when the component mounts
   }, [quizId]);
@@ -125,10 +127,42 @@ const QuizDetail = () => {
 
       <div className="mb-5">
         {/* {ques} */}
-        {currentOptions.map((option) => (
+        <React.Fragment key={questions[currentQuestion]?.id}>
+    {questions[currentQuestion]?.question_type === "Multiple Choice" ? (
+      // Render radio buttons for multiple-choice questions
+      currentOptions.map((answer) => (
+        <div key={answer.id}>
+          <input
+            type="radio"
+            id={`answer-${answer.id}`}
+            name={`answer-${questions[currentQuestion].id}`} // Group options by question ID
+            value={answer.answer}
+            checked={selectedAnswer === answer.id}
+            onChange={() => setSelectedAnswer(answer.id)}
+          />
+          <label htmlFor={`answer-${answer.id}`}>{answer.answer}</label>
+        </div>
+      ))
+    ) : (
+      // Render a single input for "Fill in the Blank" questions
+      <div>
+        <input
+          className="input"
+          type="text"
+          id={`answer-${questions[currentQuestion]?.id}`}
+          name={`answer-${questions[currentQuestion]?.id}`}
+          value={selectedAnswer || ""}
+          onChange={(e) => setSelectedAnswer(e.target.value)}
+          placeholder="Fill in the Blank"
+        />
+      </div>
+    )}
+  </React.Fragment>
+        {/* {currentOptions.map((option) => (
           <React.Fragment key={option.id}>
             {option.question_type === "Multiple Choice" ? (
               <div>
+                <p>{option.question_type}</p>
                 <input
                   type="radio"
                   id={option.id}
@@ -138,24 +172,22 @@ const QuizDetail = () => {
                   onChange={() => setSelectedAnswer(option.id)}
                 />
                 <label htmlFor={option.id}>{option.answer}</label>
-                Multiple
               </div>
             ) : (
               <div>
-                <p>not multiple</p>
                 <input
                 className="input"
                   type="text"
                   id={option.id}
                   name="answer"
-                  // value={}
-                  checked={selectedAnswer === option.id}
-                  onChange={() => setSelectedAnswer(option.id)}
+                  value={selectedAnswer || ''}
+                  // checked={selectedAnswer === option.id}
+                  onChange={(e) => setSelectedAnswer(e.target.value)}
                 />
               </div>
             )}
           </React.Fragment>
-        ))}
+        ))} */}
       </div>
       <div>
         <button
