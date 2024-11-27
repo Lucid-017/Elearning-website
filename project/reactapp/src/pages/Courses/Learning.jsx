@@ -73,7 +73,7 @@ const Learning = () => {
     <div>
       {/* links to the our topcs */}
       {/* if user is in learning page */}
-      <nav className="py-5 px-5 hidden phone:block phone:px-10 tablet:px-20 bg-slate-700">
+      <nav className="py-5 px-5 hidden phone:block phone:px-10 tablet:px-20 bg-[#292f36]">
         <div className="w-full ">
           {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
           <div className="learning flex flex-col justify-center justify-around  phone:flex-row ">

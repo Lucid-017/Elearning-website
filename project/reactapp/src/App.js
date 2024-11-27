@@ -65,6 +65,12 @@ function App() {
                 <Routes>
                   {/* redirect '/' to dashboard if logged in */}
                   <Route
+                    path="/home"
+                    element={
+                       <Home />
+                    }
+                  />
+                  <Route
                     path="/"
                     element={
                       isLoggedIn ? <Navigate to="/dashboard" /> : <Home />

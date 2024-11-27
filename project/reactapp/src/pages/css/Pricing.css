@@ -1,18 +1,28 @@
-.container .herop img{
+.herop img{
     height: 198px;
     width: 458px;
 }
+.herop p{
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+h2{
+    font-size: 45px;
+    line-height: 50px;
+    text-transform: capitalize;
+}
 .herop{
     padding: 10px 40px;
-    background-color: #a8d29f5d;
+    background-color: #c8dcf9;
     border-radius: 20px;
 }
+
 .newsletter{
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #50c878;
+    background-color: #5995ed;
     color: white;
     border-radius: 20px;
     width: 100%;
@@ -21,9 +31,6 @@
 }
 .newsletter .header{
     text-transform: capitalize;
-}
-.newsletter .header h2{
-    /* line-height: 55px; */
 }
 .newsletter input{
     border-radius: 10px 0 0 10px;
@@ -43,22 +50,39 @@
 }
 /* pricing */
 .pricing .header{
-    border-bottom: 1px solid #0a0a0a2c;
+    border-bottom: 1px solid #0a033c2d;
 }
 .pricing .header img{
-    display: inlines;
+    display: inline;
     width: 30px;
     height: 30px;
 }
 .pricing .pricing-card{
-    border: 1px solid rgba(0, 0, 0, 0.225);
     padding: 40px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.055);
+    transition: box-shadow 0.3s ease; /* Smooth animation */
+}
+.pricing .pricing-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
 }
 .pricing .pricing-card .price{
     padding-top: 1.25em;
 }
+
+.pricing-desc{
+    line-height: 30px;
+}
 .pricing button{
     background-color: #0A0A0A;
     color: white;
+    width: 100%;
+    transition: background-color 0.2s ease-in, border 0.3s ease-in-out;
+}
+.pricing button:hover{
+    background-color: transparent;
+    border: 1px solid #0A0A0A;
+    color: #0A0A0A;
     width: 100%;
 }
