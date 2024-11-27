@@ -6,10 +6,9 @@
 }
 .link{
     text-decoration: none;
-    color: black ;
+    color: #292f36 ;
     transition: all .2s ease-in;
     font-weight: 600;
-    /* padding-right: 10px; */
 }
 
 div .link:hover{    
