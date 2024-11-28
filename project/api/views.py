@@ -363,6 +363,8 @@ def quiz_detail(request, slug):
     try:
         skill = Skill.objects.get(slug=slug)
         quiz = skill.quiz
+        # quiz_attempt, created = StudentQuizAttempt.objects.get_or_create(user=request.user, quiz=quiz, completed=False)
+        # print(quiz_attempt)
         serializer = QuizSerializer(quiz)
         return Response(serializer.data)
     except (Skill.DoesNotExist, Quiz.DoesNotExist):
@@ -371,14 +373,19 @@ def quiz_detail(request, slug):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def submit_question(request, slug):
     question_id = request.data.get('question_id')
     answer_id = request.data.get('answer')
+    attempt_id = request.data.get('attempt_id')
     print('Question:', question_id, "   ", 'Answer:', answer_id)
 
     try:
         question = Question.objects.get(id=question_id)
+        print('attempt_id', attempt_id)
+        quiz_attempt, created = StudentQuizAttempt.objects.get_or_create(user=request.user, quiz=question.quiz, completed=False)
+        if created:
+            total_question = question.quiz.questions.all().count()
+            quiz_attempt.total_questions = total_question
         if question.question_type == 'Multiple Choice':
             selected_answer = Answer.objects.get(id=answer_id, question=question)
 
@@ -389,9 +396,18 @@ def submit_question(request, slug):
                 is_correct = True
             else:
                 is_correct = False
-
+        
+        
+            if is_correct:
+                quiz_attempt.questions_answered += 1
+                score =  (quiz_attempt.questions_answered / quiz_attempt.total_questions) * 100
+                quiz_attempt.score = round(score, 2)
+        quiz_attempt.save()
         return Response({
-            'is_correct': is_correct
+            'is_correct': is_correct,
+            'quiz_attempt_id': quiz_attempt.id,
+            'score': quiz_attempt.score,
+            'total_answered': quiz_attempt.questions_answered
         })
 
     except (Question.DoesNotExist, Answer.DoesNotExist):

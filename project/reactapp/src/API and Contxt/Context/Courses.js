@@ -30,7 +30,15 @@ export const CoursesProvider = ({children})=>{
     }
     const getQuiz =async(quizId)=>{
         const url = `/api/quizzes/${quizId}/`;
-        return await apiCall(url)
+        const userInfoString = sessionStorage.getItem('user_info');
+        const userInfo = userInfoString ? JSON.parse(userInfoString) : {}; // Convert to object
+        const accessToken = userInfo.access_token
+        console.log(accessToken)
+        return await apiCall(url, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // Add the token to the header
+            },
+          })
     }
 
     const value = useMemo(()=>( {getTopics,getYear,getGradeCourse,getQuiz,loading,setLoading,error,setError,gradeSelected,setGradeSelected}),[loading,error])

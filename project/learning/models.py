@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
@@ -135,8 +136,11 @@ class Answer(models.Model):
 class StudentQuizAttempt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    total_questions = models.IntegerField(default=0)
     questions_answered = models.IntegerField(default=0)
-    score = models.FloatField()
+    score = models.FloatField(null=True)
+    completed = models.BooleanField(default=False)
+    quiz_duration = models.DurationField(default=timedelta(seconds=0), help_text="Duration of the quiz attempt (e.g., HH:MM:SS)")
     completed_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
