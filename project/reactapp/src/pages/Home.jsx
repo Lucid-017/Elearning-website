@@ -12,7 +12,7 @@ import Grades from '../Components/Layout/Grades'
 const Home = () => {
 
   return (
-    <div className='px-10 phone:px-20'>
+    <div className='px-10 phone:px-20 Home-comp'>
       <div className="home flex items-center justify-center flex-col tablet:flex-row phone:justify-normal">
         <div className="header flex-1 tablet:w-3/5">
           <code className='text-[#a3c4f5]'>Never stop Learning</code>
@@ -70,13 +70,13 @@ const Home = () => {
             <button>See more classes</button>
           </div>
       </section>
-      <section className='my-10 phone:my-20 '>
+      <section className='my-10 phone:my-20 reach-out '>
         <div className="flex space-x-10 items-center justify-center flex-col tablet:flex-row phone:justify-normal">
           <div className='flex-1 w-1/2'>
             <img src={share} alt="" srcset="" />
           </div>
           <div className='flex-1 w-1/2'>
-            <h2 className="title">
+            <h2 className="title pb-2">
             Want to share your
 knowledge? Join us
 as a Mentor
@@ -84,7 +84,7 @@ as a Mentor
             <p>High-definition video is video of higher resolution and quality than standard-definition. 
               While there is no standardized meaning for high-definition, generally any video.</p>
               <Link to={'/pricing'}>
-              <button>
+              <button className='mt-5'>
                 Reach out
               </button>
               </Link>

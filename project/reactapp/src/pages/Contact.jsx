@@ -7,7 +7,7 @@ const Contact = () => {
         <div className="heading">
           <p className="text-4xl font-[600] overflow-hidden">Contact Us</p>
         </div>
-        <div className="content">
+        <div className="">
           At EBEDMAS platform is designed to offer progress management and
           monitor student achievements, allowing users to track growth and
           educational milestones every step of the way. We believe in providing flexible and affordable pricing 

@@ -27,9 +27,14 @@ const QuizDetail = () => {
   const fetchQuiz = async () => {
     try {
       setLoading(true);
-      const response = await getQuiz(quizId);
-      setQuestions(response.questions);
-      console.log("Grade", response.questions);
+      const response = await axios.get(`/api/quizzes/${quizId}/`,{
+        headers: {
+          Authorization: `Bearer ${accessToken}` // Example for adding token
+      }
+      })
+      //a=if you add config include it like so getQuiz(quizId,config)
+      setQuestions(response.data.questions);
+      console.log("Grade", response.data.questions);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -41,7 +46,7 @@ const QuizDetail = () => {
     console.log(quizId);
     // console.log('current option. answers',currentOptions);
 
-    fetchQuiz();
+    return ()=> fetchQuiz();
     // Fetch the quiz questions when the component mounts
   }, [quizId]);
 

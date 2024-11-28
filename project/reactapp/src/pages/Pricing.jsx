@@ -30,7 +30,7 @@ const Pricing = () => {
             </div>
 
             <div className="pricing">
-            <div className="flex flex-col tablet:flex-row gap-4 justify-center">
+            <div className="flex flex-col tablet:flex-row gap-4 justify-center p-4">
                 <Price pricingName={'Monthly Subscription'} price={9000} />
                 <Price pricingName={'Yearly Subscription'} price={79900} discount={6658.33}/>
             </div>
