@@ -14,6 +14,7 @@ list available courses
 ##TODO - everything icons
 ##TODO - Clean up code with context
 ##TODO - Utlize outlet, define routes properly
+##TODO - anaylze code and find out certain values that should be made as constants
 <!-- ##TODO - everything icons -->
 
 

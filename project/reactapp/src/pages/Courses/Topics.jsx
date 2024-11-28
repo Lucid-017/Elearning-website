@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 // import { Link } from 'react-router-dom'
 import './Css/Topics.css'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CoursesContext } from '../../API and Contxt/Context/Courses';
 import { useToast } from '../../API and Contxt/Context/ToastContext';
 
 const Topics = () => {
-  const navigate = useNavigate();
+  const navigate = useLocation();
   const { subject } = useParams(); // Extract the 'subject' slug from the URL
   const [topics, setTopics] = useState([]);
   const {getTopics,setLoading,setError,error,loading} =useContext(CoursesContext)
@@ -31,7 +31,7 @@ const Topics = () => {
 
   useEffect(()=>{
     setTopics([]);
-    fetchTopics();
+    return ()=> fetchTopics();
     // navigate(`topic/${subject}`)
 
   },[subject])

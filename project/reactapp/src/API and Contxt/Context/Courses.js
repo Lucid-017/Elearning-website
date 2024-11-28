@@ -30,6 +30,11 @@ export const CoursesProvider = ({children})=>{
     }
     const getQuiz =async(quizId)=>{
         const url = `/api/quizzes/${quizId}/`;
+        // const config = {
+        //     headers: {
+        //         Authorization: `Bearer ${sessionStorage.getItem("user_info")}`, // Example for adding token
+        //     }
+        // }
         return await apiCall(url)
     }
 

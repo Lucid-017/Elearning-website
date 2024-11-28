@@ -50,7 +50,7 @@ const Login = () => {
       const { access_token, refresh_token } = response.data;
       
       // Saving the userTokens object to sessionStorage  as a string
-      const userInfo = sessionStorage .setItem("user_info", JSON.stringify({
+      const userInfo = sessionStorage.setItem("user_info", JSON.stringify({
         access_token: access_token,
         refresh_token: refresh_token,
         username: username

@@ -24,13 +24,13 @@
 .subject p{
     font-weight: 500;
 }
-.grade button{
+.Home-comp button{
     border-radius: 2px;
     background-color: #FF9500;
     color: white;
     transition: background-color 0.2s ease-in, border 0.3s ease-in-out;
 }
-.grade button:hover{
+.Home-comp button:hover{
     border: 1px solid #FF9500;
     background-color: transparent;
     color: #FF9500;

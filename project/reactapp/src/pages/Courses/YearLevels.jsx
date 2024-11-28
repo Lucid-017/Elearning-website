@@ -44,15 +44,7 @@ const YearLevels = () => {
     if(!subject) return;
     setYearLevels([]);
     setError(null);
-    //   //  Trigger fetch requests(streamlined to avoid unnecessary setState calls)
-    // (async ()=>{
-    //   try{
-    //     await Promise.all([fetchYearLevels()])
-    //   }catch(err){
-    //     console.log(err)
-    //   }
-    // })();
-    fetchYearLevels();
+    return ()=> fetchYearLevels();
     // fetchTopics();
   }, [subject]);
 
@@ -72,12 +64,7 @@ const YearLevels = () => {
         <div className="grid grid-cols-1 p-2 phone:grid-cols-2 laptop:grid-cols-3 gap-6">
         {yearLevels?.map((yearLevel) => (
           <div key={yearLevel.id} onClick={()=>handleGrade(yearLevel.slug)} >
-             {/* <Link
-                class="grade-box-link"
-                to={`${subject}/grade-1`}
-              > */}
-            <div class="grade-module blue1-bdr">
-             
+            <div class="grade-module blue1-bdr">     
                 <div class="grade-box-tab ">{yearLevel.level === 'Reception' ? 'R' :yearLevel.order_number}</div>
                 <h2 class="grade-box-hdr blue1-text">
                   <span class="block phone:hidden grade-box-short-name grade-box-name">
@@ -124,7 +111,7 @@ const YearLevels = () => {
       </div> 
       )}
        
-<Outlet/>
+      <Outlet/>
     </div>
 
   );
