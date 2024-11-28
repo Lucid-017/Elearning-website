@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
+from datetime import timedelta
 from dotenv import load_dotenv
+from pathlib import Path
 import os
 
 load_dotenv()
@@ -134,6 +135,15 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=90),  # Extend to 1 hour
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Extend to 7 days
+    'ROTATE_REFRESH_TOKENS': True,  
+    'BLACKLIST_AFTER_ROTATION': True,
+}
+
 
 AUTH_USER_MODEL = 'account.User'
 

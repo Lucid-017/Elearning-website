@@ -28,13 +28,8 @@ export const CoursesProvider = ({children})=>{
         const url = `/api/year-levels/${subject}/${grade}`;
         return await apiCall(url)
     }
-    const getQuiz =async(quizId)=>{
+       const getQuiz =async(quizId)=>{
         const url = `/api/quizzes/${quizId}/`;
-        // const config = {
-        //     headers: {
-        //         Authorization: `Bearer ${sessionStorage.getItem("user_info")}`, // Example for adding token
-        //     }
-        // }
         return await apiCall(url)
     }
 

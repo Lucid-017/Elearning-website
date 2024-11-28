@@ -52,7 +52,7 @@ class QuizAdmin(admin.ModelAdmin):
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
-    search_fields = ['question', 'quiz__str__']
+    search_fields = ['question', 'quiz__skill__name']
     list_display = ['question', 'quiz']
     list_filter = ['quiz']
 
