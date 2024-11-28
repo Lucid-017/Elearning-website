@@ -19,6 +19,10 @@ const QuizDetail = () => {
   // New state variables for score and total answered
   const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
+  const [attempt_id, setQuizAttemotId] = useState(0);  
+  const userInfoString = sessionStorage.getItem('user_info');
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : {}; // Convert to object
+  const accessToken = userInfo.access_token
 
   const fetchQuiz = async () => {
     try {
@@ -52,13 +56,23 @@ const QuizDetail = () => {
       .post(`/api/quizzes/${quizId}/submit-question/`, {
         question_id: questions[currentQuestion]?.id, // Use optional chaining
         answer: selectedAnswer,
-      })
+        attempt_id: attempt_id
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
       .then((response) => {
         setLoading(false);
         setIsCorrect(response.data.is_correct);
-
+        setQuizAttemotId(response.data.quiz_attempt_id)
+        
         // Update total answered and score
-        setTotalAnswered(totalAnswered + 1);
+        if (response.data.is_correct) {
+          setTotalAnswered(totalAnswered + 1);
+        }
         if (response.data.is_correct) {
           setScore(score + 1); // Increment score for a correct answer
           if (currentQuestion < questions.length - 1) {
