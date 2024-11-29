@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from account.models import User
+from api.utils import format_duration
 
 # Create your models here.
 class Subject(models.Model):
@@ -136,12 +137,17 @@ class Answer(models.Model):
 class StudentQuizAttempt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    current_question = models.IntegerField(default=0)
     total_questions = models.IntegerField(default=0)
     questions_answered = models.IntegerField(default=0)
     score = models.FloatField(null=True)
     completed = models.BooleanField(default=False)
-    quiz_duration = models.DurationField(default=timedelta(seconds=0), help_text="Duration of the quiz attempt (e.g., HH:MM:SS)")
+    time_spent = models.DurationField(default=timedelta(seconds=0), help_text="Duration of the quiz attempt (e.g., HH:MM:SS)")
     completed_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username}'s attempt at {self.quiz}"
+    
+    @property
+    def formatted_time_spent(self):
+        return format_duration(self.time_spent)
