@@ -88,6 +88,23 @@ const QuizDetail = () => {
               setIsCorrect(null);
             }, 2000); // 2 seconds delay to show correct message
           } else {
+            const timeSpent = 120 // Assuming you track quiz start time in `startTime`
+            const quizData = {
+              time_spent: timeSpent, // in seconds
+            };
+
+            axios.post(`/api/quizzes/${quizId}/submit/`, quizData, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`, // Add your access token
+              },
+            })
+            .then((response) => {
+              console.log('Quiz submitted successfully:', response.data);
+            })
+            .catch((error) => {
+              console.error('Error submitting quiz:', error);
+            });
+
             alert(
               `Quiz completed! Your score is ${score + 1}/${questions.length}.`
             );

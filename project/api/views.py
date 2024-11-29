@@ -1,6 +1,4 @@
-import json
-import re
-from django.http import JsonResponse
+from datetime import timedelta
 import requests
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
@@ -358,14 +356,17 @@ def quiz_list(request):
 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
 def quiz_detail(request, slug):
     try:
         skill = Skill.objects.get(slug=slug)
         quiz = skill.quiz
-        # quiz_attempt, created = StudentQuizAttempt.objects.get_or_create(user=request.user, quiz=quiz, completed=False)
-        # print(quiz_attempt)
-        serializer = QuizSerializer(quiz)
+        quiz_attempt, created = StudentQuizAttempt.objects.get_or_create(user=request.user, quiz=quiz, completed=False)
+        if created:
+            total_question = quiz.questions.all().count()
+            quiz_attempt.total_questions = total_question
+            quiz_attempt.save()
+        serializer = QuizSerializer(quiz, context={'quiz_attempt': quiz_attempt})
+        print(serializer.data['attempt_completed'])
         return Response(serializer.data)
     except (Skill.DoesNotExist, Quiz.DoesNotExist):
         return Response({'error': 'Quiz not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -398,16 +399,19 @@ def submit_question(request, slug):
                 is_correct = False
         
         
-            if is_correct:
-                quiz_attempt.questions_answered += 1
-                score =  (quiz_attempt.questions_answered / quiz_attempt.total_questions) * 100
-                quiz_attempt.score = round(score, 2)
+        if is_correct:
+            quiz_attempt.questions_answered += 1
+            score =  (quiz_attempt.questions_answered / quiz_attempt.total_questions) * 100
+            quiz_attempt.score = round(score, 2)
+            if not quiz_attempt.questions_answered >= quiz_attempt.total_questions:
+                quiz_attempt.current_question = quiz_attempt.questions_answered + 1
         quiz_attempt.save()
         return Response({
             'is_correct': is_correct,
             'quiz_attempt_id': quiz_attempt.id,
             'score': quiz_attempt.score,
-            'total_answered': quiz_attempt.questions_answered
+            'total_answered': quiz_attempt.questions_answered,
+            'current_question': quiz_attempt.current_question
         })
 
     except (Question.DoesNotExist, Answer.DoesNotExist):
@@ -418,30 +422,24 @@ def submit_question(request, slug):
     
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def submit_quiz(request, slug):
     try:
         skill = Skill.objects.get(slug=slug)
         quiz = skill.quiz
         user = request.user
+        duration = request.data.get('time_spent', 0)
+        quiz_duration = timedelta(minutes=duration)
 
-        submitted_answers = request.data.get('answers', {})
-
-        correct_count = 0
-        questions_answered = 0
-        total_questions = quiz.questions.count()
-
-        for question in quiz.questions.all():
-            submitted_answer_id = submitted_answers.get(str(question.id))
-            if submitted_answer_id:
-                selected_answer = Answer.objects.get(id=submitted_answer_id)
-                questions_answered += 1
-                if selected_answer.is_correct:
-                    correct_count += 1
-
-        score = (correct_count / total_questions) * 100
-        StudentQuizAttempt.objects.create(user=user, quiz=quiz, questions_answered=questions_answered, score=score)
-        return Response({'score': score}, status=status.HTTP_200_OK)
+        student_attempt = StudentQuizAttempt.objects.get(user=user, quiz=quiz, completed=False)
+        student_attempt.completed = True
+        student_attempt.time_spent = quiz_duration
+        student_attempt.save()
+        return Response({
+            'score': student_attempt.score,
+            'time_spent': student_attempt.formatted_time_spent,
+            'question_answered': f"{student_attempt.questions_answered} / {student_attempt.total_questions}"
+        
+        }, status=status.HTTP_200_OK)
 
     except Quiz.DoesNotExist:
         return Response({'error': 'Quiz not found'}, status=status.HTTP_404_NOT_FOUND)
