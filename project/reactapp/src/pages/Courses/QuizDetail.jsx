@@ -35,6 +35,9 @@ const QuizDetail = () => {
       })
       //a=if you add config include it like so getQuiz(quizId,config)
       setQuestions(response.data.questions);
+      if(response.data.attempt_completed ===false){
+        setCurrentQuestion(response.data.current_question-1)
+      }
       console.log("Grade", response.data);
 
 
@@ -84,7 +87,8 @@ const QuizDetail = () => {
       .post(`/api/quizzes/${quizId}/submit-question/`, {
         question_id: questions[currentQuestion]?.id, // Use optional chaining
         answer: selectedAnswer,
-        attempt_id: attempt_id
+        attempt_id: attempt_id,
+        time_spent : timeElapsed
       },
       {
         headers: {
@@ -106,7 +110,8 @@ const QuizDetail = () => {
           if (currentQuestion < questions.length - 1) {
             // Move to the next question after a delay
             setTimeout(() => {
-              setCurrentQuestion(currentQuestion + 1);
+              setCurrentQuestion(response.data.current_question);
+              console.log('current question is ',response.data.current_question);
               setSelectedAnswer(null);
               setIsCorrect(null);
             }, 2000); // 2 seconds delay to show correct message
@@ -188,7 +193,7 @@ const QuizDetail = () => {
       <div className="mb-5">
         {/* {ques} */}
         <React.Fragment key={questions[currentQuestion]?.id}>
-    {questions[currentQuestion]?.question_type === "Multiple Choice" ? (
+       {questions[currentQuestion]?.question_type === "Multiple Choice" ? (
       // Render radio buttons for multiple-choice questions
       currentOptions.map((answer) => (
         <div key={answer.id}>
