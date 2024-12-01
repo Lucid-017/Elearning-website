@@ -97,12 +97,12 @@ class QuizSerializer(serializers.ModelSerializer):
     attempt_completed = serializers.SerializerMethodField(read_only=True)
     current_question = serializers.SerializerMethodField(read_only=True)
     questions_answered = serializers.SerializerMethodField(read_only=True)
-    
+    time_spent = serializers.SerializerMethodField(read_only=True)
 
 
     class Meta:
         model = Quiz
-        fields = ['id', 'title', 'attempt_completed', 'current_question', 'questions_answered', 'questions']
+        fields = ['id', 'title', 'attempt_completed', 'current_question', 'questions_answered', 'time_spent', 'questions']
 
     def get_title(self, obj):
         try:
@@ -121,6 +121,10 @@ class QuizSerializer(serializers.ModelSerializer):
     def get_questions_answered(self, obj):
         quiz_attempt = self.context.get('quiz_attempt')
         return quiz_attempt.questions_answered
+    
+    def get_time_spent(self, obj):
+        quiz_attempt = self.context.get('quiz_attempt')
+        return quiz_attempt.time_spent
 
 class StudentAttemptSerializer(serializers.ModelSerializer):
     class Meta:
