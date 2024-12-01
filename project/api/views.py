@@ -377,6 +377,7 @@ def submit_question(request, slug):
     question_id = request.data.get('question_id')
     answer_id = request.data.get('answer')
     attempt_id = request.data.get('attempt_id')
+    duration = request.data.get('time_spent', 0)
     print('Question:', question_id, "   ", 'Answer:', answer_id)
 
     try:
@@ -402,6 +403,7 @@ def submit_question(request, slug):
             quiz_attempt.questions_answered += 1
             score =  (quiz_attempt.questions_answered / quiz_attempt.total_questions) * 100
             quiz_attempt.score = round(score, 2)
+            quiz_attempt.time_spent = timedelta(seconds=duration)
             if not quiz_attempt.questions_answered >= quiz_attempt.total_questions:
                 quiz_attempt.current_question = quiz_attempt.questions_answered + 1
         quiz_attempt.save()
@@ -409,7 +411,7 @@ def submit_question(request, slug):
             'is_correct': is_correct,
             'quiz_attempt_id': quiz_attempt.id,
             'score': quiz_attempt.score,
-            'total_answered': quiz_attempt.questions_answered,
+            'questions_answered': quiz_attempt.questions_answered,
             'current_question': quiz_attempt.current_question
         })
 
