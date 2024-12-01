@@ -427,7 +427,7 @@ def submit_quiz(request, slug):
         quiz = skill.quiz
         user = request.user
         duration = request.data.get('time_spent', 0)
-        quiz_duration = timedelta(minutes=duration)
+        quiz_duration = timedelta(seconds=duration)
 
         student_attempt = StudentQuizAttempt.objects.get(user=user, quiz=quiz, completed=False)
         student_attempt.completed = True
