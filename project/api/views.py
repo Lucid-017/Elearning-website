@@ -366,7 +366,6 @@ def quiz_detail(request, slug):
             quiz_attempt.total_questions = total_question
             quiz_attempt.save()
         serializer = QuizSerializer(quiz, context={'quiz_attempt': quiz_attempt})
-        print(serializer.data['attempt_completed'])
         return Response(serializer.data)
     except (Skill.DoesNotExist, Quiz.DoesNotExist):
         return Response({'error': 'Quiz not found'}, status=status.HTTP_404_NOT_FOUND)
