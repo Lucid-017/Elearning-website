@@ -35,10 +35,10 @@ const QuizDetail = () => {
       })
       //a=if you add config include it like so getQuiz(quizId,config)
       setQuestions(response.data.questions);
-      if(response.data.attempt_completed ===false){
+      if(response.data.attempt_completed ===false && response.data.current_question >0){
         setCurrentQuestion(response.data.current_question-1)
       }
-      console.log("Grade", response.data);
+      console.log("Quiz details", response.data);
 
 
     } catch (err) {

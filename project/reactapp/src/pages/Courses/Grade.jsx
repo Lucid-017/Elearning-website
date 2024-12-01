@@ -47,7 +47,7 @@ const Grade = () => {
       {gradeCourses.length > 0 ? (
         gradeCourses.map((course,index) => (
           <>
-            <p className="font-bold pb-2" key={course.id}><span className="uppercase">{course.order_number}.</span> {course.name}</p>
+            <p className="font-bold pb-2" key={index}><span className="uppercase">{course.order_number}.</span> {course.name}</p>
             <ul>
               {course.skills?.map(skill=>(
                 <>
