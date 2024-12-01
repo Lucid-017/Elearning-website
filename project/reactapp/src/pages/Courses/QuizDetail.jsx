@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CoursesContext } from "../../API and Contxt/Context/Courses";
 import "./Css/Quiz.css";
+import { useToast } from "../../API and Contxt/Context/ToastContext";
 
 const QuizDetail = () => {
-  const { quizId } = useParams(); // Get quizId from URL parameters
+  const { quizId,subject,grade } = useParams(); // Get quizId from URL parameters
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  // const [quiz,setQuiz] =useState(null)
   const [isCorrect, setIsCorrect] = useState(null); // null: not answered, true: correct, false: incorrect
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(null);
-  const { getQuiz, error, setError, setLoading, loading } =
-    useContext(CoursesContext);
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { getQuiz, error, setError, setLoading, loading } = useContext(CoursesContext);
+  const [timeElapsed, setTimeElapsed] =useState(0)
+  
 
   // New state variables for score and total answered
   const [score, setScore] = useState(0);
@@ -34,8 +35,16 @@ const QuizDetail = () => {
       })
       //a=if you add config include it like so getQuiz(quizId,config)
       setQuestions(response.data.questions);
-      console.log("Grade", response.data.questions);
+      console.log("Grade", response.data);
+
+
     } catch (err) {
+        if(err.status === 401){
+          // route user to login page if unauthorized
+          navigate('/login')
+          sessionStorage.removeItem('user_info')
+          showToast(`Session Expired, Kindly log back in`,'error')
+        }
       setError(err.message);
     } finally {
       setLoading(false);
@@ -43,12 +52,26 @@ const QuizDetail = () => {
   };
 
   useEffect(() => {
+    // start timer
+    const timer = setInterval(() => {
+      setTimeElapsed(prevTime => prevTime +1) //on each interval(one second) incrememt the time elapsed variable
+    }, 1000);
+    console.log(timer,'time is')
+    // 
     console.log(quizId);
     // console.log('current option. answers',currentOptions);
 
-    return ()=> fetchQuiz();
+    return ()=> {clearInterval(timer);fetchQuiz();}
     // Fetch the quiz questions when the component mounts
-  }, [quizId]);
+  }, [quizId,subject,grade]);
+
+  // convert time to seconds
+  const timeFormat = (seconds)=>{
+    const minute = Math.floor(seconds/60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minute).padStart(2,'0')}:${String(remainingSeconds).padStart(2,'0')}`;
+  }
+
 
   const handleSubmit = () => {
     if (selectedAnswer === null) return;
@@ -87,8 +110,9 @@ const QuizDetail = () => {
               setSelectedAnswer(null);
               setIsCorrect(null);
             }, 2000); // 2 seconds delay to show correct message
+            console.log(response.data)
           } else {
-            const timeSpent = 120 // Assuming you track quiz start time in `startTime`
+            const timeSpent = timeElapsed // Assuming you track quiz start time in `startTime`
             const quizData = {
               time_spent: timeSpent, // in seconds
             };
@@ -104,7 +128,7 @@ const QuizDetail = () => {
             .catch((error) => {
               console.error('Error submitting quiz:', error);
             });
-
+            // show toast
             alert(
               `Quiz completed! Your score is ${score + 1}/${questions.length}.`
             );
@@ -134,7 +158,7 @@ const QuizDetail = () => {
   const currentOptions = questions[currentQuestion]?.answers || []; // Default to an empty array
 
   // Calculate the percentage score
-  const percentageScore = totalAnswered > 0 ? (score / totalAnswered) * 100 : 0;
+  // const percentageScore = totalAnswered > 0 ? (score / totalAnswered) * 100 : 0;
 
   return (
     <div className="container quiz-container">
@@ -156,7 +180,7 @@ const QuizDetail = () => {
         {/* store the time in a global varible to use in our dashboard later
         if user is focused out of the browser pause the timer and resume when they areon
         basically track the time it takes to finish a question */}
-        <div className="time-elapsed">00:00</div>
+        <div className="time-elapsed">{timeFormat(timeElapsed)}</div>
       </div>
       <h2 className="text-[#FF9500] mb-3">Question {currentQuestion + 1}</h2>
       <p className="mb-2">{questions[currentQuestion].question}</p>
@@ -194,36 +218,6 @@ const QuizDetail = () => {
       </div>
     )}
   </React.Fragment>
-        {/* {currentOptions.map((option) => (
-          <React.Fragment key={option.id}>
-            {option.question_type === "Multiple Choice" ? (
-              <div>
-                <p>{option.question_type}</p>
-                <input
-                  type="radio"
-                  id={option.id}
-                  name="answer"
-                  value={option.id}
-                  checked={selectedAnswer === option.id}
-                  onChange={() => setSelectedAnswer(option.id)}
-                />
-                <label htmlFor={option.id}>{option.answer}</label>
-              </div>
-            ) : (
-              <div>
-                <input
-                className="input"
-                  type="text"
-                  id={option.id}
-                  name="answer"
-                  value={selectedAnswer || ''}
-                  // checked={selectedAnswer === option.id}
-                  onChange={(e) => setSelectedAnswer(e.target.value)}
-                />
-              </div>
-            )}
-          </React.Fragment>
-        ))} */}
       </div>
       <div>
         <button

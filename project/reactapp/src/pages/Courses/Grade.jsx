@@ -27,7 +27,7 @@ const Grade = () => {
     };
 
     return ()=> fetchGradeCourses();
-  }, [grade,subject]);
+  }, [grade,subject,SelectedQuiz]);
 
   const handleQuiz = async (quiz) => {
     setSelectedQuiz(quiz)
