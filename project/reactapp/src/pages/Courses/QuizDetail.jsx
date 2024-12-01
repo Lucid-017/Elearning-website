@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { CoursesContext } from "../../API and Contxt/Context/Courses";
@@ -15,12 +15,16 @@ const QuizDetail = () => {
   const { showToast } = useToast();
   const { getQuiz, error, setError, setLoading, loading } = useContext(CoursesContext);
   const [timeElapsed, setTimeElapsed] =useState(0)
+  const timerRef = useRef(null) //ref for timer
+  const pausedTimeRef = useRef(null) //ref for timer when paused
   
 
   // New state variables for score and total answered
-  const [score, setScore] = useState(0);
+  // const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
-  const [attempt_id, setQuizAttemotId] = useState(0);  
+  const [attempt_id, setQuizAttemptId] = useState(0); 
+  const [questionAnswered,setQuestionAnswered] =useState(0)
+  const [smartScore,setSmartScore] =useState(0)
   const userInfoString = sessionStorage.getItem('user_info');
   const userInfo = userInfoString ? JSON.parse(userInfoString) : {}; // Convert to object
   const accessToken = userInfo.access_token
@@ -35,8 +39,12 @@ const QuizDetail = () => {
       })
       //a=if you add config include it like so getQuiz(quizId,config)
       setQuestions(response.data.questions);
+      // if quiz has been attempted before
       if(response.data.attempt_completed ===false && response.data.current_question >0){
         setCurrentQuestion(response.data.current_question-1)
+        setQuestionAnswered(response.data.questions_answered || 0)
+        setSmartScore(response.data.score || 0)
+        // setSmartScore(response.data.score)
       }
       console.log("Quiz details", response.data);
 
@@ -55,16 +63,47 @@ const QuizDetail = () => {
   };
 
   useEffect(() => {
-    // start timer
-    const timer = setInterval(() => {
-      setTimeElapsed(prevTime => prevTime +1) //on each interval(one second) incrememt the time elapsed variable
-    }, 1000);
-    console.log(timer,'time is')
+    // start timer\    
+    const startTimer= ()=>{
+      if(!timerRef.current){
+        timerRef.current =setInterval(() => {
+          setTimeElapsed((prev)=>prev+1)
+        }, 1000);
+      }
+    }
+        // Function to pause the timer if user has unfocused from the browser
+   const pauseTimer = () => {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null; // Reset timer reference
+          }
+        };
+      
+    const handleVisibilityChange = ()=>{
+      if(document.hasFocus()){
+        pauseTimer();//pause
+        pausedTimeRef.current = Date.now() //keep track
+      }else{
+        // Resume and adjust elapsed time based on how long the tab was hidden
+        if (pausedTimeRef.current){
+          const pausedDur =Math.floor((Date.now() - pausedTimeRef.current)/1000)
+          setTimeElapsed(prevTime=>prevTime +pausedDur)
+        }
+        startTimer()    //resume time  
+      }
+    }
+
+    // Start the timer when the component mounts
+    startTimer();
+    document.addEventListener('visibilitychange',handleVisibilityChange)
+    fetchQuiz();
+    console.log(timerRef,'time is')
     // 
     console.log(quizId);
     // console.log('current option. answers',currentOptions);
 
-    return ()=> {clearInterval(timer);fetchQuiz();}
+    return ()=> {pauseTimer(); // Clear the timer
+      document.removeEventListener("visibilitychange", handleVisibilityChange);}
     // Fetch the quiz questions when the component mounts
   }, [quizId,subject,grade]);
 
@@ -77,7 +116,10 @@ const QuizDetail = () => {
 
 
   const handleSubmit = () => {
-    if (selectedAnswer === null) return;
+    // if (selectedAnswer === null) return;
+    if (selectedAnswer === null) {
+      showToast("please select an answer before submiting",'error')
+    };
 
     setLoading(true);
     setError(null);
@@ -95,29 +137,29 @@ const QuizDetail = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       }
-    )
-      .then((response) => {
+    ).then((response) => {
         setLoading(false);
         setIsCorrect(response.data.is_correct);
-        setQuizAttemotId(response.data.quiz_attempt_id)
-        
-        // Update total answered and score
+        setQuizAttemptId(response.data.quiz_attempt_id)
+
+         // Update total answered and score
         if (response.data.is_correct) {
-          setTotalAnswered(totalAnswered + 1);
-        }
-        if (response.data.is_correct) {
-          setScore(score + 1); // Increment score for a correct answer
+
+            console.log(smartScore)
+            setTotalAnswered(prevAnswered =>prevAnswered + 1);
+            // Check if it's the last question
           if (currentQuestion < questions.length - 1) {
             // Move to the next question after a delay
             setTimeout(() => {
-              setCurrentQuestion(response.data.current_question);
+              setCurrentQuestion(response.data.current_question -1); //minus one because of javascript index
               console.log('current question is ',response.data.current_question);
               setSelectedAnswer(null);
               setIsCorrect(null);
             }, 2000); // 2 seconds delay to show correct message
             console.log(response.data)
           } else {
-            const timeSpent = timeElapsed // Assuming you track quiz start time in `startTime`
+            // submit quiz
+            const timeSpent = timeElapsed
             const quizData = {
               time_spent: timeSpent, // in seconds
             };
@@ -134,12 +176,14 @@ const QuizDetail = () => {
               console.error('Error submitting quiz:', error);
             });
             // show toast
-            alert(
-              `Quiz completed! Your score is ${score + 1}/${questions.length}.`
-            );
+            showToast(`Quiz completed! Your score is ${totalAnswered  + questionAnswered}/${questions.length}.`,'success')
+            // alert(
+            //   `Quiz completed! Your score is ${score + 1}/${questions.length}.`
+            // );
           }
         } else {
-          alert("Incorrect! Try again.");
+          showToast("Incorrect! Try again.0,'error")
+          // alert("Incorrect! Try again.");
         }
       })
       .catch((err) => {
@@ -163,7 +207,7 @@ const QuizDetail = () => {
   const currentOptions = questions[currentQuestion]?.answers || []; // Default to an empty array
 
   // Calculate the percentage score
-  // const percentageScore = totalAnswered > 0 ? (score / totalAnswered) * 100 : 0;
+  const percentageScore = ((questionAnswered + totalAnswered) / questions.length) * 100 || 0;
 
   return (
     <div className="container quiz-container">
@@ -172,20 +216,25 @@ const QuizDetail = () => {
         <div className="questions-answered">
           <div>
             <progress
-              value={totalAnswered || 0}
+              value={questionAnswered +totalAnswered}
               max={questions.length || 1}
               className="progress"
             ></progress>
           </div>
         </div>
         <p>
-          Questions Answered:{totalAnswered}/ {questions.length}{" "}
+          Questions Answered:{questionAnswered + totalAnswered}/ {questions.length}{" "}
         </p>
 
         {/* store the time in a global varible to use in our dashboard later
         if user is focused out of the browser pause the timer and resume when they areon
         basically track the time it takes to finish a question */}
-        <div className="time-elapsed">{timeFormat(timeElapsed)}</div>
+        <div className="time-elapsed">
+          {timeFormat(timeElapsed)}
+          <div className="smartscore">
+          <p>{Math.floor(percentageScore)}% completed</p>
+          </div>
+          </div>
       </div>
       <h2 className="text-[#FF9500] mb-3">Question {currentQuestion + 1}</h2>
       <p className="mb-2">{questions[currentQuestion].question}</p>
@@ -235,6 +284,7 @@ const QuizDetail = () => {
       </div>
 
       {isCorrect === true && <p>Correct! Loading next question...</p>}
+      {/* {currentQuestion >=questions.length && <p>Correct! Loading next question...</p>} */}
       {isCorrect === false && (
         <p>
           Incorrect! <button onClick={handleRetry}>Try Again</button>
