@@ -10,13 +10,15 @@ list available courses
 #FIXME - Navbar should show logout and setting on mid screen or stick to the hamburger ✅
 #FIXME - Remove local storage info on every session ✅
 ##TODO - preview skills when fetching year levels ✅
-##TODO - create a hero section for subject titles
+##TODO - create a hero section for subject titles ✅
 ##TODO - everything icons
-##TODO - Clean up code with context
-##TODO - Utlize outlet, define routes properly
+##TODO - Clean up code with context ✅
+##TODO - Utlize outlet, define routes properly ✅
 ##TODO - anaylze code and find out certain values that should be made as constants
 <!-- ##TODO - everything icons -->
-##TODO - When user is yanked off due to expired access token, ensure the navbar is access the user_info from session storage and display accordinly
+##TODO - When user is yanked off due to expired access token, ensure the navbar is access the user_info from session storage and display accordinly ✅
+##TODO - There should be a differnt logic if the anser is not correct 
+##TODO - Navigate maually to an invalid q
 
 
 #REVIEW - potential issues
