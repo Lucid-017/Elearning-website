@@ -22,10 +22,11 @@
     width: 100%;
     height: 400px;
     /* Add the fade-out effect */
-    /* -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgb(0, 0, 0));
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgb(0, 0, 0));
     mask-image: linear-gradient(to bottom, rgb(146, 21, 21), rgba(235, 26, 26, 0));
     -webkit-mask-size: cover;
-    mask-size: cover; */
+    mask-size: cover;
+    z-index: -1;
 }
 .hcontent {
     position: absolute;

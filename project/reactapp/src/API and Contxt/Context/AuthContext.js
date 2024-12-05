@@ -5,24 +5,20 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userInfoString = sessionStorage.getItem('user_info');
+ 
 
   // runs when application loads
   useEffect(() => {
-    const userInfoString = sessionStorage.getItem('user_info');
     if (userInfoString) {
       const userInfo = JSON.parse(userInfoString);
       setUser(userInfo);
       setIsLoggedIn(true);
-            // console.log('user is logged in')
-
     }else{
-      // console.log('user is not logged in')
-            setUser(null)
+      setUser(null)
       setIsLoggedIn(false)
-
     }
- 
-  }, [isLoggedIn]); //anytime user logs out and logs in
+  }, [userInfoString]); //anytime user logs out and logs in and if the usrInfostring changes
 
 
   // login to get local storage info

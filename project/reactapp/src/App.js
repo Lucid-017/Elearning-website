@@ -22,7 +22,7 @@ import CompleteGoogleRegistration from "./pages/Login/complete-google-registerat
 import { ToastProvider } from "./API and Contxt/Context/ToastContext";
 import { AuthProvider, useAuth } from "./API and Contxt/Context/AuthContext";
 // import Learning from "./pages/Courses/Learning";
-import React, { Children, lazy, Suspense,useEffect, useState } from "react";
+import React, { Children, lazy, Suspense, useEffect, useState } from "react";
 import ProtectedRoute from "./Route";
 // import Grade from "./pages/Courses/Grade";
 import { CoursesProvider } from "./API and Contxt/Context/Courses";
@@ -30,18 +30,20 @@ import { CoursesProvider } from "./API and Contxt/Context/Courses";
 import Pricing from "./pages/Pricing";
 // import QuizDetail from "./pages/Courses/QuizDetail";
 
-  // lazy load
-  const Learning = lazy(()=>import('./pages/Courses/Learning'))
-  const YearLevels = lazy(()=>import('./pages/Courses/YearLevels'))
-  const Grade = lazy(()=>import('./pages/Courses/Grade'))
-  const QuizDetail = lazy(()=>import('./pages/Courses/QuizDetail'))
-  const Topics = lazy(()=>import('./pages/Courses/Topics'))
+// lazy load
+const Learning = lazy(() => import("./pages/Courses/Learning"));
+const YearLevels = lazy(() => import("./pages/Courses/YearLevels"));
+const Grade = lazy(() => import("./pages/Courses/Grade"));
+const QuizDetail = lazy(() => import("./pages/Courses/QuizDetail"));
+const Topics = lazy(() => import("./pages/Courses/Topics"));
 
-  const SuspenseWrapper = ({children})=>{
-    return <Suspense fallback={<div>Loading component....</div>}>{children}</Suspense>
-  }
+const SuspenseWrapper = ({ children }) => {
+  return (
+    <Suspense fallback={<div>Loading component....</div>}>{children}</Suspense>
+  );
+};
 
-function App(){
+function App() {
   // confirm if user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
@@ -75,12 +77,7 @@ function App(){
                   <Navbar />
                   {/* NAVBAR END */}
                   <Routes>
-                  <Route
-                      path="/home"
-                      element={
-                        <Home />
-                      }
-                    />
+                    <Route path="/home" element={<Home />} />
                     {/* redirect '/' to dashboard if logged in */}
 
                     <Route
@@ -110,16 +107,47 @@ function App(){
                         <ProtectedRoute>
                           <SuspenseWrapper>
                             <Learning />
-                          </SuspenseWrapper>      
+                          </SuspenseWrapper>
                         </ProtectedRoute>
                       }
-                    > 
+                    >
                       {/* Nested routes inside Learning */}
-                      <Route index element={<SuspenseWrapper><YearLevels /></SuspenseWrapper>} />
-                      <Route path=":grade" element={<SuspenseWrapper><Grade /></SuspenseWrapper>}> 
-                      <Route path=':quizId' element={<SuspenseWrapper><QuizDetail/></SuspenseWrapper>}/>
+                      <Route
+                        index
+                        element={
+                          <SuspenseWrapper>
+                            <YearLevels />
+                          </SuspenseWrapper>
+                        }
+                      />
+                      <Route
+                        path=":grade"
+                        element={
+                          <SuspenseWrapper>
+                            <Grade />
+                          </SuspenseWrapper>
+                        }
+                      >
+                        <Route
+                          path=":quizId"
+                          element={
+                            <SuspenseWrapper>
+                              <QuizDetail />
+                            </SuspenseWrapper>
+                          }
+                        />
                       </Route>
-                      \ <Route path="topic" element={<SuspenseWrapper><Topics /></SuspenseWrapper>} />
+                      <Route path="*" element={<NotFound />} />
+                      {/*FALLBACK FOR INVALID QUIZ PATHS*/}
+                      
+                      <Route
+                        path="topic"
+                        element={
+                          <SuspenseWrapper>
+                            <Topics />
+                          </SuspenseWrapper>
+                        }
+                      />
                     </Route>
                     {/* Routes that require Auth */}
 
@@ -129,7 +157,10 @@ function App(){
                       path="/register/complete-google-registration"
                       element={<CompleteGoogleRegistration />}
                     />
-                    <Route path="/forgotpassword" element={<ForgotPassword />} />
+                    <Route
+                      path="/forgotpassword"
+                      element={<ForgotPassword />}
+                    />
                     <Route
                       path="/confirm-password-reset/:uidb64/:token"
                       element={<ResetPassword />}

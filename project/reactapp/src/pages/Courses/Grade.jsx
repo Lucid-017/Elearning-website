@@ -1,6 +1,7 @@
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useMatch, useNavigate, useParams, useResolvedPath } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { CoursesContext } from "../../API and Contxt/Context/Courses";
+import QuizDetail from "./QuizDetail";
 
 const Grade = () => {
   const { subject, grade } = useParams();
@@ -8,8 +9,10 @@ const Grade = () => {
   const [gradeCourses, setGradeCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [SelectedQuiz, setSelectedQuiz] = useState(null);
   const navigate = useNavigate()
+  // const resolvedPath = useResolvedPath("")
+  const isQuizDetail = useMatch(`/learning/:subject/:grade/:quiz`)
+  // chek if url includes a quiz detail
 
   useEffect(() => {
     // console.log(grade)
@@ -27,19 +30,19 @@ const Grade = () => {
     };
 
     return ()=> fetchGradeCourses();
-  }, [grade,subject,SelectedQuiz]);
+  }, [grade,subject]);
 
   const handleQuiz = async (quiz) => {
-    setSelectedQuiz(quiz)
       navigate(`${quiz}`)
   };
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
-      {!SelectedQuiz &&(
+      {!isQuizDetail ?(
       <div className=" bg-white p-10 ">
       <div>
        <p className="capitalize text-[#FF9500] font-[600]">{grade} skills</p>
@@ -65,8 +68,9 @@ const Grade = () => {
         <p>No courses found for this grade.</p>
       )}
     </div>
+      ):(
+        <Outlet/>
       )}
-  <Outlet/>
     </div>
   );
 };

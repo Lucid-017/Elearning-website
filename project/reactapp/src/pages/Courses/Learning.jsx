@@ -16,22 +16,10 @@ import { CoursesContext } from "../../API and Contxt/Context/Courses";
 
 const Learning = () => {
    const navigate = useNavigate();
-  // const location = useLocation();
-  // const [yearLevels, setYearLevels] = useState([]);
-  // const [topics, setTopics] = useState([]);
   const { subject = 'maths' } = useParams(); // Extract the 'subject' slug from the URL
-  // const { showToast } = useToast();
   const [selectedView, setSelectedView] = useState("Years"); //Default years
-  // const [selectedSubject, setSelectedSubject] = useState("maths"); //Default years
-  // const {getTopics,getYear,setLoading,setError,loading,error} =useContext(CoursesContext)
   const [viewBy, setViewBy] = useState(["Years", "Topics"]); //static options array
 
-  // Redirect to default subject if none is provided
-  // useEffect(() => {
-  //   if (!subject) {
-  //     navigate("/learning/maths", { replace: true }); // Set default subject
-  //   }
-  // }, [subject]);
 
   // // handle which filter is being clicked
   const handleFilterChange = (view) => {
@@ -43,31 +31,7 @@ const Learning = () => {
     }
     console.log(view, "has been clicked");
   };
-  // // const handleSubjectChange = (subject) => {
-  // //   setSelectedSubject(subject);
-  // //   navigate(`/learning/${subject}`);
-  // // };
 
-  
- 
-
-  // useEffect(() => {
-  //   // Reset states when the subject changes
-  //   if(!subject) return;
-  //   setYearLevels([]);
-  //   setTopics([]);
-  //   setError(null);
-  //     //  Trigger fetch requests(streamlined to avoid unnecessary setState calls)
-  //   (async ()=>{
-  //     try{
-  //       await Promise.all([fetchTopics(),fetchYearLevels()])
-  //     }catch(err){
-  //       console.log(err)
-  //     }
-  //   })();
-  //   // fetchYearLevels();
-  //   // fetchTopics();
-  // }, [subject]);
 
   return (
     <div>
@@ -109,22 +73,22 @@ const Learning = () => {
       </div>
       <div className="hero">
         <div className="hcontent">
-          <h1 className="uppercase p-2">{subject}</h1>
+          <h1 className="uppercase p-2 z-10">{subject}</h1>
           <div className="details">
             {subject === "maths" ? (
-              <p>
+              <p className="hidden phone:block">
                 Gain fluency and confidence in maths! IXL helps students master
                 essential skills at their own pace through fun and interactive
                 questions, built in support and motivating awards.
               </p>
             ) : subject === "english" ? (
-              <p>
+              <p className="hidden phone:block">
                 From phonics and reading comprehension to writing strategies and
                 more, IXL helps learners develop the communication skills needed
                 for success in school, university and career.
               </p>
             ) : (
-              <p>
+              <p className="hidden phone:block">
                 IXL offers personalised skill recommendations based on what each
                 student has been practising, so they can grow from where they
                 are. If you have an IXL account, make sure to sign in to see
