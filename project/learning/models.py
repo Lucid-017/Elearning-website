@@ -27,7 +27,7 @@ class Subject(models.Model):
 class Topic(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100, unique=True)
-    order_number = models.IntegerField(unique=True, null=True)
+    order_number = models.IntegerField(null=True)
     slug = models.SlugField(unique=True, null=True)
 
     class Meta:
