@@ -20,4 +20,5 @@ urlpatterns = [
     path('api/quizzes/<str:slug>/submit-question/', views.submit_question, name="submit-question"),
     path('api/quizzes/<str:slug>/submit/', views.submit_quiz, name='submit-quiz'),
     path('api/create-quiz/', views.create_quiz_with_questions, name='create_quiz'),
+    path('api/get-student-statistics/', views.student_statistics, name="student_statistics")
 ]

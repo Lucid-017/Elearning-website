@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from social_django.models import UserSocialAuth
-from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer, TopicSerializer, CourseSerializer
+from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer, TopicSerializer, CourseSerializer, StudentStatisticSerializer
 from account.models import User
 from learning.models import Quiz, Question, Answer, StudentQuizAttempt, Course, YearLevel, Subject, Topic, Skill
 
@@ -85,7 +85,11 @@ def get_routes(request):
             'method': 'POST',
             'description': 'Submits an entire quiz'
         },
-
+        {
+            'Endpoint': 'api/get-student-statistics/',
+            'method': 'POST',
+            'description': 'Gets the learning statistics of a particular student or user'
+        },
     ]
 
     return Response(routes)
@@ -558,3 +562,14 @@ def create_quiz_with_questions(request):
 #             )
             
     return Response({"message": "Quiz created successfully"}, status=201)
+
+
+@api_view(['GET'])
+def student_statistics(request):
+    user = request.user
+    student_quiz_attempt = StudentQuizAttempt.objects.filter(user=user)
+
+    if student_quiz_attempt.exists():
+        serializer = StudentStatisticSerializer(student_quiz_attempt.first())
+        return Response(serializer.data)
+    return Response({'total_time_spent': '0 hr 0 min', 'total_questions_answered': 0, 'total_quiz_completed': 0, 'recent_quizzes': []})

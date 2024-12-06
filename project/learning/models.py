@@ -1,9 +1,10 @@
 from datetime import timedelta
 from django.db import models
+from django.db.models import Sum
 from django.utils import timezone
 from django.utils.text import slugify
 from account.models import User
-from api.utils import format_duration
+from api.utils import format_quiz_duration, format_total_time_spent
 
 # Create your models here.
 class Subject(models.Model):
@@ -109,6 +110,10 @@ class Quiz(models.Model):
     def __str__(self):
         return self.skill.name
     
+    @property
+    def get_slug(self):
+        return self.skill.slug
+    
 
 QUESTION_TYPES = [
     ('Multiple Choice', 'Multiple Choice'),
@@ -150,4 +155,20 @@ class StudentQuizAttempt(models.Model):
     
     @property
     def formatted_time_spent(self):
-        return format_duration(self.time_spent)
+        return format_quiz_duration(self.time_spent)
+   
+    @property
+    def get_total_time_spent(self):
+        total_time = StudentQuizAttempt.objects.filter(user=self.user).aggregate(Sum('time_spent'))['time_spent__sum']
+        print(total_time)
+        return format_total_time_spent(total_time) or timedelta(seconds=0)  # Return 0 if no attempts exist
+    
+    @property
+    def get_total_question_answered(self):
+        total_questions = StudentQuizAttempt.objects.filter(user=self.user, completed=True).aggregate(Sum('questions_answered'))['questions_answered__sum']
+        return total_questions or 0 # Return 0 if no attempts exist
+    
+    @property
+    def get_total_quiz_completed(self):
+        total_quiz = StudentQuizAttempt.objects.filter(user=self.user, completed=True).count()
+        return total_quiz

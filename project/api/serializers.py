@@ -94,6 +94,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 class QuizSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
     title = serializers.SerializerMethodField(read_only=True)
+    slug = serializers.SerializerMethodField(read_only=True)
     attempt_completed = serializers.SerializerMethodField(read_only=True)
     current_question = serializers.SerializerMethodField(read_only=True)
     questions_answered = serializers.SerializerMethodField(read_only=True)
@@ -102,13 +103,17 @@ class QuizSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Quiz
-        fields = ['id', 'title', 'attempt_completed', 'current_question', 'questions_answered', 'time_spent', 'questions']
+        fields = ['id', 'title', 'slug', 'attempt_completed', 'current_question', 'questions_answered', 'time_spent', 'questions']
 
     def get_title(self, obj):
         try:
             return obj.__str__()
         except:
             return obj.id
+        
+    def get_slug(self, obj):
+        return obj.get_slug
+
     
     def get_attempt_completed(self, obj):
         quiz_attempt = self.context.get('quiz_attempt')
@@ -163,7 +168,7 @@ class YearLevelSerializer(serializers.ModelSerializer):
         courses = obj.year_level_courses.filter(subject__slug=slug)
         skills = Skill.objects.filter(course__in=courses).distinct()
         return len(SkillSerializer(skills, many=True).data)
-        # return len(CourseSerializer(courses, many=True).data)
+
 
 class TopicSerializer(serializers.ModelSerializer):
     skills = serializers.SerializerMethodField()
@@ -179,4 +184,29 @@ class TopicSerializer(serializers.ModelSerializer):
     def get_total_skills(self, obj):
         skills = Skill.objects.filter(related_topics__id=obj.id).distinct()
         return len(SkillSerializer(skills, many=True).data)
-        # return len(CourseSerializer(courses, many=True).data)
+
+
+class StudentStatisticSerializer(serializers.ModelSerializer):
+    total_time_spent = serializers.SerializerMethodField(read_only=True)
+    total_questions_answered = serializers.SerializerMethodField(read_only=True)
+    total_quiz_completed = serializers.SerializerMethodField(read_only=True)
+    recent_quizzes = serializers.SerializerMethodField()
+    class Meta:
+        model = StudentQuizAttempt
+        fields = ['total_time_spent', 'total_questions_answered', 'total_quiz_completed', 'recent_quizzes']
+
+    def get_total_time_spent(self, obj):
+        return obj.get_total_time_spent
+    
+    def get_total_questions_answered(self, obj):
+        return obj.get_total_question_answered
+    
+    def get_total_quiz_completed(self, obj):
+        return obj.get_total_quiz_completed
+    
+    def get_recent_quizzes(self, obj):
+        quizzes = Quiz.objects.filter(studentquizattempt__user=obj.user).distinct()
+        serialized_data =  QuizSerializer(quizzes, context={'quiz_attempt': obj}, many=True).data[:8]
+        filtered_data = [{'slug': quiz['slug'], 'title': quiz['title']} for quiz in serialized_data]
+        return filtered_data
+        
