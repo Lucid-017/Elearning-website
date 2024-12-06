@@ -11,11 +11,17 @@ import icon6 from '../../assets/profile/fish.png'
 import icon7 from '../../assets/profile/flower.png'
 import icon8 from '../../assets/profile/girl.png'
 import './Css/Setting.css'
+import { useLocation } from 'react-router-dom';
+import logo from '../../assets/contact.svg'
+
 
 const Settings = () => {
     const {userInfo} = useContext(AuthContext)
-    const [username,setUsername] = useState(userInfo.username)
+    const [username,setUsername] = useState(userInfo?.username || 'guest')
     const [selectedIcon,setSelectedIcon] =useState(0)
+    const url = useLocation().pathname
+    const segments = url.split('/')
+
     const profileIcon =[
         {  image:icon1},
         {  image:icon2},
@@ -38,9 +44,17 @@ const Settings = () => {
     }
   return (
     <div className='px-10 phone:px-20 my-10'>
+        <div className="herop">
+            <p>Home | <span className='text-[#FF9500] capitalize'>{segments}</span></p>
+            <div className="flex flex-col tablet:flex-row items-center justify-around pt-5">
+                <h2 className='text-[32px] tablet:text-[45px] font-semibold overflow-hidden'>Profile & Settings</h2>
+                <div>
+                    <img src={logo} alt="" srcset="" />
+                </div>
+            </div>
+        </div>
         <div className="header mb-10">
-            <h2>Profile & Settings</h2>
-            <p>You're currently signed in as {userInfo.username} </p>
+            <p>You're currently signed in as {userInfo.username || 'guest'} </p>
         </div>
         <div className="form shadow-md m-1">
             <div className="iconArea flex items-center p-4 bg-[#ff9500] space-x-2">

@@ -15,7 +15,7 @@ const Newsletter = () => {
         </div>
         <div className='flex justify-center'>
             <input onChange={(e)=>setText(e.target.value)} className='w-[100px] phone:w-[509px]' type="email" placeholder='enter your email'/>
-            <button>Subscribe</button>
+            <button className='text-white'>Subscribe</button>
         </div>
     </div>
 </section>
