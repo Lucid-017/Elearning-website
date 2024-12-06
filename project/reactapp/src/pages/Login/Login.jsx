@@ -8,6 +8,8 @@ import { useToast } from "../../API and Contxt/Context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
 import {GoogleOAuthProvider,GoogleLogin,googleLogout} from "@react-oauth/google";
 import { AuthContext } from "../../API and Contxt/Context/AuthContext";
+import login from '../../assets/Login.svg'
+
 const Login = () => {
   //
   const { showToast } = useToast();
@@ -71,10 +73,10 @@ const Login = () => {
 
       // remember me,store email in local storage
       if (rememberMe) {
-        sessionStorage .setItem("username", username);
+        sessionStorage.setItem("username", username);
       } else {
         // remove email if not remembering
-        sessionStorage .removeItem("username");
+        sessionStorage.removeItem("username");
       }
     } catch (err) {
       const errmesg = err.response?.data || { error: "login failed!" };
@@ -154,33 +156,15 @@ const Login = () => {
 
   return (
     <>
-      <div className="px-5 phone:px-10">
+      <div className="px-5 phone:px-10 my-10">
         {/* if user already exist */}
         <div>
-          <div className="grid tablet:grid-cols-2">
-            <div className="div1 mb-40 hidden phone:block tablet:mb-0 grid phone:place-items-center h-full w-full px-10 ">
+          <div className="grid tablet:grid-cols-2 phone:place-items-center">
+            <div className="div1 mb-40 hidden place-content-center tablet:block tablet:mb-0 h-full w-full px-10 ">
               {/* display by the left */}
               <div>
-                <h2 className="pb-2">Students Testimonials</h2>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur. Tempus tincidunt etiam
-                  eget elit id imperdiet et. Cras eu sit dignissim lorem nibh
-                  et. Lorem ipsum dolor sit amet consectetur. Tempus tincidunt
-                  etiam eget elit id imperdiet et. Cras eu sit dignissim lorem
-                  nibh et.Lorem ipsum dolor sit amet consectetur. Tempus
-                  tincidunt etiam eget elit id imperdiet et. Cras eu sit
-                  dignissim lorem nibh et.Lorem ipsum dolor sit amet
-                  consectetur. Tempus tincidunt etiam eget elit id imperdiet et.
-                  Cras eu sit dignissim lorem nibh et.Ac cum eget habitasse in
-                  velit fringilla feugiat senectus in.
-                </p>
-
-                <div className="carosel laptop:pl-10 pt-20">
-                  The web design course provided a solid foundation for me. The
-                  instructors were knowledgeable and supportive, and the
-                  interactive learning environment was engaging. I highly
-                  recommend it!
-                </div>
+                <h2 className="pb-2">Welcome to Ebemas online learning platform</h2>
+                <img src={login} alt="welcome logo" />
               </div>
             </div>
             <div className="div2">

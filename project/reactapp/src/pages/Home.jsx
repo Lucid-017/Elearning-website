@@ -5,8 +5,11 @@ import Hero from '../assets/Home2.png'
 import maths from '../assets/MATHS.SVG'
 import english from '../assets/English.svg'
 import share from '../assets/share.svg'
+import learn from '../assets/learn.svg'
 import './css/Home.css'
 import Grades from '../Components/Layout/Grades'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as icons from "@fortawesome/free-solid-svg-icons";
 // import { useAuth } from '../Components/Context/AuthContext'
 
 const Home = () => {
@@ -50,8 +53,42 @@ const Home = () => {
         </div>
       </section>
       {/*  */}
+      <section className='my-10 reach-out '>
+        <div className="flex space-x-10 items-center justify-center flex-col tablet:flex-row phone:justify-normal">
+          <div className='flex-1 w-1/2'>
+            <img src={learn} alt="" srcset="" />
+          </div>
+          <div className='flex-1 w-1/2'>
+            <h2 className="title pb-2">
+            What will your chid get after studying at Ebedmas?
+            </h2>
+            <ul>
+              <li className='flex items-center space-x-4'>
+              <FontAwesomeIcon className="icon w-[15px] text-[#5995ed]" icon={icons.faCheckCircle}/>
+               <p>Master Program knowledge at school.</p> 
+               </li>
+              <li className='flex items-center space-x-4'>
+              <FontAwesomeIcon className="icon w-[15px] text-[#5995ed]" icon={icons.faCheckCircle}/>
+               <p>The ability to criticize knowledge increases.</p> 
+               </li>
+              <li className='flex items-center space-x-4'>
+              <FontAwesomeIcon className="icon w-[15px] text-[#5995ed]" icon={icons.faCheckCircle}/>
+               <p>Respond confidently when encountering difficult situations.</p> 
+               </li>
+            </ul>
+            
+           <Link to={'/contact'}>
+              <button className='mt-5'>
+                Reach out
+              </button>
+              </Link>
+              
+          </div>
+        </div>
+      </section>
+      {/*  */}
       <section className='my-10 phone:my-20 grade'>
-          <div className="lesson-Header text-center mb-5">
+          <div className="lesson-Header text-center pb-8">
             <h2 className='pb-2'>Qualified lessons for students</h2>
             <p className='phone:w-1/2 mx-auto'>A lesson or class is a structured period of time where learning is intended to occur. 
               It involves one or more students being taught by a teacher or instructor.</p>
@@ -77,13 +114,10 @@ const Home = () => {
           </div>
           <div className='flex-1 w-1/2'>
             <h2 className="title pb-2">
-            Want to share your
-knowledge? Join us
-as a Mentor
+            Make a Difference as a Mentor
             </h2>
-            <p>High-definition video is video of higher resolution and quality than standard-definition. 
-              While there is no standardized meaning for high-definition, generally any video.</p>
-              <Link to={'/pricing'}>
+            <p>Join us as a mentor and play a vital role in empowering the next generation of learners. Whether it’s guiding students or supporting educators, your skills and insights can leave a lasting mark. Connect with us today to begin making a difference.</p>
+              <Link to={'/contact'}>
               <button className='mt-5'>
                 Reach out
               </button>

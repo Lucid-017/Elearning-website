@@ -1,24 +1,44 @@
 import React from "react";
-import './css/Contact.css'
+import './css/Contact.css';
+import logo from '../assets/contact.svg';
+import { useLocation } from "react-router-dom";
+import Newsletter from '../Components/Newsletter';
+
 const Contact = () => {
+  const url = useLocation().pathname
+  const segments = url.split('/')
+
+  
   return (
-    <>
-      <div className="grid grid-cols-1 pb-20 px-10 phone:grid-cols-2 phone:px-20  gap-10">
-        <div className="heading">
-          <p className="text-4xl font-[600] overflow-hidden">Contact Us</p>
-        </div>
-        <div className="">
-          At EBEDMAS platform is designed to offer progress management and
-          monitor student achievements, allowing users to track growth and
-          educational milestones every step of the way. We believe in providing flexible and affordable pricing 
-          options for our services.
-          If you have any
-          questions, feedback, or need assistance, please don’t hesitate to
-          reach out.
-        </div>
+    <div className=" px-10 phone:px-20 ">
+      <div className=" pb-20 gap-10">
+        <div className="herop">
+              <p>Home | <span className='text-[#FF9500] capitalize'>{segments}</span></p>
+              <div className="flex flex-col tablet:flex-row items-center justify-around pt-5">
+                  <h2 className='text-[32px] tablet:text-[45px] font-semibold overflow-hidden'>Reach out to us</h2>
+                  <div>
+                      <img src={logo} alt="" srcset="" />
+                  </div>
+              </div>
+          </div>
+          <div className="grid grid-cols-1  phone:grid-cols-2 py-20">
+            <div className="heading">
+              <p className="text-4xl font-[600] overflow-hidden">Contact Us</p>
+            </div>
+            <div className="">
+              <p>At EBEDMAS platform is designed to offer progress management and
+            monitor student achievements, allowing users to track growth and
+            educational milestones every step of the way. We believe in providing flexible and affordable pricing 
+            options for our services.
+            If you have any
+            questions, feedback, or need assistance, please don’t hesitate to
+            reach out.</p>
+            </div>
+          </div>
+
       </div>
       <hr className="mx-10 tablet:px-20" />
-      <div className="contact grid grid-cols-1 mt-20 mx-10 p-10 tablet:mx-40 tablet:p-20 tablet:grid-cols-2 tablet:gap-10">
+      <div className="contact grid grid-cols-1 mt-16 mx-10 p-10  tablet:p-20 tablet:grid-cols-2 tablet:gap-10">
         <div className="">
           <form method="post" className="w-full">
             {/* Full name */}
@@ -125,7 +145,10 @@ const Contact = () => {
           </div>
         </div>
       </div>
-    </>
+
+      <Newsletter/>
+
+    </div>
   );
 };
 

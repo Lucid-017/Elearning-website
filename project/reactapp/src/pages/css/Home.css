@@ -24,11 +24,15 @@
 .subject p{
     font-weight: 500;
 }
-.Home-comp button{
+button{
+    padding: 8px 12px;
     border-radius: 2px;
+    transition: background-color 0.2s ease-in, border 0.3s ease-in-out;
+
+}
+.Home-comp button{
     background-color: #FF9500;
     color: white;
-    transition: background-color 0.2s ease-in, border 0.3s ease-in-out;
 }
 .Home-comp button:hover{
     border: 1px solid #FF9500;
