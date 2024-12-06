@@ -64,21 +64,22 @@ const YearLevels = () => {
         <div className="grid grid-cols-1 p-2 phone:grid-cols-2 laptop:grid-cols-3 gap-6">
         {yearLevels?.map((yearLevel) => (
           <div key={yearLevel.id} onClick={()=>handleGrade(yearLevel.slug)} >
-            <div class="grade-module blue1-bdr">     
+            <div class="grade-module">     
                 <div class="grade-box-tab ">{yearLevel.level === 'Reception' ? 'R' :yearLevel.order_number}</div>
-                <h2 class="grade-box-hdr blue1-text">
+                <p class="grade-box-hdr font-semibold text-2xl">
                   <span class="block phone:hidden grade-box-short-name grade-box-name">
                   {yearLevel.order_number}
                   </span>
-                  <span class="hidden phone:block grade-box-long-name grade-box-name text-black ">
+                  <span class="hidden phone:block grade-box-long-name grade-box-name text-black hover:text-[#ff9500] ">
                     {yearLevel.level}
                   </span>
-                </h2>
+                </p>
               <div class="hidden tablet:block grade-body">
                 <div class="grade-description" escapehtml="false">
                   {/* list 4 topics included in course and prefix for mroe */}
-                  Counting objects, inside and outside, longer and shorter, letter
-                  names, rhyming words, and more.
+                  <p>Counting objects, inside and outside, longer and shorter, letter
+                  names, rhyming words, and more.</p>
+
                 </div>
   
                 <ul class="list-subject-links">
@@ -88,19 +89,19 @@ const YearLevels = () => {
                       <div
                         class="skill-lk"
                        >
-                        <span class="lk-txt">{yearLevel.total_skills}</span>
+                        <span className="text-[#ff9500]">{yearLevel.total_skills}</span>
                       </div>
                     </div>
                   </li>
   
                   <li class="subject-link-item language-arts">
-                    <div class="subject-skill-container">
+                    {/* <div class="subject-skill-container">
                     {yearLevel.skills.map((skill,index) => (
                        <span key={skill.slug}> {skill.name}
                        {index < yearLevel.skills.length - 1 && ' | '}
                        </span>
                     ))}
-                    </div>
+                    </div> */}
                   </li>
                 </ul>
               </div>

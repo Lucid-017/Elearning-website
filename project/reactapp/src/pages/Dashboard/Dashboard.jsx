@@ -1,30 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../css/Dashboard.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
+import { CoursesContext } from "../../API and Contxt/Context/Courses";
+import { AuthContext } from "../../API and Contxt/Context/AuthContext";
 
 const Dashboard = () => {
-  const [user, setUser] = useState("");
+  // const [user, setUser] = useState("");
+  const {timeElaspsed,timeFormat,timeArray} = useContext(CoursesContext)
+  const {userInfo,user,setUser} = useContext(AuthContext)
   const date = new Date(); // Use the current date
 const options = { month: 'short', day: '2-digit' };
 const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
 
-  // Find another way to access username, local storage is only dependent on if user uses the remember me option
-  useEffect(() => {
-    const userInfoString = sessionStorage.getItem("user_info");
-    const userInfo = userInfoString ? JSON.parse(userInfoString) : {};
-    // Now userInfo will be an object with access_token, refresh_token, and username
-    setUser(userInfo.username || "guest");
-  }, []);
 
   return (
     <div className="px-10 phone:px-20">
       <div className="welcome mb-5 ">
-        <h2 className="font-[500] pl-8">Hi {user}, Welcome!</h2>
+        <h3 className="font-[500] pl-8">Hi {userInfo.username}, Welcome!</h3>
       </div>
 
-      <div className="bg-white mb-32 laptop:mb-14 px-5 phone:px-10 tablet:px-20 py-10">
+      <div className="bg-white rounded mb-32 laptop:mb-14 px-5 phone:px-10 tablet:px-20 py-10">
         <div className="pb-5">
           <p className="font-[500]">In this week({formattedDate} - today)</p>
           <small>See how you’ve performed this week</small>
@@ -58,7 +55,7 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
                   <div className="stats-info">
                     <div className="stats-text">You've spent</div>
                     <div className="stats-data">
-                      <span className="stats-number">42</span>
+                      <span className="stats-number">{timeArray}</span>
                       <span className="stats-unit">mins learning</span>
                     </div>
                   </div>
@@ -94,7 +91,7 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
         </div>
         <div className="text-center">
           <p>Keep up the great work!</p>
-          <Link className="no-underline" to={"/courses"}>
+          <Link className="no-underline" to={"/learning"}>
             <p className="text-[#FF9500]">Continue Learning</p>
           </Link>
         </div>

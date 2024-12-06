@@ -14,12 +14,10 @@ const QuizDetail = () => {
   const [isCorrect, setIsCorrect] = useState(null); // null: not answered, true: correct, false: incorrect
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const { getQuiz, error, setError, setLoading, loading } =
+  const {timeArray,timeElapsed,setTimeElapsed,timeFormat, getQuiz, error, setError, setLoading, loading } =
     useContext(CoursesContext);
-  const [timeElapsed, setTimeElapsed] = useState(0);
   const [quizStatus, setQuizStatus] = useState(false);
   const timerRef = useRef(null); //ref for timer
-  const pausedTimeRef = useRef(null); //ref for timer when paused
 
   // New state variables for score and total answered
   // const [score, setScore] = useState(0);
@@ -74,54 +72,22 @@ const QuizDetail = () => {
         }, 1000);
       }
     };
+    console.log(timerRef.current)
+
     // Function to pause the timer if user has unfocused from the browser
-    const pauseTimer = () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null; // Reset timer reference
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.hasFocus()) {
-        pauseTimer(); //pause
-        pausedTimeRef.current = Date.now(); //keep track
-      } else {
-        // Resume and adjust elapsed time based on how long the tab was hidden
-        if (pausedTimeRef.current) {
-          const pausedDur = Math.floor(
-            (Date.now() - pausedTimeRef.current) / 1000
-          );
-          setTimeElapsed((prevTime) => prevTime + pausedDur);
-        }
-        startTimer(); //resume time
-      }
-    };
-
     // Start the timer when the component mounts
     startTimer();
-    document.addEventListener("visibilitychange", handleVisibilityChange);
     fetchQuiz();
-    console.log(timerRef, "time is");
     //
     console.log(quizId);
     // console.log('current option. answers',currentOptions);
 
     return () => {
-      pauseTimer(); // Clear the timer
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      clearInterval(startTimer)
     };
     // Fetch the quiz questions when the component mounts
   }, [quizId, subject, grade]);
 
-  // convert time to seconds
-  const timeFormat = (seconds) => {
-    const minute = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${String(minute).padStart(2, "0")}:${String(
-      remainingSeconds
-    ).padStart(2, "0")}`;
-  };
 
   const handleSubmit = () => {
     // if (selectedAnswer === null) return;
@@ -176,6 +142,8 @@ const QuizDetail = () => {
           } else {
             // submit quiz
             const timeSpent = timeElapsed;
+            // append time to globally store time array
+            timeArray.push(timeSpent) //in seconds
             const quizData = {
               time_spent: timeSpent, // in seconds
             };

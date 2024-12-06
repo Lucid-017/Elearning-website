@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../../API and Contxt/Context/AuthContext";
+import { AuthContext } from "../../API and Contxt/Context/AuthContext";
 import "../Layout/css/Navbar.css";
 import Logo from "../../assets/EBEDMAS Logo 0.1.png";
 import MobileLogo from "../../assets/Logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout } = useContext(AuthContext);
   const { subject } = useParams();
   const navigate = useNavigate();
   const [isTabletOrLaptop, setIsTabletOrLaptop] = useState(window.innerWidth >= 768);

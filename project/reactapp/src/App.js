@@ -28,6 +28,7 @@ import ProtectedRoute from "./Route";
 import { CoursesProvider } from "./API and Contxt/Context/Courses";
 // import Topics from "./pages/Courses/Topics";
 import Pricing from "./pages/Pricing";
+import Settings from "./pages/Courses/Settings";
 // import QuizDetail from "./pages/Courses/QuizDetail";
 
 // lazy load
@@ -153,6 +154,7 @@ function App() {
 
                     <Route path="/register" element={<Signup />} />
                     <Route path="pricing" element={<Pricing />} />
+                    <Route path="settings" element={<Settings />} />
                     <Route
                       path="/register/complete-google-registration"
                       element={<CompleteGoogleRegistration />}

@@ -1,17 +1,17 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const userInfoString = sessionStorage.getItem('user_info');
- 
+  const userInfo = JSON.parse(userInfoString);
+
 
   // runs when application loads
   useEffect(() => {
     if (userInfoString) {
-      const userInfo = JSON.parse(userInfoString);
       setUser(userInfo);
       setIsLoggedIn(true);
     }else{
@@ -35,10 +35,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, authlogin, logout,setIsLoggedIn,setUser }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, authlogin, logout,setIsLoggedIn,setUser,userInfo }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+// export const useAuth = () => useContext(AuthContext);
