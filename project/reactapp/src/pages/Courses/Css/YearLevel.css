@@ -20,7 +20,11 @@
     padding: 0;
     position: relative;
     text-align: left;
+    cursor: pointer;
 }
+/* .grade-module:hover p{
+    color: #FF9500;
+} */
 
 .grade-box-hdr {
     display: inline-block;

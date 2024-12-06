@@ -103,7 +103,7 @@ const Learning = () => {
 
       {/* )} */}
       <div className="content">
-        <div className="px-5 phone:px-10 tablet:px-20 tablet:mb-10">
+        <div className="p-5 phone:px-10 tablet:px-20 tablet:mb-10">
           <Outlet/>
         </div>
       </div>

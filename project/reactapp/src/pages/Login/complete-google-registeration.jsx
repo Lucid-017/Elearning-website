@@ -1,5 +1,5 @@
 import '../css/Login.css'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import countries from './countries';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useToast } from "../../API and Contxt/Context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
-import { useAuth } from '../../API and Contxt/Context/AuthContext';
+import { AuthContext, useAuth } from '../../API and Contxt/Context/AuthContext';
 
 const CompleteGoogleRegistration = () => {
     const location = useLocation();
@@ -29,7 +29,7 @@ const CompleteGoogleRegistration = () => {
     const [loading, setLoading] =useState(false)
     const [toastMessage,setToastMessage]=useState('')
     const [toastType,setToastType]=useState('')
-    const {authlogin}=useAuth()
+    const {authlogin}= useContext(AuthContext)
 
     // 
     const navigate = useNavigate()

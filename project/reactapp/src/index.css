@@ -17,13 +17,13 @@ h1 {
 
   }
   h3 {
-    @apply text-lg;
+    @apply text-xl;
     font-weight: bold;
     overflow: hidden;
 
   }
   h4 {
-    @apply text-base;
+    @apply text-lg;
     font-weight: bold;
     overflow: hidden;
   }

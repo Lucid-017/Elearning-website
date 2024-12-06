@@ -1,7 +1,6 @@
 import { Link, Outlet, useLocation, useMatch, useNavigate, useParams, useResolvedPath } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { CoursesContext } from "../../API and Contxt/Context/Courses";
-import QuizDetail from "./QuizDetail";
 
 const Grade = () => {
   const { subject, grade } = useParams();
@@ -41,9 +40,9 @@ const Grade = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className="">
       {!isQuizDetail ?(
-      <div className=" bg-white p-10 ">
+      <div className=" bg-white p-10 rounded">
       <div>
        <p className="capitalize text-[#FF9500] font-[600]">{grade} skills</p>
       </div>

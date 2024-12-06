@@ -1,5 +1,5 @@
 // import css
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../css/Login.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "../../API and Contxt/Context/ToastContext";
 import ErrorHandling from "../../Components/Errors/ErrorHandling";
 import {GoogleOAuthProvider,GoogleLogin,googleLogout} from "@react-oauth/google";
-import { useAuth } from "../../API and Contxt/Context/AuthContext";
+import { AuthContext } from "../../API and Contxt/Context/AuthContext";
 const Login = () => {
   //
   const { showToast } = useToast();
@@ -21,7 +21,7 @@ const Login = () => {
   const [errormsg, setError] = useState(null);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("");
-  const {authlogin}=useAuth()
+  const {authlogin}=useContext(AuthContext)
   const navigate = useNavigate();
 
   // handle form submit
@@ -226,6 +226,7 @@ const Login = () => {
                         Remember Me
                       </label>
                     </div>
+                    <div className="btns w-full">
                     <button
                       disabled={loading}
                       type="submit"
@@ -233,13 +234,30 @@ const Login = () => {
                     >
                       Login {loading ? "..." : null}
                     </button>
-                    <GoogleOAuthProvider clientId="285601537552-ibees7qsgb5hjkr2a1r9qb3jjk14gvu2.apps.googleusercontent.com">
-                      <GoogleLogin
-                        onSuccess={handleLoginSuccess}
-                        onError={handleLoginError}
-                      />
-                    </GoogleOAuthProvider>
-                    <p>
+                    <div className="google">
+                      <GoogleOAuthProvider  clientId="285601537552-ibees7qsgb5hjkr2a1r9qb3jjk14gvu2.apps.googleusercontent.com">
+                        <div className="w-full">
+                          <GoogleLogin
+          onSuccess={handleLoginSuccess}
+          onError={handleLoginError}
+          render={(renderProps) => (
+            <button
+              className="w-full"
+              onClick={renderProps.onClick}
+              disabled={renderProps.disabled}
+            >
+             
+            </button>
+          )}
+        />
+                        </div>
+                        
+                      </GoogleOAuthProvider>
+                    </div>
+
+                    </div>
+
+                    <p className="pt-2">
                       Don't have an account?{" "}
                       <Link to={"/register"} className="pl-1 link">
                         Sign Up
