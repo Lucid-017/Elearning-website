@@ -94,6 +94,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 class QuizSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
     title = serializers.SerializerMethodField(read_only=True)
+    subject = serializers.SerializerMethodField(read_only=True)
+    grade_level = serializers.SerializerMethodField(read_only=True)
     slug = serializers.SerializerMethodField(read_only=True)
     attempt_completed = serializers.SerializerMethodField(read_only=True)
     current_question = serializers.SerializerMethodField(read_only=True)
@@ -103,7 +105,7 @@ class QuizSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Quiz
-        fields = ['id', 'title', 'slug', 'attempt_completed', 'current_question', 'questions_answered', 'time_spent', 'questions']
+        fields = ['id', 'title', 'subject', 'grade_level', 'slug', 'attempt_completed', 'current_question', 'questions_answered', 'time_spent', 'questions']
 
     def get_title(self, obj):
         try:
@@ -130,6 +132,12 @@ class QuizSerializer(serializers.ModelSerializer):
     def get_time_spent(self, obj):
         quiz_attempt = self.context.get('quiz_attempt')
         return quiz_attempt.time_spent
+    
+    def get_subject(self, obj):
+        return obj.skill.course.subject.name
+    
+    def get_grade_level(self, obj):
+        return obj.skill.course.grade_level.level
 
 class StudentAttemptSerializer(serializers.ModelSerializer):
     class Meta:
@@ -207,6 +215,6 @@ class StudentStatisticSerializer(serializers.ModelSerializer):
     def get_recent_quizzes(self, obj):
         quizzes = Quiz.objects.filter(studentquizattempt__user=obj.user).distinct()
         serialized_data =  QuizSerializer(quizzes, context={'quiz_attempt': obj}, many=True).data[:8]
-        filtered_data = [{'slug': quiz['slug'], 'title': quiz['title']} for quiz in serialized_data]
+        filtered_data = [{'slug': quiz['slug'], 'title': quiz['title'], 'subject': quiz['subject'], 'grade_level': quiz['grade_level']} for quiz in serialized_data]
         return filtered_data
         

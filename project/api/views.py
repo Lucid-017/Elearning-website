@@ -87,7 +87,7 @@ def get_routes(request):
         },
         {
             'Endpoint': 'api/get-student-statistics/',
-            'method': 'POST',
+            'method': 'GET',
             'description': 'Gets the learning statistics of a particular student or user'
         },
     ]
