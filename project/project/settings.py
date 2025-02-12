@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'account',
     'api',
     'learning',
+    'transactions',
 
     # Third-party apps
     "corsheaders",
@@ -175,6 +176,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://127.0.0.1:3000",
 ]
+
+
+# payment
+PAYSTACK_SECRET_KEY = os.getenv('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = os.getenv('PAYSTACK_PUBLIC_KEY')
 
 # for production
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

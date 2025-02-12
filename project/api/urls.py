@@ -20,5 +20,9 @@ urlpatterns = [
     path('api/quizzes/<str:slug>/submit-question/', views.submit_question, name="submit-question"),
     path('api/quizzes/<str:slug>/submit/', views.submit_quiz, name='submit-quiz'),
     path('api/create-quiz/', views.create_quiz_with_questions, name='create_quiz'),
-    path('api/get-student-statistics/', views.student_statistics, name="student_statistics")
+    path('api/get-student-statistics/', views.student_statistics, name="student_statistics"),
+    path('api/get-student-statistics/weekly/', views.student_weekly_statistics, name="student_weekly_statistics"),
+    path('api/get-subscription-plans/', views.subscription_plan_list, name="subsciption_plans"),
+    path('api/initiate-payment/', views.initiate_payment, name="initiate_payment"),
+    path('api/verify-payment/<str:reference_number>/', views.verify_payment, name='verify_payment')
 ]

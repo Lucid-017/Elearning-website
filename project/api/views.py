@@ -1,21 +1,23 @@
 from datetime import timedelta
 import requests
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
+from django.utils import timezone
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from social_django.models import UserSocialAuth
-from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer, TopicSerializer, CourseSerializer, StudentStatisticSerializer
+from .serializers import RegisterSerializer, PasswordResetSerializer, QuizSerializer, YearLevelSerializer, TopicSerializer, CourseSerializer, StudentStatisticSerializer, StudentWeeklyStatistics, SubscriptionPlanSerializer
 from account.models import User
 from learning.models import Quiz, Question, Answer, StudentQuizAttempt, Course, YearLevel, Subject, Topic, Skill
+from transactions.models import Payment, SubscriptionPlan, Subscription
+from transactions.utils import verify_payment as verify_initiated_payment
 
 # Create your views here.
 
@@ -438,6 +440,7 @@ def submit_quiz(request, slug):
         student_attempt = StudentQuizAttempt.objects.get(user=user, quiz=quiz, completed=False)
         student_attempt.completed = True
         student_attempt.time_spent = quiz_duration
+        student_attempt.completed_at = timezone.now()
         student_attempt.save()
         return Response({
             'score': student_attempt.score,
@@ -573,3 +576,58 @@ def student_statistics(request):
         serializer = StudentStatisticSerializer(student_quiz_attempt.first())
         return Response(serializer.data)
     return Response({'total_time_spent': '0 hr 0 min', 'total_questions_answered': 0, 'total_quiz_completed': 0, 'recent_quizzes': []})
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def student_weekly_statistics(request):
+    # user = request.user
+    user = User.objects.get(username="Quest")
+    student_quiz_attempt = StudentQuizAttempt.objects.filter(user=user)
+
+    if student_quiz_attempt.exists():
+        serializer = StudentWeeklyStatistics(student_quiz_attempt.first())
+        return Response(serializer.data)
+    return Response({'total_time_spent': '0 hr 0 min', 'total_questions_answered': 0, 'total_quiz_completed': 0, 'recent_quizzes': []})
+
+
+@api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+def initiate_payment(request):
+    user = request.user
+    amount = request.data.get('amount')
+    email = user.email # user's email
+
+    url = "https://api.paystack.co/transaction/initialize"
+    headers = {
+        'Authorization': f"bearer {settings.PAYSTACK_SECRET_KEY}"
+    }
+    data = {
+        'email': email,
+        'amount': int(amount) * 100 #convert to kobo
+    }
+    response = requests.get(url, headers, json=data)
+    response_data = response.json()
+
+    if response_data['status']:
+        Payment.objects.create(user=user, amount=amount, reference_number=response_data["data"]["reference"])
+        return Response({'payment_url': response_data['data']['authorization_url']}, status=status.HTTP_201_CREATED)
+    return Response({"error": "Payment initiation failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def verify_payment(request, reference_number):
+    response_data = verify_initiated_payment(reference_number)
+
+    if response_data.get('status'):
+        payment = Payment.objects.filter(reference_number=reference_number).first()
+        if payment:
+            payment.status = 'Successful'
+            payment.save()
+            return Response({"message": "Payment successful"}, status=status.HTTP_200_OK)
+    return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def subscription_plan_list(request):
+    plans = SubscriptionPlan.objects.all()
+    serializer = SubscriptionPlanSerializer(plans, many=True)
+    return Response(serializer.data)
