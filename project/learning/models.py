@@ -148,7 +148,7 @@ class StudentQuizAttempt(models.Model):
     score = models.FloatField(null=True)
     completed = models.BooleanField(default=False)
     time_spent = models.DurationField(default=timedelta(seconds=0), help_text="Duration of the quiz attempt (e.g., HH:MM:SS)")
-    completed_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True)
 
     def __str__(self):
         return f"{self.user.username}'s attempt at {self.quiz}"
@@ -172,3 +172,13 @@ class StudentQuizAttempt(models.Model):
     def get_total_quiz_completed(self):
         total_quiz = StudentQuizAttempt.objects.filter(user=self.user, completed=True).count()
         return total_quiz
+    
+    @property
+    def get_weekly_avg_time_spent(self):
+        one_week_ago = timezone.now() - timedelta(days=7)
+        user_attempts = StudentQuizAttempt.objects.filter(user=self.user, completed_at__gte=one_week_ago)
+        total_time = user_attempts.aggregate(Sum('time_spent'))['time_spent__sum'] or timedelta()
+        num_attempts = user_attempts.count()
+        weekly_avg = total_time / num_attempts if num_attempts > 0 else timedelta()
+        print(weekly_avg)
+        return weekly_avg

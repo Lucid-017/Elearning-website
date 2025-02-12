@@ -1,10 +1,11 @@
-from rest_framework import serializers
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 from account.models import User
 from learning.models import Quiz, Question, Answer, StudentQuizAttempt, YearLevel, Course, Skill, Topic
-from django.contrib.auth import get_user_model
+from transactions.models import Payment, SubscriptionPlan
 
 User = get_user_model()
 
@@ -218,3 +219,34 @@ class StudentStatisticSerializer(serializers.ModelSerializer):
         filtered_data = [{'slug': quiz['slug'], 'title': quiz['title'], 'subject': quiz['subject'], 'grade_level': quiz['grade_level']} for quiz in serialized_data]
         return filtered_data
         
+class StudentWeeklyStatistics(serializers.ModelSerializer):
+    total_time_spent = serializers.SerializerMethodField(read_only=True)
+    total_questions_answered = serializers.SerializerMethodField(read_only=True)
+    total_quiz_completed = serializers.SerializerMethodField(read_only=True)
+    recent_quizzes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StudentQuizAttempt
+        fields = ['total_time_spent', 'total_questions_answered', 'total_quiz_completed', 'recent_quizzes']
+
+
+    def get_total_time_spent(self, obj):
+        return obj.get_weekly_avg_time_spent
+    
+    def get_total_questions_answered(self, obj):
+        return 0
+    
+    def get_total_quiz_completed(self, obj):
+        return 0
+    def get_recent_quizzes(self, obj):
+        return []
+    
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['user',  'amount', 'reference_number', 'status', 'date']
+
+class SubscriptionPlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubscriptionPlan
+        fields = ['name', 'duration_months', 'price']
