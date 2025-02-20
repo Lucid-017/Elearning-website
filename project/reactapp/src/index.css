@@ -28,7 +28,7 @@
 }
 @font-face {
   font-family: 'Metropolis';
-  src: url('../Fonts/metro/Metropolis-Bold.woff'), url('../Fonts/metro/Metropolis-Bold.woff2');
+  src: url('../Fonts/metro/Metropolis-Bold.woff');
   font-weight: bold;
   font-style: bold;
 }
