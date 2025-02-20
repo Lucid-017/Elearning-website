@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'inter';
+  src: url('../Fonts/inter/Inter-Regular.woff2'), url('../Fonts/inter/Inter-Regular.otf');
+  font-weight: normal,500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'inter';
+  src: url('../Fonts/inter/Inter-Bold.woff2'), url('../Fonts/inter/Inter-Bold.otf');
+  font-weight: bold;
+  font-style: bold;
+}
+@font-face {
+  font-family: 'inter';
+  src: url('../Fonts/inter/Inter-Light.woff2'),url('../Fonts/inter/Inter-Light.otf');
+  font-weight: light;
+  font-style: light;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('../Fonts/metro/Metropolis-Regular.woff2'), url('../Fonts/metro/Metropolis-Regular.woff');
+  font-weight: normal,500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('../Fonts/metro/Metropolis-Bold.woff'), url('../Fonts/metro/Metropolis-Bold.woff2');
+  font-weight: bold;
+  font-style: bold;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('../Fonts/metro/Metropolis-Light.woff'),url('../Fonts/metro/Metropolis-Light.woff2');
+  font-weight: light;
+  font-style: light;
+}
+
+
 
 h1 {
     @apply text-4xl;
@@ -30,7 +68,7 @@ h1 {
   
   *{
     overflow-x: hidden;
-    font-family: 'Metropolis', 'inter';
+    font-family: 'Metropolis', 'inter',sans-serif;
   }
 
   body{

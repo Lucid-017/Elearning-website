@@ -627,6 +627,7 @@ def verify_payment(request, reference_number):
     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def subscription_plan_list(request):
     plans = SubscriptionPlan.objects.all()
     serializer = SubscriptionPlanSerializer(plans, many=True)

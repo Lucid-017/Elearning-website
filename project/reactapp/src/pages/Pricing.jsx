@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../assets/pricing2.svg'
 import './css/Pricing.css'
 import Price from '../Components/Price'
 import Newsletter from '../Components/Newsletter'
+import {usePaystackPayment} from 'react-paystack'
 
 const Pricing = () => {
-    const monthly = 9900
+    const [plans,setPlans] =useState([])
+    const getPaymentOptions = async()=>{
+        try{
+            const response = await fetch('http://127.0.0.1:8000/api/get-subscription-plans/',{
+                headers:{
+                    "Content-Type": "application/json" 
+                }
+            })
+            console.log(response.data)
+        }catch(err){
+            console.log(err)
+        }
+    }
+    useEffect(()=>{
+        getPaymentOptions()
+    },[])
   return (
     <div className='px-10 phone:px-20'>
         <div className="herop">

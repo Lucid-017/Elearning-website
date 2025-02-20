@@ -15,19 +15,17 @@ export const CoursesProvider = ({children})=>{
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [gradeSelected,setGradeSelected]=useState(false)
-    const [timeElapsed, setTimeElapsed] = useState(0);
-    const timeArray = useState([])
-    
-  // convert time to seconds
-  const timeFormat = (seconds) => {
-    const minute = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    // setTimeElapsed(`${minute}:${remainingSeconds}`)
-    return `${String(minute).padStart(2, "0")}:${String(
-      remainingSeconds
-    ).padStart(2, "0")}`;
-  };
 
+    
+    // convert time to seconds
+    const timeFormat = (seconds) => {
+        const minute = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        // setTimeElapsed(`${minute}:${remainingSeconds}`)
+        return `${String(minute).padStart(2, "0")}:${String(
+          remainingSeconds
+        ).padStart(2, "0")}`;
+      };
 
     const getTopics =async(subject)=>{
         const url = `/api/topics/${subject}/`;
@@ -46,7 +44,7 @@ export const CoursesProvider = ({children})=>{
         return await apiCall(url)
     }
 
-    const value = useMemo(()=>( {getTopics,getYear,getGradeCourse,getQuiz,timeFormat,timeElapsed,timeArray,setTimeElapsed,loading,setLoading,error,setError,gradeSelected,setGradeSelected}),[loading,error])
+    const value = useMemo(()=>( {getTopics,getYear,getGradeCourse,getQuiz,timeFormat,loading,setLoading,error,setError,gradeSelected,setGradeSelected}),[loading,error])
     return(
         <CoursesContext.Provider value={value}>
             {children}
