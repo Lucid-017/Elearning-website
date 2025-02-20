@@ -614,7 +614,7 @@ def initiate_payment(request):
     return Response({"error": "Payment initiation failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def verify_payment(request, reference_number):
     response_data = verify_initiated_payment(reference_number)
 
