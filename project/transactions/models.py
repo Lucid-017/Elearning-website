@@ -30,13 +30,6 @@ class SubscriptionPlan(models.Model):
     def __str__(self):
         return self.name
 
-
-SUBSCRIPTION_PLANS = [
-    ('monthly', 'Monthly'),
-    ('six_months', '6 Months'),
-    ('yearly', 'Yearly'),
-]
-
 class Subscription(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription')
     plan = models.ForeignKey(SubscriptionPlan, on_delete=models.SET_NULL, null=True)
