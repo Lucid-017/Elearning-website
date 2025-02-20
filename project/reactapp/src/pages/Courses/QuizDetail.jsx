@@ -12,12 +12,14 @@ const QuizDetail = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null); // null: not answered, true: correct, false: incorrect
+  const [timeElapsed, setTimeElapsed] = useState(0);    
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const {timeArray,timeElapsed,setTimeElapsed,timeFormat, getQuiz, error, setError, setLoading, loading } =
+  const {timeFormat,getQuiz, error, setError, setLoading, loading } =
     useContext(CoursesContext);
   const [quizStatus, setQuizStatus] = useState(false);
   const timerRef = useRef(null); //ref for timer
+  // const pausedTimeRef = useRef(null) //ref for timer when paused
 
   // New state variables for score and total answered
   // const [score, setScore] = useState(0);
@@ -62,30 +64,33 @@ const QuizDetail = () => {
       setLoading(false);
     }
   };
+   // start timer    
+   const startTimer= ()=>{
+    if(timerRef.current && quizStatus === false) return; //prevent multiple intervlas
+    timerRef.current = setInterval(() => {
+        setTimeElapsed((prev)=>prev+1)
+      }, 1000);
+  }
+   const stopTimer= ()=>{
+    if(timerRef.current ){
+      if(quizStatus===true){
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
+    } 
+    
+  }
 
   useEffect(() => {
-    // start timer\
-    const startTimer = () => {
-      if (!timerRef.current) {
-        timerRef.current = setInterval(() => {
-          setTimeElapsed((prev) => prev + 1);
-        }, 1000);
-      }
-    };
-    console.log(timerRef.current)
-
-    // Function to pause the timer if user has unfocused from the browser
     // Start the timer when the component mounts
     startTimer();
-    fetchQuiz();
-    //
-    console.log(quizId);
-    // console.log('current option. answers',currentOptions);
+    // document.addEventListener('visibilitychange',handleVisibilityChange)
 
-    return () => {
-      clearInterval(startTimer)
-    };
-    // Fetch the quiz questions when the component mounts
+    // 
+    fetchQuiz();
+    console.log(quizId);
+
+    return () => {stopTimer();}
   }, [quizId, subject, grade]);
 
 
@@ -126,7 +131,6 @@ const QuizDetail = () => {
         if (response.data.is_correct) {
           console.log(smartScore);
           setTotalAnswered((prevAnswered) => prevAnswered + 1);
-          // Check if it's the last question
           if (currentQuestion < questions.length - 1) {
             // Move to the next question after a delay
             setTimeout(() => {
@@ -137,16 +141,17 @@ const QuizDetail = () => {
               );
               setSelectedAnswer(null);
               setIsCorrect(null);
+              
             }, 2000); // 2 seconds delay to show correct message
             console.log(response.data);
           } else {
             // submit quiz
+            stopTimer();
             const timeSpent = timeElapsed;
-            // append time to globally store time array
-            timeArray.push(timeSpent) //in seconds
             const quizData = {
               time_spent: timeSpent, // in seconds
             };
+
 
             axios
               .post(`/api/quizzes/${quizId}/submit/`, quizData, {
@@ -162,12 +167,8 @@ const QuizDetail = () => {
                 console.error("Error submitting quiz:", error);
               });
             // show toast
-            showToast(
-              `Quiz completed! Your score is ${
-                totalAnswered + questionAnswered
-              }/${questions.length}.`,
-              "success"
-            );
+            showToast(`Quiz completed! Your score is ${totalAnswered  + questionAnswered}/${questions.length}.`,'success')
+              console.log('on submit,',totalAnswered,'an', questionAnswered)
 
             setQuizStatus(true);
             // alert(
@@ -194,6 +195,7 @@ const QuizDetail = () => {
     setIsCorrect(null);
     setError(null);
   };
+
 
   // Check if questions are loaded and there is a current question
   if (!questions.length || currentQuestion >= questions.length) {
@@ -223,8 +225,7 @@ const QuizDetail = () => {
               </div>
             </div>
             <p>
-              Questions Answered:{questionAnswered + totalAnswered}/{" "}
-              {questions.length}{" "}
+              Questions Answered:{questionAnswered + totalAnswered}/{questions.length}
             </p>
 
             {/* store the time in a global varible to use in our dashboard later
@@ -290,10 +291,10 @@ const QuizDetail = () => {
           </div>
         </>
       ):(
-        <Complete subject={subject} grade={grade} time={timeElapsed} score={totalAnswered} smartScore={Math.floor(percentageScore)}/>
+        <Complete subject={subject} grade={grade} time={timeElapsed} score={totalAnswered+questionAnswered} smartScore={Math.floor(percentageScore)}/>
       )}
       
-      {isCorrect === true && <p>Correct! Loading next question...</p>}
+      {isCorrect === true && !quizStatus && <p>Correct! Loading next question...</p>}
       {/* {currentQuestion >=questions.length && <p>Correct! Loading next question...</p>} */}
       {isCorrect === false && (
         <p>

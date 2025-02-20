@@ -32,24 +32,30 @@ const Learning = () => {
     console.log(view, "has been clicked");
   };
 
+  const handleSubjectChange =(subject)=>{
+    // navigate to the course page for the selected subject
+    navigate(`/learning/${subject}`)
+    console.log(subject, "has been clicked");
+  }
 
   return (
     <div>
       {/* links to the our topcs */}
       {/* if user is in learning page */}
-      <nav className="py-5 px-5 hidden phone:block phone:px-10 tablet:px-20 bg-[#292f36]">
+      <nav className=" hidden phone:block phone:px-10 tablet:px-20 bg-[#292f36]">
         <div className="w-full ">
           {/* Navbar Links (Hidden on phone screens, visible on tablet and above) */}
-          <div className="learning flex flex-col justify-center justify-around  phone:flex-row ">
-          {["maths", "english", "recommendations"].map((subj) => (
+          <div className="relative learning flex flex-col items-center justify-center justify-around  phone:flex-row ">
+          {["maths", "english"].map((subj) => (
             <div
               key={subj}
               className={`link ${
                 subject === subj ? "active" : ""
               }`}
-              onClick={() => navigate(`/learning/${subj}`)}
+              onClick={() => handleSubjectChange(subj)}
             >
               {subj.charAt(0).toUpperCase() + subj.slice(1)}
+              {/* {subj} */}
             </div>
           ))}
           </div>

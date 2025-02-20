@@ -18,13 +18,12 @@ list available courses
 <!-- ##TODO - everything icons -->
 ##TODO - When user is yanked off due to expired access token, ensure the navbar is access the user_info from session storage and display accordinly ✅
 ##TODO - There should be a differnt logic if the anser is not correct 
-##TODO - Navigate maually to an invalid quiz fix
-##TODO - create an array of last visited quizzes and make it global
-##TODO - store time elapased and make it global
-##TODO - store questions answered and make it global
-##TODO - store amount of quiz submitted and make it global
+<!-- ##TODO - create an array of failed quiz ids and store quiz id anytime the user failes a quiz -->
+##TODO - if user fails a question attemot 3 times, display hint
+##TODO - create a subscribe now component pop ✅
+##TODO - globally add font ✅
+
 
 
 
 #REVIEW - potential issues
-- the global error handling component is not working as expected, the click and monitoring shouldn't have to be in each component to work

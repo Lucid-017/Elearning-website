@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
+import { CoursesContext } from '../../API and Contxt/Context/Courses';
 
 const Complete = ({time,smartScore,score,grade,subject}) => {
     const navigate = useNavigate();
+    const {timeFormat} = useContext(CoursesContext)
 
     const handleGoback=()=>{
         navigate(-1)
@@ -21,7 +23,7 @@ const Complete = ({time,smartScore,score,grade,subject}) => {
                 <FontAwesomeIcon className="icon text-[#00FF00]" icon={icons.faClock}/>
                 <div>
                     <p>Time Spent</p>
-                    <p>{time}</p>
+                    <p>{timeFormat(time)}</p>
                 </div>
             </div>
             <div className="timeSpent flex items-center gap-x-5 justify-center">

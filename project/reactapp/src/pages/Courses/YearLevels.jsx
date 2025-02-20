@@ -44,8 +44,7 @@ const YearLevels = () => {
     if(!subject) return;
     setYearLevels([]);
     setError(null);
-    return ()=> fetchYearLevels();
-    // fetchTopics();
+     fetchYearLevels();
   }, [subject]);
 
 

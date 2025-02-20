@@ -9,7 +9,7 @@ const About = () => {
   const segments = url.split('/')
 
   return (
-    <div className=" pb-20 px-10 phone:px-20  gap-10">
+    <div className="my-10 px-10 phone:px-20  gap-10">
       <div className="herop">
             <p>Home | <span className='text-[#FF9500] capitalize'>{segments}</span></p>
             <div className="flex flex-col tablet:flex-row items-center justify-around pt-5">
@@ -20,8 +20,8 @@ const About = () => {
             </div>
         </div>
       <section className='my-10 phone:my-20'>
-        <div className="flex">
-          <h2>Making educational experiences better for everyone.</h2>
+        <div className="flex flex-col phone:flex-row items-center">
+          <h2 className='pb-2'>Making educational experiences better for everyone.</h2>
           <div className="">
               <p>At Ebedmas Learning, 
                 we are dedicated to enhancing education for everyone. We leverage technology in innovative and thoughtful ways to inspire learners' natural curiosity,

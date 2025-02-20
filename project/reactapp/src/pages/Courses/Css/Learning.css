@@ -50,3 +50,23 @@
     box-shadow: 5px 5px 15px 2px rgba(0, 0, 0, 0.127);   
 
 }
+.learning{
+    height: 40px;
+    margin: auto 0;
+}
+.learning .link{
+    cursor: pointer;
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; */
+}
+.active{
+    background-color: white;
+    /* position: relative; */
+    padding: 20px;
+    cursor: pointer;
+    /* margin: 10px; */
+    color: #FF9500 !important;
+    /* border-radius: 50%; */
+}

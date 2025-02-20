@@ -1,19 +1,53 @@
 import React, { useState, useEffect, useContext } from "react";
 import "../css/Dashboard.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
 import { CoursesContext } from "../../API and Contxt/Context/Courses";
 import { AuthContext } from "../../API and Contxt/Context/AuthContext";
+import axios from "axios";
 
 const Dashboard = () => {
   // const [user, setUser] = useState("");
   const {timeElaspsed,timeFormat,timeArray} = useContext(CoursesContext)
   const {userInfo,user,setUser} = useContext(AuthContext)
+  const [stats,setStats]= useState('')
+  const navigate = useNavigate()
+  const accessToken = userInfo.access_token;
   const date = new Date(); // Use the current date
 const options = { month: 'short', day: '2-digit' };
 const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
 
+const fetchStats = async()=>{
+  try {
+    const response = await axios.get('api/get-student-statistics/',{
+      headers:{
+        "Content-Type":"application/json",
+        Authorization: `Bearer ${accessToken}`,
+      }
+    })
+    console.log(response.data)
+    setStats(response.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+const handleRouteToQuiz = (quiz) => {
+  // instead of routing, make a direct call, quiz Slug = quiz id
+  // const response = await axios.get(`api/quizzes/${quiz.title}`, {
+  //   headers: {
+  //     Authorization: `Bearer ${accessToken}`,
+  //   },
+  //   // params: { quiz_id: quiz.id },
+  // });
+  // console.log(response.data);
+  let sub= quiz.subject.toLowerCase()
+  let level= quiz.grade_level.toLowerCase()
+  const route = `/learning/${sub}/${level}/${quiz.slug}`
+  console.log(route, 'route clicked')
+  navigate(route)
+}
+useEffect(()=>{fetchStats()},[])
 
   return (
     <div className="px-10 phone:px-20">
@@ -21,7 +55,7 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
         <h3 className="font-[500] pl-8">Hi {userInfo.username}, Welcome!</h3>
       </div>
 
-      <div className="bg-white rounded mb-32 laptop:mb-14 px-5 phone:px-10 tablet:px-20 py-10">
+      <div className="bg-white rounded my-10 laptop:mb-14 px-5 phone:p-10 tablet:px-20 shadow-md">
         <div className="pb-5">
           <p className="font-[500]">In this week({formattedDate} - today)</p>
           <small>See how you’ve performed this week</small>
@@ -35,7 +69,7 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
                   <div className="stats-info">
                     <div className="stats-text">You've answered</div>
                     <div className="stats-data">
-                      <span className="stats-number">63</span>
+                      <span className="stats-number">{stats.total_questions_answered}</span>
                       <span className="stats-unit">questions</span>
                     </div>
                   </div>
@@ -55,8 +89,8 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
                   <div className="stats-info">
                     <div className="stats-text">You've spent</div>
                     <div className="stats-data">
-                      <span className="stats-number">{timeArray}</span>
-                      <span className="stats-unit">mins learning</span>
+                      <span className="stats-number">{stats.total_time_spent}</span>
+                      <span className="stats-unit">(s) learning</span>
                     </div>
                   </div>
                   <div className="delta-info">
@@ -75,7 +109,7 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
                   <div className="stats-info">
                     <div className="stats-text">You've made progress in</div>
                     <div className="stats-data">
-                      <span className="stats-number">3</span>
+                      <span className="stats-number">{stats.total_quiz_completed}</span>
                       <span className="stats-unit">skills</span>
                     </div>
                   </div>
@@ -96,62 +130,42 @@ const formattedDate = date.toLocaleString('en-US', options).replace(',', '-');
           </Link>
         </div>
       </div>
+
       <div className="welcome mb-5 ">
         <h3 className="font-[500] pl-8">Pick up where you left off</h3>
       </div>
-      <div className="bg-white px-5 tablet:px-10 py-10">
+      <div className=" bg-slate-white shadow-md p-5 rounded-md tablet:px-10">
         <div className="pb-5">
           <p className="font-[500]">Recent Courses</p>
         </div>
         <div className="pb-10 text-center">
           <div>
-            <ul>
-              <li className="mb-2">
-                <div className="recent px-10 flex items-center justify-between p-4">
-                  <div className="flex items-center text-start capitalize">
-                    {/* <img src="icon1.png" alt="Icon 1" class="h-6 w-6 mr-2" /> */}
-                    <FontAwesomeIcon
-                      className="icon  pr-5 text-[#ff9900]"
-                      icon={icons.faStar}
-                    />
-
-                    <div className="details">
-                      <p className="title text-[#ff9900]">
-                        Multiply two fractions
-                      </p>
-                      <p>year 6, Math</p>
-                    </div>
-                  </div>
-                  {/* <img src="icon2.png" alt="Icon 2" class="h-6 w-6" /> */}
+            <ul >
+              {stats.recent_quizzes?.map((recent,index)=>(
+              <li className="mb-2" key={recent.title}>
+              <div className="recent py-2 px-10 flex flex-col phone:flex-row items-center justify-between">
+                <div className="flex items-center text-start capitalize">
+                  {/* <img src="icon1.png" alt="Icon 1" class="h-6 w-6 mr-2" /> */}
                   <FontAwesomeIcon
-                    className="icon text-[#708090]"
-                    icon={icons.faGlasses}
+                    className="icon  pr-5 text-[#ff9900]"
+                    icon={icons.faStar}
                   />
-                </div>
-              </li>
-              <li className="mb-2">
-                <div className="recent px-10 flex items-center justify-between p-4">
-                  <div className="flex items-center text-start capitalize">
-                    {/* <img src="icon1.png" alt="Icon 1" class="h-6 w-6 mr-2" /> */}
-                    <FontAwesomeIcon
-                      className="icon  pr-5 text-[#ff9900]"
-                      icon={icons.faStar}
-                    />
 
-                    <div className="details">
-                      <p className="title text-[#ff9900]">
-                        understanding intergers
-                      </p>
-                      <p>year 6, Math</p>
-                    </div>
+                  <div onClick={()=>handleRouteToQuiz(recent)} className="details cursor-pointer">
+                    <p className="title text-[#ff9900]">
+                      {recent.title}
+                    </p>
+                    <small>{recent.grade_level}, {recent.subject}</small>
                   </div>
-                  {/* <img src="icon2.png" alt="Icon 2" class="h-6 w-6" /> */}
-                  <FontAwesomeIcon
-                    className="icon text-[#708090]"
-                    icon={icons.faGlasses}
-                  />
                 </div>
-              </li>
+                {/* <img src="icon2.png" alt="Icon 2" class="h-6 w-6" /> */}
+                <FontAwesomeIcon
+                  className="icon text-[#708090]"
+                  icon={icons.faGlasses}
+                />
+              </div>
+            </li>
+              ))}
             </ul>
           </div>
         </div>
