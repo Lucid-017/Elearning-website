@@ -13,7 +13,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_filter = ['plan', 'active', 'start_date', 'end_date']
 
 class SubscriptionPlanAdmin(admin.ModelAdmin):
-    list_display = ['name', 'duration_months', 'price']
+    prepopulated_fields = {'slug': ['name']}
+    list_display = ['name', 'duration_months', 'price', 'slug']
 
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)

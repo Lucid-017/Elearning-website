@@ -1,6 +1,7 @@
 from django.db import models
+from django.utils.text import slugify
 from account.models import User
-from datetime import timedelta, date
+from django.utils import timezone
 
 # Create your models here.
 PAYMENT_STATUS = (
@@ -26,32 +27,31 @@ class SubscriptionPlan(models.Model):
     name = models.CharField(max_length=50)
     duration_months = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.slug)
+        super(SubscriptionPlan, self).save(*args, **kwargs)
+
 
 class Subscription(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription')
     plan = models.ForeignKey(SubscriptionPlan, on_delete=models.SET_NULL, null=True)
     active = models.BooleanField(default=False)
-    start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField()
+    start_date = models.DateTimeField(null=True, blank=True)
+    end_date = models.DateTimeField(null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-       #Automatically set the expiration date based on the plan
-        if not self.end_date:
-            if self.plan == 'monthly':
-                self.end_date = self.start_date + timedelta(days=30)
-            elif self.plan == 'six_months':
-                self.end_date = self.start_date + timedelta(days=180)
-            elif self.plan == 'yearly':
-                self.end_date = self.start_date + timedelta(days=365)
-        super().save(*args, **kwargs)
 
     @property
     def is_active(self):
        #Check if the subscription is still valid
-        return self.end_date >= date.today()
+       if self.end_date:
+           return self.end_date >= timezone.now()
+       return False
 
     def __str__(self):
         return f"{self.user.username} - {self.plan} (Active: {self.is_active})"

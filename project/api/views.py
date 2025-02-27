@@ -95,14 +95,37 @@ def get_routes(request):
             'method': 'GET',
             'description': 'Gets the learning statistics of a particular student or user'
         },
+         {
+            'Endpoint': 'api/get-student-statistics/weekly/',
+            'method': 'GET',
+            'description': 'Gets the weekly learning statistics of a particular student or user'
+        },
+        {
+            'Endpoint': 'api/get-subscription-plans/',
+            'method': 'GET',
+            'description': 'Gets the valid subscription plans for the platform'
+        },
+        {
+            'Endpoint': 'api/get-subscription-plans/',
+            'method': 'GET',
+            'description': 'Gets the valid subscription plans for the platform'
+        },
+        {
+            'Endpoint': 'api/subscription/initiate-payment/<str:slug>/',
+            'method': 'POST',
+            'description': 'Initiates the payment for a subscription plan. The slug is used to identify the play(6-months, 1-year, 1-month)'
+        },
+        {
+            'Endpoint': 'api/verify-payment/<str:reference_number>/',
+            'method': 'POST',
+            'description': 'Verifies a particular payment via reference number and subscription plan'
+        },
     ]
 
     return Response(routes)
  
 
 #  Authentication views
-
-
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
@@ -592,14 +615,19 @@ def student_weekly_statistics(request):
         return Response(serializer.data)
     return Response({'total_time_spent': '0 hr 0 min', 'total_questions_answered': 0, 'total_quiz_completed': 0, 'recent_quizzes': []})
 
-
+# Payment Views
 @api_view(['POST'])
-@permission_classes([AllowAny])
-def initiate_payment(request):
-    # user = request.user
-    user  = User.objects.get(username='Quest')
+@permission_classes([IsAuthenticated])
+def initiate_payment(request, slug):
+    user = request.user
     amount = request.data.get('amount')
     email = user.email # user's email
+
+    try: 
+        subscription_plan = SubscriptionPlan.objects.get(slug=slug)
+    except SubscriptionPlan.DoesNotExist:
+        return Response({"error": "Payment initiation failed: Invalid subscription plan"}, status=status.HTTP_400_BAD_REQUEST)
+
 
     url = "https://api.paystack.co/transaction/initialize"
     headers = {
@@ -607,33 +635,52 @@ def initiate_payment(request):
     }
     data = {
         'email': email,
-        'amount': int(amount) * 100, #convert to kobo
+        'amount': int(subscription_plan.price) * 100, #convert to kobo
         'reference': str(uuid4()).replace('-', '')
     }
     response = requests.post(url, headers=headers, json=data)
     response_data = response.json()
-    print(uuid4())
-    print(response_data)
+
 
     if response_data['status']:
-        Payment.objects.create(user=user, amount=amount, reference_number=response_data["data"]["reference"])
+        Payment.objects.create(user=user, amount=subscription_plan.price, reference_number=response_data["data"]["reference"])
+        subscription, created = Subscription.objects.get_or_create(user=user)
+        subscription.plan = subscription_plan
+        subscription.save()
         return Response({'payment_url': response_data['data']['authorization_url'], 'reference': response_data["data"]["reference"]}, status=status.HTTP_201_CREATED)
     return Response({"error": "Payment initiation failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
-@permission_classes([AllowAny])
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def verify_payment(request, reference_number):
-    # user = request.user
-    # amount = request.data.get('amount')
-    # email = user.email # user's email
+    user = request.user
 
     response_data = verify_initiated_payment(reference_number)
+
+    try:
+        subscription = Subscription.objects.get(user=user)
+    except Subscription.DoesNotExist:
+        return Response({"error": "Payment verification failed: Invalid subscription"}, status=status.HTTP_400_BAD_REQUEST)
 
     if response_data.get('status'):
         payment = Payment.objects.filter(reference_number=reference_number).first()
         if payment:
             payment.status = 'Successful'
             payment.save()
+            subscription.active = True
+            subscription.start_date = timezone.now()
+
+            print(subscription.plan)
+            if subscription.plan.name == '1 Year':
+                subscription.end_date = subscription.start_date + timedelta(days=30)
+            elif subscription.plan.name == '6 Months':
+                subscription.end_date = subscription.start_date + timedelta(days=180)
+            elif subscription.plan.name == '1 Month':
+                subscription.end_date = subscription.start_date + timedelta(days=365)
+            else:
+                subscription.end_date = None
+            subscription.save()
+
             return Response({"message": "Payment successful"}, status=status.HTTP_200_OK)
     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
 

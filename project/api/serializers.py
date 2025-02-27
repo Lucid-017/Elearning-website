@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth import get_user_model
+from django.contrib.humanize.templatetags.humanize import intcomma
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from account.models import User
@@ -247,6 +248,10 @@ class PaymentSerializer(serializers.ModelSerializer):
         fields = ['user',  'amount', 'reference_number', 'status', 'date']
 
 class SubscriptionPlanSerializer(serializers.ModelSerializer):
+    formatted_price = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = SubscriptionPlan
-        fields = ['name', 'duration_months', 'price']
+        fields = ['name', 'duration_months', 'price', 'formatted_price', 'slug']
+
+    def get_formatted_price(self, obj):
+        return intcomma(obj.price)

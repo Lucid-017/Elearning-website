@@ -48,16 +48,19 @@
 // export default PaymentInitiate;
 
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../API and Contxt/Context/AuthContext.js";
 
 const InitiatePaymentButton = ({ amount='500', onPaymentInitiated }) => {
+  const {userInfo,user,setUser} = useContext(AuthContext)
+  const accessToken = userInfo.access_token;
   const handleInitiatePayment = async () => {
     try {
-      const response = await fetch("/api/initiate-payment/", {
+      const response = await fetch("/api/subscription/initiate-payment/1-year/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Include authorization headers if needed
+          "Authorization": `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ amount }),
       });
