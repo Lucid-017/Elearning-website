@@ -1,5 +1,5 @@
 // VerifyPayment.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 
 const VerifyPayment = () => {
@@ -13,7 +13,13 @@ const VerifyPayment = () => {
 
     if (reference) {
       // Call the backend verification endpoint.
-      fetch(`/api/verify-payment/${reference}/`)
+      fetch(`/api/subscription/verify-payment/${reference}/`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ reference: reference })
+      }) 
         .then((res) => res.json())
         .then((data) => {
           if (data.message === "Payment successful") {

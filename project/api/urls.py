@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/get-student-statistics/', views.student_statistics, name="student_statistics"),
     path('api/get-student-statistics/weekly/', views.student_weekly_statistics, name="student_weekly_statistics"),
     path('api/get-subscription-plans/', views.subscription_plan_list, name="subsciption_plans"),
-    path('api/initiate-payment/', views.initiate_payment, name="initiate_payment"),
-    path('api/verify-payment/<str:reference_number>/', views.verify_payment, name='verify_payment'),
+    path('api/subscription/initiate-payment/<str:slug>/', views.initiate_payment, name="initiate_payment"),
+    path('api/subscription/verify-payment/<str:reference_number>/', views.verify_payment, name='verify_payment'),
     path("paystack-webhook/", views.paystack_webhook, name="paystack-webhook"),
 ]

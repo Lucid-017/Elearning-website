@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '97f5-105-112-176-161.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1', '1b62-105-112-18-39.ngrok-free.app']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -139,7 +140,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=90),  # Extend to 1 hour
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  # Extend to 1 hour
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Extend to 7 days
     'ROTATE_REFRESH_TOKENS': True,  
     'BLACKLIST_AFTER_ROTATION': True,
