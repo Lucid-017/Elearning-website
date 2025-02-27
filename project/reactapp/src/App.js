@@ -7,6 +7,8 @@ import {
 import { Navigate } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
+import PaymentInitiate from './pages/paymentDemo';
+import VerifyPayment from './pages/verifyPayment';
 import About from "./pages/About";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound";
@@ -168,6 +170,8 @@ function App() {
                       element={<ResetPassword />}
                     />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/payment-demo" element={<PaymentInitiate />} />
+                    <Route path="/payment-success" element={<VerifyPayment />} />
                     {/* <Route path='/maths' element={<QuizList/>}/> */}
                     <Route path="/*" element={<NotFound />} />
                   </Routes>
