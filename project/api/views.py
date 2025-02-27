@@ -1,9 +1,12 @@
 from datetime import timedelta
+from uuid import uuid4
+import json
 import requests
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
+from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_decode
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -591,9 +594,10 @@ def student_weekly_statistics(request):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def initiate_payment(request):
-    user = request.user
+    # user = request.user
+    user  = User.objects.get(username='Quest')
     amount = request.data.get('amount')
     email = user.email # user's email
 
@@ -603,19 +607,26 @@ def initiate_payment(request):
     }
     data = {
         'email': email,
-        'amount': int(amount) * 100 #convert to kobo
+        'amount': int(amount) * 100, #convert to kobo
+        'reference': str(uuid4()).replace('-', '')
     }
-    response = requests.get(url, headers, json=data)
+    response = requests.post(url, headers=headers, json=data)
     response_data = response.json()
+    print(uuid4())
+    print(response_data)
 
     if response_data['status']:
         Payment.objects.create(user=user, amount=amount, reference_number=response_data["data"]["reference"])
-        return Response({'payment_url': response_data['data']['authorization_url']}, status=status.HTTP_201_CREATED)
+        return Response({'payment_url': response_data['data']['authorization_url'], 'reference': response_data["data"]["reference"]}, status=status.HTTP_201_CREATED)
     return Response({"error": "Payment initiation failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def verify_payment(request, reference_number):
+    # user = request.user
+    # amount = request.data.get('amount')
+    # email = user.email # user's email
+
     response_data = verify_initiated_payment(reference_number)
 
     if response_data.get('status'):
@@ -625,6 +636,20 @@ def verify_payment(request, reference_number):
             payment.save()
             return Response({"message": "Payment successful"}, status=status.HTTP_200_OK)
     return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def paystack_webhook(request):
+    payload = json.loads(request.body)
+    event = payload.get("event")
+
+    if event == "charge.success":
+        reference = payload["data"]["reference"]
+        payment = Payment.objects.filter(reference=reference).first()
+        if payment:
+            payment.status = "success"
+            payment.save()
+    return JsonResponse({"status": "success"}, status=200)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

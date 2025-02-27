@@ -12,14 +12,14 @@ PAYMENT_STATUS = (
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(decimal_places=2, max_digits=2)
+    amount = models.DecimalField(decimal_places=2, max_digits=10)
     reference_number = models.CharField(max_length=100, unique=True)
     status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='Pending')
     date = models.DateTimeField(auto_now_add=True)
 
 
     def __str__(self):
-        return f"{self.user} - {self.reference} - {self.status}"
+        return f"{self.user} - {self.reference_number} - {self.status}"
 
 
 class SubscriptionPlan(models.Model):
