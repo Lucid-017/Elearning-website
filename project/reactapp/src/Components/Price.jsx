@@ -7,24 +7,23 @@ const Price = ({price,pricingName,slug}) => {
       const accessToken = userInfo.access_token;
 
     const handleInitiatePayment = async () => {
+        console.log(accessToken)
+
         try {
-          const response = await axios.post(`http://127.0.0.1:8000/api/subscription/initiate-payment/${slug}/`, {
+          const response = await axios.post(`http://127.0.0.1:8000/api/subscription/initiate-payment/${slug}/`,{price}, {
             headers: {
               "Content-Type": "application/json",
               "Authorization": `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({ price }),
-          });
-        //   const data = await response.json();
-        console.log(accessToken)
-    
-          if (response.payment_url) {
+            }          });
+            const responseData = response.data;
+            console.log(responseData)
+          if (responseData.payment_url) {
             // Redirect the user to the Paystack authorization URL
-            window.location.href = response.payment_url;
+            window.location.href = responseData.payment_url;
             // Optionally, call onPaymentInitiated callback
             // onPaymentInitiated();
           } else {
-            console.error("Error initiating payment:", response.error);
+            console.error("Error initiating payment:", responseData.error);
           }
         } catch (error) {
           console.error("Network error:", error);
