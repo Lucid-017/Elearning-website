@@ -1,0 +1,37 @@
+.check{
+    width: 20px !important;
+    height: 20px !important;
+}
+.div2{
+    background-color: white !important;
+    padding: 10px;
+}
+.div2 input,.select{
+    display: block;
+    border-radius: 10px;
+    padding: 17px 10px;
+    width: 100%;
+    background-color: #F7F7F8;
+    /* height: 62px; */
+    margin: 10px 0 15px 0;
+}
+.haAclf {
+    display: inline-block;
+    width: 100%;
+}
+#gsi_220746_160024 { width:100% !important  }
+iframe{ width:100% !important  }
+
+@media screen and (min-width: 481px) { 
+    .div2{
+        padding: 30px;
+    }
+ }
+
+.div2 label{
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+/* className="block border border-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" */

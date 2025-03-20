@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'inter';
+  src: url('../Fonts/inter/Inter-Regular.woff2'), url('../Fonts/inter/Inter-Regular.otf');
+  font-weight: normal,500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'inter';
+  src: url('../Fonts/inter/Inter-Bold.woff2'), url('../Fonts/inter/Inter-Bold.otf');
+  font-weight: bold;
+  font-style: bold;
+}
+@font-face {
+  font-family: 'inter';
+  src: url('../Fonts/inter/Inter-Light.woff2'),url('../Fonts/inter/Inter-Light.otf');
+  font-weight: light;
+  font-style: light;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('../Fonts/metro/Metropolis-Regular.woff2'), url('../Fonts/metro/Metropolis-Regular.woff');
+  font-weight: normal,500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('../Fonts/metro/Metropolis-Bold.woff');
+  font-weight: bold;
+  font-style: bold;
+}
+@font-face {
+  font-family: 'Metropolis';
+  src: url('../Fonts/metro/Metropolis-Light.woff'),url('../Fonts/metro/Metropolis-Light.woff2');
+  font-weight: light;
+  font-style: light;
+}
+
+
+
+h1 {
+    @apply text-4xl;
+    font-weight: bold;
+    overflow: hidden;
+
+  }
+  h2 {
+    @apply text-2xl;
+    font-weight: bold;
+    color: #292f36;
+    overflow: hidden;
+
+  }
+  h3 {
+    @apply text-xl;
+    font-weight: bold;
+    overflow: hidden;
+
+  }
+  h4 {
+    @apply text-lg;
+    font-weight: bold;
+    overflow: hidden;
+  }
+  
+  *{
+    overflow-x: hidden;
+    font-family: 'Metropolis', 'inter',sans-serif;
+  }
+
+  body{
+    background-color: #F7F5FA;
+  }
+p{
+  font-size: 16px;
+  color: #292f36;
+  font-weight: 400;
+  overflow: hidden;
+}

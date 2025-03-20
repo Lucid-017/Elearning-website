@@ -1,0 +1,24 @@
+.inputs input{
+    outline: none;
+    background-color: #d1f3ff;
+    padding: 4px;
+}
+.icon-list-container{
+    /* border: 1px solid ; */
+    max-width: 1200px;
+}
+.icon-list li .icon-box{
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    height: 50px;
+    width: 50px;
+    padding: 5px;
+    cursor: pointer;
+}
+.icon-list li .icon-box.selected{
+    background-color: #d1f3ff;
+    border: 2px solid #00aeef;
+    border-radius: 5px;
+    box-sizing: border-box;
+}

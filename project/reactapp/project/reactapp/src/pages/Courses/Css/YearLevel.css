@@ -1,0 +1,67 @@
+.grade-box-tab {
+    background-color: #FF9500;
+    border-radius: 0 19px 19px 0;
+    color: #fff;
+    display: inline-block;
+    height: 38px;
+    font: bold 18px / 38px "Trebuchet MS", sans-serif;
+    left: -4px;
+    margin-right: 2px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 33px;
+    box-sizing: border-box;
+}
+.grade-module {
+    background-color: #fff;
+    border: 1px solid rgba(128, 128, 128, 0.363);
+    border-radius: 5px;
+    padding: 0;
+    position: relative;
+    text-align: left;
+    cursor: pointer;
+}
+/* .grade-module:hover p{
+    color: #FF9500;
+} */
+
+.grade-box-hdr {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.grade-box-link {
+    cursor: pointer;
+    display: block;
+    padding: 4px 7px 4px 0;
+    position: relative;
+    text-decoration: none;
+}
+
+
+@media screen and (min-width: 801px) {
+    .grade-module {
+        height: 100%;
+    }
+}
+ @media screen and (min-width: 661px) {
+    .grade-box-tab {
+        padding-right: 15px;
+        text-align: right;
+        width: 43px;
+    }
+}
+@media screen and (min-width: 801px) {
+    .grade-body {
+        display: block;
+        padding: 5px 20px 15px 20px;
+    }
+}
+@media screen and (min-width: 801px) {
+    .list-subject-links {
+        border-top: 1px solid #e1e1e1;
+        padding-top: 15px;
+    }
+}

@@ -52,8 +52,9 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../API and Contxt/Context/AuthContext.js";
 
 const InitiatePaymentButton = ({ amount='500', onPaymentInitiated }) => {
-  const {userInfo,user,setUser} = useContext(AuthContext)
+  const {userInfo} = useContext(AuthContext);
   const accessToken = userInfo.access_token;
+
   const handleInitiatePayment = async () => {
     try {
       const response = await fetch("/api/subscription/initiate-payment/1-year/", {

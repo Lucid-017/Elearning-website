@@ -1,0 +1,57 @@
+.welcome{
+    position: relative;
+}
+.welcome::before{
+    content: '';
+    position: absolute;
+    width: 20px;
+    background-color: #FF9500;
+    height: 100%;
+}
+.recent{
+    border: 2px solid rgba(0, 0, 0, 0.144);
+    border-radius: 10px;
+}
+.summary-stats {
+    align-items: center;
+    /* color: #545454; */
+    display: flex;
+    flex: 1;
+    font-family: Verdana, sans-serif;
+    /* font-size: 15px; */
+    justify-content: center;
+    line-height: 18px;
+}
+
+.summary-stats .summary-stats-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+.summary-stats .summary-stats-grid .stats-delta-info .stats-info {
+    padding-left: 20px;
+    padding-top: 1px;
+}
+.summary-stats .summary-stats-grid .stats-delta-info .stats-info .stats-data {
+    padding-top: 7px;
+}
+.summary-stats .summary-stats-grid .stats-delta-info .stats-info .stats-data .stats-number {
+    font-family: Trebuchet MS, sans-serif;
+    font-size: 26px;
+    line-height: 30px;
+    padding-right: 5px;
+}
+.delta-info {
+    font-family: Trebuchet MS, sans-serif;
+    /* font-size: 13px; */
+    padding-top: 20px;
+}
+
+.delta-info .delta-data.negative {
+    color: #C98714;
+}
+.delta-info .delta-data {
+font-weight: 700;
+}
+.icon{
+    font-size: 30px;
+}
