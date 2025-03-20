@@ -4,16 +4,14 @@ import './css/Pricing.css'
 import Price from '../Components/Price'
 import Newsletter from '../Components/Newsletter'
 import {usePaystackPayment} from 'react-paystack'
+import axios from 'axios'
 
 const Pricing = () => {
     const [plans,setPlans] =useState([])
     const getPaymentOptions = async()=>{
         try{
-            const response = await fetch('http://127.0.0.1:8000/api/get-subscription-plans/',{
-                headers:{
-                    "Content-Type": "application/json" 
-                }
-            })
+            const response = await axios.get('api/get-subscription-plans/')
+            setPlans(response.data)
             console.log(response.data)
         }catch(err){
             console.log(err)
@@ -46,9 +44,10 @@ const Pricing = () => {
             </div>
 
             <div className="pricing">
-            <div className="flex flex-col tablet:flex-row gap-4 justify-center p-4">
-                <Price pricingName={'Monthly Subscription'} price={9000} />
-                <Price pricingName={'Yearly Subscription'} price={79900} discount={6658.33}/>
+            <div className="grid grid-cols-1 phone:grid-cols-2 laptop:grid-cols-3 gap-4 justify-center p-4">
+                {plans.map(plan=>(
+                    <Price pricingName={plan.name} price={plan.price} slug={plan.slug}/>
+                ))}
             </div>
         </div>
         </section>

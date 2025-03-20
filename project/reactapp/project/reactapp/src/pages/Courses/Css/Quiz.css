@@ -1,0 +1,47 @@
+.quiz-container{
+    position: relative;
+    background-color:White;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 15px 2px rgba(0, 0, 0, 0.39);   
+}
+.quiz-container .progress{
+        /* width: 100%; */
+        height: 6px;
+        border-radius: 8px;
+        overflow: hidden;
+        appearance: none;
+}
+.questions-answered p{
+    color: #292f36;
+    font-size: 14px;
+}
+.btn-submit{
+    background-color: #292f36;
+    color: white;
+    border-radius: 5px;
+}
+  /* WebKit-based browsers (Chrome, Edge, Safari) */
+  .progress::-webkit-progress-bar {
+    background-color: rgba(128, 128, 128, 0.356); /* Background behind the bar */
+    border-radius: 10px; /* Rounded corners */
+  }
+
+  .progress::-webkit-progress-value {
+    background: linear-gradient(90deg, #5995ed, #6ca0ed); /* Gradient bar */
+    border-radius: 10px; /* Rounded corners for the progress */
+  }
+
+  /* Firefox-based browsers */
+  .progress::-moz-progress-bar {
+    background: linear-gradient(90deg, #5995ed,  #6ca0ed); /* Gradient bar */
+    border-radius: 10px;
+  }
+  /* Add fallback for other browsers or scenarios */
+.quiz-container .progress {
+    background-color: rgba(128, 128, 128, 0.467); /* Background for unsupported cases */
+  }
+
+  .input{
+    border: 1px solid black;
+  }
